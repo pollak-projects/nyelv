@@ -1,11 +1,14 @@
 model user {
     id Int @id @default(autoincrement())
+    first_name String
+    last_name String
     username String @unique
     password String
     email String @unique
     birth_date DateTime
     created_at DateTime
     updated_at DateTime
+    user_level Int
 
     api_key apikey?
 }
