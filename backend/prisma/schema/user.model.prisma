@@ -1,11 +1,11 @@
 model user {
     id Int @id @default(autoincrement())
+    username String @unique
     first_name String
     last_name String
-    username String @unique
-    password String
-    email String @unique
     birth_date DateTime
+    email String @unique
+    password String
     created_at DateTime
     updated_at DateTime
     user_level Int

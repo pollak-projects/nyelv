@@ -14,16 +14,16 @@ router.post("/getApiKey", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const { first_name, last_name, username, email, password, birth_date } =
+  const { username, first_name, last_name, birth_date, email, password } =
     req.body;
   try {
     const user = await register(
+      username,
       first_name,
       last_name,
-      username,
+      birth_date,
       email,
-      password,
-      birth_date
+      password
     );
     res.status(201).json(user);
   } catch (error) {

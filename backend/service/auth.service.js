@@ -17,19 +17,19 @@ export function verifyJwt(access_token, refresh_token) {
 }
 
 
-export async function register(first_name, last_name, username, email, password, birth_date) {
+export async function register(username, first_name, last_name, birth_date, email, password) {
   const pwdEncrypted = await encrypt(password);
   await prisma.user.create({
     data: {
+      username: username,
       first_name: first_name,
       last_name: last_name,
-      username: username,
+      birth_date: new Date(birth_date),
       email: email,
       password: pwdEncrypted,
-      birth_date: new Date(birth_date),
       created_at: new Date(),
       updated_at: new Date(),
-      user_level: 1
+      user_level: 1,
     },
   });
 }
