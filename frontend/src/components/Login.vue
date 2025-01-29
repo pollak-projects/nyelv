@@ -39,6 +39,7 @@ function Login() {
       "Content-Type": "application/json",
     },
     method: "POST",
+    credentials: "include",
     body: JSON.stringify({
       username: username.value,
       password: password.value,
