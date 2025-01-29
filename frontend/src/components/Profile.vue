@@ -1,34 +1,9 @@
 <script setup>
 import {Toolbar, Button, Avatar} from 'primevue';
-import { RouterLink } from 'vue-router';
-import { router } from '../config/routes';
 
-function Login() {
-  isLoading.value = true;
 
-  fetch(`http://localhost:3300/auth/logout`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify({
-      username: username.value,
-      password: password.value,
-    }),
-  })
-    .then(async (res) => {
-        router.push("/login");
-    })
-    .catch((error) => {
-      isLoading.value = false;
-      console.error("Sikertelen bejelentkezés", error);
-      alert("Valami hiba történt. Próbáld meg később!");
-    });
-}
 
 </script>
-
 
 <template>
     <div class="card">
@@ -53,7 +28,8 @@ function Login() {
 
             <template #end>
                 <div class="flex items-center gap-2">
-                    <RouterLink to="/profile"><Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" style="width: 32px; height: 32px" /></RouterLink>           
+                        <Button label="Kilépés" text plain />
+                        <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" style="width: 32px; height: 32px" />           
                 </div>
             </template>
         </Toolbar>
@@ -61,5 +37,4 @@ function Login() {
 </template>
 
 <style scoped>
-
 </style>
