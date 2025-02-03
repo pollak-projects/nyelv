@@ -2,8 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function listAllQuizzes(kerdesSzama) {
-    const kapottTipus = "beginner_beiros"+kerdesSzama;
+export async function listAllQuizzes(kapottTipus) {
     console.log(kapottTipus);
     const data = await prisma.feladatok.findMany({
         where: {

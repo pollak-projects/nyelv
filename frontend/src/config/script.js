@@ -18,13 +18,13 @@ export function Logout() {
     .catch((error) => console.error("Hiba kijelentkezés közben:", error));
 }
 
-export async function GetCurrentTask(taskNumber) {
+export async function GetCurrentTask(taskId) {
   var requestOptions = {
     method: "GET",
   };
   return new Promise((resolve, reject) => {
     fetch(
-      `http://localhost:3300/quiz/getAllTask?kerdesSzama=${taskNumber}`,
+      `http://localhost:3300/quiz/getAllTask?kapottTipus=${taskId}`,
       requestOptions
     )
       .then(async (result) => {
