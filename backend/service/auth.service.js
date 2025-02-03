@@ -1,23 +1,31 @@
-import bcrypt from 'bcryptjs'
-import { PrismaClient } from '@prisma/client';
+import bcrypt from "bcryptjs";
+import { PrismaClient } from "@prisma/client";
 import { encrypt } from "./user.service.js";
 import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
-
-
 export function verifyJwt(access_token, refresh_token) {
-    jwt.verify(access_token, "test", {
-        algorithms: "HS512"
-    }, (err, decoded) => {
-        console.log(decoded),
-        console.log(err)
-    })
+  jwt.verify(
+    access_token,
+    "test",
+    {
+      algorithms: "HS512",
+    },
+    (err, decoded) => {
+      console.log(decoded), console.log(err);
+    }
+  );
 }
 
-
-export async function register(username, first_name, last_name, birth_date, email, password) {
+export async function register(
+  username,
+  first_name,
+  last_name,
+  birth_date,
+  email,
+  password
+) {
   const pwdEncrypted = await encrypt(password);
   await prisma.user.create({
     data: {
@@ -52,26 +60,30 @@ export async function login(username, password) {
   const token = jwt.sign(
     {
       sub: user.id,
-      name: user.nev,
+      username: user.username,
       email: user.email,
-      userGroup: user.groupsNeve
+      level: user.user_level,
     },
-    "test", {
-        expiresIn: "5m",
-        algorithm : "HS512"
+    "test",
+    {
+      expiresIn: "5m",
+      algorithm: "HS512",
     }
   );
 
-  const refreshToken = jwt.sign({
-    sub: user.id,
-  }, "test", {
-    expiresIn: "1h",
-    algorithm: "HS512"
-  }
-)
+  const refreshToken = jwt.sign(
+    {
+      sub: user.id,
+    },
+    "test",
+    {
+      expiresIn: "1h",
+      algorithm: "HS512",
+    }
+  );
 
   return {
     access_token: token,
-    refresh_token: refreshToken
+    refresh_token: refreshToken,
   };
 }
