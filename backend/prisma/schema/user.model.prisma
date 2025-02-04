@@ -9,5 +9,6 @@ model user {
     created_at DateTime
     updated_at DateTime
     user_level Int @default(1)
+    user_current_progress Int @default(0)
     isAdmin Int @default(0)
 }
