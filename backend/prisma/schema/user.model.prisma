@@ -8,7 +8,6 @@ model user {
     password String
     created_at DateTime
     updated_at DateTime
-    user_level Int
-
-    api_key apikey?
+    user_level Int @default(1)
+    isAdmin Int @default(0)
 }

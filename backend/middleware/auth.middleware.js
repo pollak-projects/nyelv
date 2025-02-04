@@ -1,15 +1,53 @@
-import { checkApiKey } from "../services/auth.service.js"
+import jwt from "jsonwebtoken";
 
-export async function verifyApiKey(req, res, next) {
-    const apiKey = req.cookies.apiKey
+// Define the decodeToken function within the same file
+const decodeToken = (token) => {
+  try {
+    // Decoding the token without verifying its signature
+    const decoded = jwt.decode(token); // Decodes the payload
 
-    const user_id = Number(req.query.id)
+    if (!decoded) {
+      console.error("Failed to decode token");
+      return null; // Return null if decoding fails
+    }
 
-    if(!apiKey) return res.status(401).json({ message: "Access Denied" })
-    
-    const ret = await checkApiKey(user_id, apiKey)
+    return decoded; // This will return the decoded user object (payload)
+  } catch (err) {
+    console.error("Token decoding error:", err);
+    return null; // Return null if there's an issue during decoding
+  }
+};
 
-    if(!ret) return res.status(401).json({ message: "Access Denied" })
+// Middleware to disable methods for non-admin users
+const disableMethodsForNonAdmin = (req, res, next) => {
+  // Allow POST methods for login, register, and logout
+  if (
+    ["POST"].includes(req.method) &&
+    (req.url === "/auth/login" ||
+      req.url === "/auth/register" ||
+      req.url === "/auth/logout")
+  ) {
+    return next(); // Skip this middleware for login, register, and logout
+  }
 
-    next()
-}
+  const accessToken = req.cookies.access_token;
+  const refreshToken = req.cookies.refresh_token;
+
+  if (!accessToken || !refreshToken) {
+    return res.status(403).json({ message: "Access denied" });
+  }
+
+  const user = decodeToken(accessToken);
+  console.log(user);
+  console.log(req.method);
+
+  if (user && user.isAdmin === 0) {
+    if (["PUT", "GET", "DELETE"].includes(req.method)) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+  }
+
+  next();
+};
+
+export default disableMethodsForNonAdmin;

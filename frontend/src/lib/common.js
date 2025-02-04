@@ -1,8 +1,6 @@
-// Function to get a specific cookie value
 export function getCookie(access_token) {
   let cookieArr = document.cookie.split(";");
 
-  // Loop through all cookies and find the one we need
   for (let i = 0; i < cookieArr.length; i++) {
     let cookie = cookieArr[i].trim();
     if (cookie.indexOf(access_token + "=") === 0) {
@@ -13,7 +11,6 @@ export function getCookie(access_token) {
 }
 export function parseJwt(token) {
   if (!token || token === "" || token === "undefined") {
-    // WHY JS WHY
     return null;
   }
 
