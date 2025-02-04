@@ -1,0 +1,6 @@
+model feladatokPair {
+    id Int @id @default(autoincrement())
+    magyar_par String @unique
+    angol_par String
+    tipus String
+}

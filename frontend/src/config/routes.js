@@ -32,7 +32,12 @@ const router = createRouter({
       path: "/taskone",
       name: "TaskOne",
       component: import("../components/TaskOne.vue"),
-    }
+    },
+    {
+      path: "/tasktwo",
+      name: "TaskTwo",
+      component: import("../components/TaskTwo.vue"),
+    },
   ],
 });
 
