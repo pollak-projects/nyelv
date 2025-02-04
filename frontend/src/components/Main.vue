@@ -45,7 +45,7 @@ onMounted(() => {
         </Toolbar>
     </div>
 
-<h1 >Üdv {{ user?.username  }}!</h1>
+<h1 class="nev" >Üdv {{ user?.username  }}!</h1>
     
 
 
@@ -98,18 +98,78 @@ onMounted(() => {
     </Card>
 </div>
 
-
-
+ <footer class="custom-footer">
+    <div class="footer-content">
+      <div class="footer-links">
+        
+      </div>
+      <div class="footer-info">
+       
+      </div>
+      <div class="footer-social">
+        <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://twitter.com" target="_blank" rel="noopener">Twitter</a>
+        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </footer>
 </template>
 
+
+
 <style scoped>
-.main-container {
-  display: flex;
-  justify-content: center; /* Centers content horizontally */
-  align-items: center; /* Centers content vertically */
-  height: 100vh; /* Ensures full viewport height */
+/* Footer stílusok */
+.custom-footer {
+  background-color: #333;
+  color: #fff;
+  padding: 2rem 1rem;
+  margin-top: 2rem;
 }
 
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.footer-links,
+.footer-social {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a,
+.footer-social a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover,
+.footer-social a:hover {
+  color: #b3b3b3;
+}
+
+.footer-info p {
+  margin: 0.2rem 0;
+  font-size: 0.8rem;
+}
+
+/* Mobilnézetre optimalizálás */
+@media (max-width: 600px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .footer-links,
+  .footer-social {
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+}
 
 </style>
