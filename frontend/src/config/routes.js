@@ -41,25 +41,7 @@ const router = createRouter({
     },
   ],
 });
-/*
-router.beforeEach((to, from, next) => {
-  const accessToken = getCookie("access_token");
-  const parsedToken = parseJwt(accessToken);
 
-  if (
-    to.name === "Login" &&
-    accessToken &&
-    parsedToken &&
-    parsedToken.userGroup === "ADMIN"
-  ) {
-    next({ name: "Kezdés" });
-  } else if ((!accessToken && to.name !== "Login") || "Register") {
-    next({ name: "Login" || "Register" });
-  } else {
-    next();
-  }
-});
-*/
 router.beforeEach((to, from, next) => {
   const accessToken = getCookie("access_token");
   const parsedToken = parseJwt(accessToken);
