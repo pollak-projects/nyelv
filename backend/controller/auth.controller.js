@@ -6,45 +6,6 @@ const router = express.Router();
 
 /**
  * @swagger
- * /getApiKey:
- *  post:
- *    summary: API kulcs generálása
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            properties:
- *              user_id:
- *                type: integer
- *                description: Felhasználó azonosítója
- *                example: 1
- *    responses:
- *      200:
- *        description: Sikeres kulcs generálás
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                message:
- *                  type: string
- *                  example: Success
- */
-router.post("/getApiKey", async (req, res) => {
-  const { user_id } = req.body;
-  const apiKey = await genAPIKey(user_id);
-
-  res.status(200).json({
-    message: "Success",
-    key: apiKey,
-  });
-});
-
-
-/**
- * @swagger
  * /register:
  *  post:
  *    summary: Regisztráció

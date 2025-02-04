@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { RouterLink, useRouter } from "vue-router";
+import { getCookie, parseJwt } from "../lib/common";
 
 const username = ref("");
 const password = ref("");
@@ -15,21 +16,6 @@ onMounted(() => {
     const jocookie = parseJwt(access_token);
   }
 });
-
-function getCookie(cname) {
-  let name = cname + "=";
-  let ca = document.cookie.split(";");
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
 
 function Login() {
   isLoading.value = true;
@@ -49,7 +35,7 @@ function Login() {
       const data = await res.json();
       isLoading.value = false;
 
-      if (!data.message) {
+      if (!data.message && data.access_token) {
         console.log(data);
 
         isRedirecting.value = true;

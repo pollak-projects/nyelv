@@ -37,7 +37,6 @@ export async function register(
       password: pwdEncrypted,
       created_at: new Date(),
       updated_at: new Date(),
-      user_level: 1,
     },
   });
 }
@@ -63,6 +62,7 @@ export async function login(username, password) {
       username: user.username,
       email: user.email,
       level: user.user_level,
+      isAdmin: user.isAdmin,
     },
     "test",
     {
