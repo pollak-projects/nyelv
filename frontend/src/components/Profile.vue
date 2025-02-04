@@ -67,7 +67,7 @@ function userLevelName(level) {
           alt="User Avatar"
         />
       </template>
-      <template #title>{{ user?.username || "Loading..." }}</template>
+      <template #title >{{ user?.username || "Loading..." }}</template>
       <template #subtitle>{{
         userLevelName(user?.level) || "Loading..."
       }}</template>
@@ -92,9 +92,12 @@ function userLevelName(level) {
         </div>
       </template>
     </Card>
-    <h1>Achievementek</h1>
+    <h1 class="ml-5">Achievementek</h1>
   </div>
 </template>
+
+
+
 
 <style scoped>
 .main-container {
