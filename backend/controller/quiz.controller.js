@@ -21,4 +21,10 @@ router.get("/getAngolPair", async (req, res) => {
   const data = await listAllQuizPair(kapottSzo);
   res.status(200).json(data);
 });
+
+router.post("/postImages", async (req, res) => {
+  const { kapottImages } = req.body;
+  const data = await listAllQuizPair(kapottImages);
+  res.status(200).json(data);
+});
 export { router };

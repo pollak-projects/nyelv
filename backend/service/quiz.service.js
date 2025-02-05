@@ -30,4 +30,22 @@ export async function listAllQuizPair(kapottSzo) {
   });
 
   return data.angol_par;
+
+
+}
+
+export async function imageSaveToDB(image) {
+  const imageBlob = Buffer.from(image, "base64")
+
+  try{
+    const result = await prisma.pictures.create({
+      data:{
+        image: imageBlob
+      }
+    })
+    return result
+  } catch(error ){
+    console.error("Error in imageDBSave: ",error)   
+  }
+  
 }
