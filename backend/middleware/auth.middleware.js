@@ -20,16 +20,6 @@ const decodeToken = (token) => {
 
 // Middleware to disable methods for non-admin users
 const disableMethodsForNonAdmin = (req, res, next) => {
-  // Allow POST methods for login, register, and logout
-  if (
-    ["POST"].includes(req.method) &&
-    (req.url === "/auth/login" ||
-      req.url === "/auth/register" ||
-      req.url === "/auth/logout")
-  ) {
-    return next(); // Skip this middleware for login, register, and logout
-  }
-
   const accessToken = req.cookies.access_token;
   const refreshToken = req.cookies.refresh_token;
 

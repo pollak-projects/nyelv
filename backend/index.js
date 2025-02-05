@@ -25,10 +25,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use(disableMethodsForNonAdmin);
 
 app.set("view engine", "ejs");
-app.use("/user", userRouter);
+app.use("/user", disableMethodsForNonAdmin, userRouter);
 app.use("/auth", authRouter);
 app.use("/quiz", quizRouter);
 
