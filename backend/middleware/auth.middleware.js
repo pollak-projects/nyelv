@@ -14,7 +14,7 @@ const decodeToken = (token) => {
     return decoded; // This will return the decoded user object (payload)
   } catch (err) {
     console.error("Token decoding error:", err);
-    return null; // Return null if there's an issue during decoding
+    return null;
   }
 };
 
