@@ -48,6 +48,7 @@ router.beforeEach((to, from, next) => {
 
   if (
     to.name === "Login" &&
+    to.name === "Register" &&
     accessToken &&
     parsedToken &&
     parsedToken.userGroup === "ADMIN"
