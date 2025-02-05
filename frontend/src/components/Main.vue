@@ -1,7 +1,7 @@
 <script setup>
 import {Toolbar, Button, Avatar, Card} from 'primevue';
 import { RouterLink } from 'vue-router';
-import { Logout } from '../config/script.js';
+import { GetUserProgress, Logout } from '../config/script.js';
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { getCookie, parseJwt } from "../lib/common.js";
@@ -13,11 +13,12 @@ const Logout2 = () => {
 
 
 const user = ref(null);
+const progress = ref(0);
 
 
-onMounted(() => {
+onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
-
+  progress.value = await GetUserProgress("Aki");
   user.value = userObj;
 });
 </script>
@@ -79,7 +80,7 @@ onMounted(() => {
           <div class="container">
             <div class="mt-2 mb-10">
               <h4>Beginner</h4>
-              <ProgressBar :value="60"></ProgressBar>
+              <ProgressBar :value="progress"></ProgressBar>
             </div>
             <hr />
             <div class="mt-2 disabled mb-10">

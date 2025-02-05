@@ -32,29 +32,16 @@ const router = createRouter({
     {
       path: "/taskone",
       name: "TaskOne",
-      component: () => import("../components/TaskOne.vue"),
+      component: import("../components/TaskOne.vue"),
+    },
+    {
+      path: "/tasktwo",
+      name: "TaskTwo",
+      component: import("../components/TaskTwo.vue"),
     },
   ],
 });
-/*
-router.beforeEach((to, from, next) => {
-  const accessToken = getCookie("access_token");
-  const parsedToken = parseJwt(accessToken);
 
-  if (
-    to.name === "Login" &&
-    accessToken &&
-    parsedToken &&
-    parsedToken.userGroup === "ADMIN"
-  ) {
-    next({ name: "Kezdés" });
-  } else if ((!accessToken && to.name !== "Login") || "Register") {
-    next({ name: "Login" || "Register" });
-  } else {
-    next();
-  }
-});
-*/
 router.beforeEach((to, from, next) => {
   const accessToken = getCookie("access_token");
   const parsedToken = parseJwt(accessToken);
