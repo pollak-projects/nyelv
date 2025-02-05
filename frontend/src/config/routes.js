@@ -39,6 +39,11 @@ const router = createRouter({
       name: "TaskTwo",
       component: import("../components/TaskTwo.vue"),
     },
+    {
+      path: "/taskthree",
+      name: "TaskThree",
+      component: import("../components/TaskThree.vue"),
+    },
   ],
 });
 

@@ -59,7 +59,7 @@ function SelectPairEN(buttonId) {
 
 <div class="text-center" v-for="task in re">
     <div class="flex flex-row">
-        <div class="basis-1/3 mb-4"><Button :value="'HU-'+task.id" :label="task.magyar_par" :id="'taskhu-' + task.magyar_par" severity="info" class="w-40" @click="SelectPairHU(task.magyar_par)"/></div>
+        <div class="basis-1/3 mb-4 "><Button :value="'HU-'+task.id" :label="task.magyar_par" :id="'taskhu-' + task.magyar_par" severity="info" class="w-40" @click="SelectPairHU(task.magyar_par)"/></div>
         <div class="basis-1/3"></div>
         <div class="basis-1/3"><Button :value="'EN-'+task.id" :label="task.angol_par" severity="info" class="w-40" :id="'tasken-' + task.angol_par" @click="SelectPairEN(task.angol_par)"/></div>
     </div>

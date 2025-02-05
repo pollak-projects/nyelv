@@ -23,10 +23,11 @@ const disableMethodsForNonAdmin = (req, res, next) => {
   const accessToken = req.cookies.access_token;
   const refreshToken = req.cookies.refresh_token;
 
+/*
   if (!accessToken || !refreshToken) {
     return res.status(403).json({ message: "Access denied" });
   }
-
+*/
   const user = decodeToken(accessToken);
   console.log(user);
   console.log(req.method);
