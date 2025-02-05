@@ -38,9 +38,10 @@ export async function imageSaveToDB(image) {
   const imageBlob = Buffer.from(image, "base64")
 
   try{
-    const result = await prisma.pictures.create({
-      data:{
-        image: imageBlob
+    const result = await prisma.feladatokPairPictures.create({
+      data: {
+        image: imageBlob,
+        text: "PLACEHOLDER"
       }
     })
     return result

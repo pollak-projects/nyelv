@@ -71,3 +71,28 @@ export async function GetCurrentTaskPair(taskId) {
       .catch((error) => console.log("error", error));
   });
 }
+
+export async function FileUpload(file) {
+  console.log(file);
+  return new Promise((resolve, reject) => {
+  fetch(`http://localhost:3300/quiz/postImages`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      file: file,
+    }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        alert("Sikeres feltöltés");
+        resolve(response);
+      } else {
+        alert("Sikertelen feltöltés");
+      }
+    })
+    .catch((error) => console.error("Hiba kijelentkezés közben:", error));});
+}
+

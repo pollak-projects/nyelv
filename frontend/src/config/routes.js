@@ -44,6 +44,11 @@ const router = createRouter({
       name: "TaskThree",
       component: import("../components/TaskThree.vue"),
     },
+    {
+      path: "/picture",
+      name: "Picture",
+      component: import("../components/PicturesUpload.vue"),
+    },
   ],
 });
 

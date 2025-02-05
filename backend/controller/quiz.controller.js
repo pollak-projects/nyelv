@@ -1,5 +1,10 @@
 import express from "express";
-import { listAllQuizzes, listAllQuizzesPair, listAllQuizPair } from "../service/quiz.service.js";
+import {
+  listAllQuizzes,
+  listAllQuizzesPair,
+  listAllQuizPair,
+  imageSaveToDB,
+} from "../service/quiz.service.js";
 
 const router = express.Router();
 
@@ -23,8 +28,9 @@ router.get("/getAngolPair", async (req, res) => {
 });
 
 router.post("/postImages", async (req, res) => {
-  const { kapottImages } = req.body;
-  const data = await listAllQuizPair(kapottImages);
+  const { file } = req.body;
+  console.log(file);
+  const data = await imageSaveToDB(file);
   res.status(200).json(data);
 });
 export { router };
