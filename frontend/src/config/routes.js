@@ -32,22 +32,22 @@ const router = createRouter({
     {
       path: "/taskone",
       name: "TaskOne",
-      component: import("../components/TaskOne.vue"),
+      component: () => import("../components/TaskOne.vue"),
     },
     {
       path: "/tasktwo",
       name: "TaskTwo",
-      component: import("../components/TaskTwo.vue"),
+      component: () => import("../components/TaskTwo.vue"),
     },
     {
       path: "/taskthree",
       name: "TaskThree",
-      component: import("../components/TaskThree.vue"),
+      component: () => import("../components/TaskThree.vue"),
     },
     {
       path: "/picture",
       name: "Picture",
-      component: import("../components/PicturesUpload.vue"),
+      component: () => import("../components/PicturesUpload.vue"),
     },
   ],
 });
