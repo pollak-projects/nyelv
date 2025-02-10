@@ -21,6 +21,8 @@ onMounted(async () => {
   progress.value = await GetUserProgress("Aki");
   user.value = userObj;
 });
+
+
 </script>
 
 

@@ -3,6 +3,8 @@ import { Toolbar, Button, Avatar } from "primevue";
 import { RouterLink, useRouter } from "vue-router";
 import { Logout } from "../config/script.js";
 import ProgressBar from "primevue/progressbar";
+import { GetUserProgress } from "../config/script.js";
+import { user_current_progress_store } from "../config/store.js";
 
 const router = useRouter();
 
@@ -13,6 +15,9 @@ function ToTaskOne() {
 const Logout2 = () => {
   Logout();
 };
+
+
+user_current_progress_store  = GetUserProgress(user)
 </script>
 
 <template>
