@@ -49,7 +49,9 @@ console.log(user_current_progress_store.user_current_progress)
     <div class="mt-2 mb-30">
       <h4>Beginner</h4>
       <ProgressBar :value="user_current_progress_store.user_current_progress"></ProgressBar>
-      <Button @click="ToTaskOne" label="Folytatás" severity="success" />
+      <div class="mt-2 flex" style="justify-content: flex-end">
+      <Button @click="ToTaskOne" label="Folytatás" severity="success" rounded />
+      </div>
     </div>
     <hr />
     <div class="mt-2 disabled mb-30">
