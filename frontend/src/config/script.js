@@ -36,13 +36,13 @@ export async function GetCurrentTask(taskId) {
   });
 }
 
-export async function GetUserProgress(username) {
+export async function GetUserProgress() {
   var requestOptions = {
     method: "GET",
   };
   return new Promise((resolve, reject) => {
     fetch(
-      `http://localhost:3300/user/getProgress?username=${username}`,
+      `http://localhost:3300/user/getProgress?username=cmd`,
       requestOptions
     )
       .then(async (result) => {

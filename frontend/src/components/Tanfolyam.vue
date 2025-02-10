@@ -3,7 +3,6 @@ import { Toolbar, Button, Avatar } from "primevue";
 import { RouterLink, useRouter } from "vue-router";
 import { Logout } from "../config/script.js";
 import ProgressBar from "primevue/progressbar";
-import { GetUserProgress } from "../config/script.js";
 import { user_current_progress_store } from "../config/store.js";
 
 const router = useRouter();
@@ -16,8 +15,8 @@ const Logout2 = () => {
   Logout();
 };
 
+console.log(user_current_progress_store.user_current_progress)
 
-user_current_progress_store  = GetUserProgress(user)
 </script>
 
 <template>
@@ -49,7 +48,7 @@ user_current_progress_store  = GetUserProgress(user)
     <h1 class="text-center">Tanfolyamok</h1>
     <div class="mt-2 mb-30">
       <h4>Beginner</h4>
-      <ProgressBar :value="60"></ProgressBar>
+      <ProgressBar :value="user_current_progress_store.user_current_progress"></ProgressBar>
       <Button @click="ToTaskOne" label="Folytatás" severity="success" />
     </div>
     <hr />

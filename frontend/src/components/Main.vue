@@ -5,6 +5,8 @@ import { GetUserProgress, Logout } from '../config/script.js';
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { getCookie, parseJwt } from "../lib/common.js";
+import { user_current_progress_store } from "../config/store.js";
+
 
 
 const Logout2 = () => {
@@ -13,12 +15,10 @@ const Logout2 = () => {
 
 
 const user = ref(null);
-const progress = ref(0);
 
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
-  progress.value = await GetUserProgress("Aki");
   user.value = userObj;
 });
 
@@ -82,7 +82,7 @@ onMounted(async () => {
           <div class="container">
             <div class="mt-2 mb-10">
               <h4>Beginner</h4>
-              <ProgressBar :value="progress"></ProgressBar>
+              <ProgressBar :value="user_current_progress_store.user_current_progress"></ProgressBar>
             </div>
             <hr />
             <div class="mt-2 disabled mb-10">
