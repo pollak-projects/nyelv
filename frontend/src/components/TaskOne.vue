@@ -18,6 +18,8 @@ re.value = await GetCurrentTask(currentTaskId.value);
 correctAnswer = re.value[currentTaskNumber.value-1].valasz;
 
 });
+
+
 function SubmitAnswer() {
     let givenAnswer = document.getElementById("answereBox").value;
 

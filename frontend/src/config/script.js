@@ -96,3 +96,21 @@ export async function FileUpload(file) {
     .catch((error) => console.error("Hiba kijelentkezés közben:", error));});
 }
 
+export async function GetTaskThree(kapottTipus){
+  var requestOptions = {
+    method: "GET",
+  };
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://localhost:3300/quiz/getImages?kapottTipus=beginner`,
+      requestOptions
+    )
+      .then(async (result) => {
+        const res = await result.text();
+        const valasz = JSON.parse(res);
+        resolve(valasz);
+      })
+      .catch((error) => console.log("error", error));
+  });
+}
+

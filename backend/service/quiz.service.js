@@ -22,18 +22,6 @@ export async function listAllQuizzesPair(kapottTipus) {
   return data;
 }
 
-export async function listAllQuizPair(kapottSzo) {
-  const data = await prisma.feladatokPair.findUnique({
-    where: {
-      magyar_par: kapottSzo,
-    },
-  });
-
-  return data.angol_par;
-
-
-}
-
 export async function imageSaveToDB(image) {
   const imageBlob = Buffer.from(image, "base64")
 
@@ -49,4 +37,13 @@ export async function imageSaveToDB(image) {
     console.error("Error in imageDBSave: ",error)   
   }
   
+}
+
+export async function listAllQuizPairImg(kapottTipus) {
+const data = await prisma.feladatokPairPictures.findMany({
+  where: {
+    tipus: kapottTipus,
+  },
+});
+return data;
 }

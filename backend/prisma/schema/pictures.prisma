@@ -1,6 +1,6 @@
 model feladatokPairPictures{
     id          Int         @id @default(autoincrement())
-    text       String       
+    text       String @unique     
     image       Bytes       @db.Blob
-    createdAt   DateTime    @default(now()) 
+    tipus String
 }
