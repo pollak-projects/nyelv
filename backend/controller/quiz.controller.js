@@ -4,6 +4,7 @@ import {
   listAllQuizzesPair,
   imageSaveToDB,
   listAllQuizPairImg,
+  listAllQuizzesListening
 } from "../service/quiz.service.js";
 
 const router = express.Router();
@@ -18,6 +19,12 @@ router.get("/getAllTask", async (req, res) => {
 router.get("/getAllPair", async (req, res) => {
   const { kapottTipus } = req.query;
   const data = await listAllQuizzesPair(kapottTipus);
+  res.status(200).json(data);
+});
+
+router.get("/getAllListening", async (req, res) => {
+  const { kapottTipus } = req.query;
+  const data = await listAllQuizzesListening(kapottTipus);
   res.status(200).json(data);
 });
 

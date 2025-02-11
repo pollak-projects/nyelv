@@ -42,7 +42,7 @@ export async function GetUserProgress() {
   };
   return new Promise((resolve, reject) => {
     fetch(
-      `http://localhost:3300/user/getProgress?username=Aki`,
+      `http://localhost:3300/user/getProgress?username=cmd`,
       requestOptions
     )
       .then(async (result) => {
@@ -103,6 +103,24 @@ export async function GetTaskThree(kapottTipus){
   return new Promise((resolve, reject) => {
     fetch(
       `http://localhost:3300/quiz/getImages?kapottTipus=beginner`,
+      requestOptions
+    )
+      .then(async (result) => {
+        const res = await result.text();
+        const valasz = JSON.parse(res);
+        resolve(valasz);
+      })
+      .catch((error) => console.log("error", error));
+  });
+}
+
+export async function GetCurrentTaskListening(taskId) {
+  var requestOptions = {
+    method: "GET",
+  };
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://localhost:3300/quiz/getAllListening?kapottTipus=${taskId}`,
       requestOptions
     )
       .then(async (result) => {

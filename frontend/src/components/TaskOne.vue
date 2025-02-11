@@ -7,7 +7,7 @@ import { GetCurrentTask } from '../config/script';
 
 
 const isAnswerCorrect = ref(0);
-const currentTaskId = ref("beginner_beiros");
+const currentTaskId = ref("beginner");
 const currentTaskNumber = ref(1);
 const re = ref(null);
 let correctAnswer = ref("");

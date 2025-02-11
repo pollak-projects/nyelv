@@ -22,6 +22,17 @@ export async function listAllQuizzesPair(kapottTipus) {
   return data;
 }
 
+export async function listAllQuizzesListening(kapottTipus) {
+  const data = await prisma.feladatokListeningAudio.findMany({
+    where: {
+      tipus: kapottTipus,
+    },
+  });
+
+  return data;
+}
+
+
 export async function imageSaveToDB(image) {
   const imageBlob = Buffer.from(image, "base64")
 

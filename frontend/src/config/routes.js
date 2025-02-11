@@ -45,6 +45,11 @@ const router = createRouter({
       component: () => import("../components/TaskThree.vue"),
     },
     {
+      path: "/taskfour",
+      name: "TaskFour",
+      component: () => import("../components/TaskFour.vue"),
+    },
+    {
       path: "/picture",
       name: "Picture",
       component: () => import("../components/PicturesUpload.vue"),
