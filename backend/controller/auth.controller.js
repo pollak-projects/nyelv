@@ -110,26 +110,13 @@ router.post("/register", async (req, res) => {
  *            schema:
  *              type: object
  *              properties:
- *                username:
- *                  type: string
- *                  example: johndoe
  *                access_token:
  *                  type: string
- *                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2MzI0NzQ1MjMsImV4cCI6MTYzMjQ3NzMyM30.2bY2dX1QoYJz4RzKf9wK8G4Zw6j0O8VY1dYJ1T2j1W4
+ *                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2MzI1Mjg5MTcsImV4cCI6MTYzMjUzMTcxN30.5q8bUwX2Z2qK5b7gY6q4zqQ8bUwX2Z2qK5b7gY6q4zqQ
  *                refresh_token:
  *                  type: string
- *                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2MzI0NzQ1MjMsImV4cCI6MTYzMjQ3NzMyM30.2bY2dX1QoYJz4RzKf9wK8G4Zw6j0O8VY1dYJ1T2j1W4
+ *                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2MzI1Mjg5MTcsImV4cCI6MTYzMjUzMTcxN30.5q8bUwX2Z2qK5b7gY6q4zqQ8bUwX2Z2qK5b7gY6q4zqQ
  *      400:
- *        description: Hibás bejelentkezési adatok
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                message:
- *                  type: string
- *                  example: Hibás bejelentkezési adatok
- *      401:
  *        description: Hibás bejelentkezési adatok
  *        content:
  *          application/json:
@@ -145,25 +132,32 @@ router.post("/login", async (req, res) => {
   try {
     const user = await login(username, password);
 
+    if (!user || !user.access_token || !user.refresh_token) {
+      return res.status(400).json({ message: "Hibás bejelentkezési adatok" });
+    }
+
     res.cookie("access_token", user.access_token, {
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: "none",
-      secure: true,
+      sameSite: "None",
       httpOnly: false,
       domain: "localhost",
-      path: "/", });
-    res.cookie("refresh_token", user.refresh_token, { 
-      maxAge: 24 * 60 * 60 * 1000,
-      httpOnly: false,
-      sameSite: "none",
       secure: true,
-      domain: "localhost",
       path: "/",
-     });
+    });
 
-    res.status(200).json(user);
+    res.cookie("refresh_token", user.refresh_token, {
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: "None",
+      httpOnly: false,
+      domain: "localhost",
+      secure: true,
+      path: "/",
+    });
+
+    return res.status(200).json(user);
   } catch (error) {
-    res.status(400).json(error.message);
+    console.error("Login error:", error);
+    return res.status(400).json({ message: error.message });
   }
 });
 
