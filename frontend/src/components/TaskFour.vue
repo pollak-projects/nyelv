@@ -17,14 +17,16 @@ onMounted(async () => {
   re.value = await GetCurrentTaskListening(currentTaskId.value);
 
   // Convert Proxy to plain object/array
-  const unwrappedData = JSON.parse(JSON.stringify(re.value));
+  const unwrappedData = [];
 
-  console.log(unwrappedData); // This should give you the actual data
+  for (let i = 0; i < 30045; i++) {
+    const element = re.value[0].audio[i];
+    unwrappedData.push(element);
+  }
+  console.log(re.value[0].audio); // This should give you the actual data
 
   // Now you can access the audio byte array safely
-  const audioByteArray = unwrappedData[0].audio;
-
-  console.log(audioByteArray);
+  const audioByteArray = unwrappedData;
 
   if (audioByteArray && audioByteArray.length > 0) {
     const audioBlob = new Blob([new Uint8Array(audioByteArray)], {

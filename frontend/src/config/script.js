@@ -42,7 +42,7 @@ export async function GetUserProgress() {
   };
   return new Promise((resolve, reject) => {
     fetch(
-      `http://localhost:3300/user/getProgress?username=cmd`,
+      `http://localhost:3300/user/getProgress?username=Zete`,
       requestOptions
     )
       .then(async (result) => {
