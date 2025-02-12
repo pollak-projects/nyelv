@@ -42,7 +42,7 @@ export async function GetUserProgress() {
   };
   return new Promise((resolve, reject) => {
     fetch(
-      `http://localhost:3300/user/getProgress?username=Zete`,
+      `http://localhost:3300/user/getProgress?username=admin`,
       requestOptions
     )
       .then(async (result) => {
@@ -75,28 +75,29 @@ export async function GetCurrentTaskPair(taskId) {
 export async function FileUpload(file) {
   console.log(file);
   return new Promise((resolve, reject) => {
-  fetch(`http://localhost:3300/quiz/postImages`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({
-      file: file,
-    }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        alert("Sikeres feltöltés");
-        resolve(response);
-      } else {
-        alert("Sikertelen feltöltés");
-      }
+    fetch(`http://localhost:3300/quiz/postImages`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        file: file,
+      }),
     })
-    .catch((error) => console.error("Hiba kijelentkezés közben:", error));});
+      .then((response) => {
+        if (response.ok) {
+          alert("Sikeres feltöltés");
+          resolve(response);
+        } else {
+          alert("Sikertelen feltöltés");
+        }
+      })
+      .catch((error) => console.error("Hiba kijelentkezés közben:", error));
+  });
 }
 
-export async function GetTaskThree(kapottTipus){
+export async function GetTaskThree(kapottTipus) {
   var requestOptions = {
     method: "GET",
   };
@@ -131,4 +132,3 @@ export async function GetCurrentTaskListening(taskId) {
       .catch((error) => console.log("error", error));
   });
 }
-

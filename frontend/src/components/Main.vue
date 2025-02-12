@@ -1,124 +1,165 @@
 <script setup>
-import {Toolbar, Button, Avatar, Card} from 'primevue';
-import { RouterLink } from 'vue-router';
-import { GetUserProgress, Logout } from '../config/script.js';
+import { Toolbar, Button, Avatar, Card, Timeline } from "primevue";
+import { RouterLink } from "vue-router";
+import { GetUserProgress, Logout } from "../config/script.js";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { getCookie, parseJwt } from "../lib/common.js";
 import { user_current_progress_store } from "../config/store.js";
 
-
-
 const Logout2 = () => {
-    Logout();
-}
-
+  Logout();
+};
 
 const user = ref(null);
 
+const timelineItems = ref([
+  {
+    status: "Started the course level",
+    date: "2025-02-12",
+    icon: "pi pi-play",
+  },
+  {
+    status: "Completed Beginner Level",
+    date: "2025-02-10",
+    icon: "pi pi-check",
+  },
+  {
+    status: "Intermediate level started",
+    date: "2025-02-05",
+    icon: "pi pi-play",
+  },
+]);
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
 });
-
-
 </script>
 
-
-
-
 <template>
-    <div class="card">
-        <Toolbar style="border-radius: 3rem; padding: 1rem 1rem 1rem 1.5rem">
-            <template #start>
-                <div class="flex items-center gap-2">
-                    <RouterLink to="/main"><Button label="Home" text plain /></RouterLink>
-                    <Button label="Chat" text plain />
-                    <RouterLink to="/tanfolyam"><Button label="Tanfolyamok" text plain /></RouterLink>
-                </div>
-            </template>
+  <Toolbar
+    style="border-radius: 3rem; padding: 1rem 1rem 1rem 1.5rem"
+    class="mt-1 ml-1 mr-1"
+  >
+    <template #start>
+      <div class="flex items-center gap-2">
+        <RouterLink to="/main"><Button label="Home" text plain /></RouterLink>
+        <Button label="Chat" text plain />
+        <RouterLink to="/tanfolyam"
+          ><Button label="Tanfolyamok" text plain
+        /></RouterLink>
+      </div>
+    </template>
 
-            <template #end>
-                <div class="flex items-center gap-2">
-                    <Button @click="Logout2" label="Kilépés" text plain />
-                    <RouterLink to="/profile"><Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" style="width: 32px; height: 32px" /></RouterLink>           
-                </div>
-            </template>
-        </Toolbar>
-    </div>
-
-<h1 class="nev" >Üdv {{ user?.username  }}!</h1>
-    
-
-
-
-
-<div class=" pr-5 pl-5 flex flex-row-reverse">
+    <template #end>
+      <div class="flex items-center gap-2">
+        <Button @click="Logout2" label="Kilépés" text plain />
+        <RouterLink to="/profile"
+          ><Avatar
+            image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
+            style="width: 32px; height: 32px"
+        /></RouterLink>
+      </div>
+    </template>
+  </Toolbar>
+  <h1>Üdv {{ user?.username }}!</h1>
+  <div class="flex justify-between pl-10 pr-10">
     <Card style="width: 25rem; overflow: hidden" class="mt-10">
+      <template #header>
+        <img alt="user header" src="../assets/england.png" />
+      </template>
+      <template #title>Angol kurzus</template>
+      <template #subtitle
+        ><RouterLink to="/tanfolyam"
+          ><Button class="w-100" label="Folytatás" /></RouterLink
+      ></template>
+    </Card>
+    <Card style="width: 25rem; overflow: hidden" class="mt-10">
+      <template #header>
+        <img alt="user header" src="../assets/germany.png" />
+      </template>
+      <template #title>Német kurzus</template>
+      <template #subtitle
+        ><RouterLink to="/tanfolyam"
+          ><Button class="w-100" label="Folytatás" /></RouterLink
+      ></template>
+    </Card>
+    <div class="flex-row-reverse">
+      <Card style="width: 25rem; overflow: hidden" class="mt-10">
         <template #header>
-   
-             <img alt="user header" src="../assets/napiszobackground.png" />
+          <img alt="user header" src="../assets/napiszobackground.png" />
         </template>
-        
+
         <template #title>Discombobulate </template>
         <template #subtitle>Szétzilál</template>
-        
-      
-    </Card>
-</div>
-
-<div class=" pr-5 pl-5 flex flex-row-reverse" >
-    <Card style="width: 25rem; overflow: hidden" class="mt-10">
-        <template #header>
-   
-            
+      </Card>
+    </div>
+  </div>
+  <div class="flex justify-between pl-10 pr-10">
+    <div class="m-0 w-full">
+      <Timeline
+        :value="timelineItems"
+        layout="horizontal"
+        align="bottom"
+        :style="{ marginTop: '2rem'  }"
+      >
+        <template #content="slotProps">
+          <div>
+            <strong>{{ slotProps.item.status }}</strong>
+            <!-- <small class="text-muted">{{ slotProps.item.date }}</small> -->
+          </div>
         </template>
-        
+      </Timeline>
+    </div>
+    <div class="flex-row-reverse">
+      <Card style="width: 25rem; overflow: hidden" class="mt-10">
+        <template #header> </template>
+
         <template #title>A jelenlegi haladásod:</template>
         <template #subtitle>Remek munka!</template>
         <template #content>
-        <div class="m-0">
-          <div class="container">
-            <div class="mt-2 mb-10">
-              <h4>Beginner</h4>
-              <ProgressBar :value="user_current_progress_store.user_current_progress"></ProgressBar>
-            </div>
-            <hr />
-            <div class="mt-2 disabled mb-10">
-              <h4>Intermediate</h4>
-              <ProgressBar :value="0"></ProgressBar>
-            </div>
-            <hr />
-            <div class="mt-2 mb-10 disabled">
-              <h4>Polyglot master</h4>
-              <ProgressBar :value="0"></ProgressBar>
+          <div class="m-0">
+            <div class="container">
+              <div class="mt-2 mb-10">
+                <h4>Beginner</h4>
+                <ProgressBar
+                  :value="user_current_progress_store.user_current_progress"
+                ></ProgressBar>
+              </div>
+              <hr />
+              <div class="mt-2 disabled mb-10">
+                <h4>Intermediate</h4>
+                <ProgressBar :value="0"></ProgressBar>
+              </div>
+              <hr />
+              <div class="mt-2 mb-10 disabled">
+                <h4>Polyglot master</h4>
+                <ProgressBar :value="0"></ProgressBar>
+              </div>
             </div>
           </div>
-        </div>
-      </template>
-      
-    </Card>
-</div>
+        </template>
+      </Card>
+    </div>
+  </div>
 
- <footer class="custom-footer">
+  <footer class="custom-footer">
     <div class="footer-content">
-      <div class="footer-links">
-        
-      </div>
-      <div class="footer-info">
-       
-      </div>
+      <div class="footer-links"></div>
+      <div class="footer-info"></div>
       <div class="footer-social">
-        <a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://facebook.com" target="_blank" rel="noopener"
+          >Facebook</a
+        >
         <a href="https://twitter.com" target="_blank" rel="noopener">Twitter</a>
-        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://instagram.com" target="_blank" rel="noopener"
+          >Instagram</a
+        >
       </div>
     </div>
   </footer>
 </template>
-
-
 
 <style scoped>
 /* Footer stílusok */
@@ -167,12 +208,11 @@ onMounted(async () => {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .footer-links,
   .footer-social {
     justify-content: center;
     margin-bottom: 1rem;
   }
 }
-
 </style>

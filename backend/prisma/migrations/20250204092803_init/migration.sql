@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `user` MODIFY `user_level` INTEGER NOT NULL DEFAULT 1,
-    MODIFY `isAdmin` INTEGER NOT NULL DEFAULT 0;
