@@ -4,9 +4,11 @@ import { Button } from "primevue";
 import ProgressBar from 'primevue/progressbar';
 import { onMounted, ref } from 'vue';
 import { GetCurrentTask } from '../config/script';
+import { router } from '../config/routes';
 
 
 const isAnswerCorrect = ref(0);
+const isAnswerWrong = ref(0);
 const currentTaskId = ref("beginner");
 const currentTaskNumber = ref(1);
 const re = ref(null);
@@ -38,11 +40,20 @@ function SubmitAnswer() {
         setTimeout(() => {
             givenAnswer = "";
             isAnswerCorrect.value = 0;
+            isAnswerWrong.value += 1;
+            CheckLife();
             currentTaskNumber.value++;
             correctAnswer = re.value[currentTaskNumber.value-1].valasz;
         }, 2000);
     }
 
+}
+
+function CheckLife() {
+    if (isAnswerWrong.value == 3) {
+        alert("Vesztettél!");
+        router.push("/tanfolyam");
+    }
 }
 </script>
 
@@ -54,12 +65,14 @@ function SubmitAnswer() {
 <div class="mx-auto text-center align-middle" v-for="task in re">
 <span v-if="task.id == currentTaskNumber">
 <h4 class="mb-5" >{{task.kerdes}}</h4>
-<InputText placeholder="Write your answer here..." id="answereBox" type="text" v-model="givenAnswer" variant="filled"/>
+<InputText placeholder="Write your answer here..." id="answereBox" type="text" variant="filled"/>
 <Button @click="SubmitAnswer" label="Submit" severity="success" />
 </span>
 </div>
 <div v-if="currentTaskNumber > 5" class="mx-auto text-center align-middle">
 <h1>Siker!</h1>
+<RouterLink to="/tasktwo"><Button label="Jöhet a következő fejezet!" severity="success" variant="text" /></RouterLink>
+<RouterLink to="/main"><Button label="Vissza a főoldalra" severity="info" variant="text" /></RouterLink>
 </div>
 
 

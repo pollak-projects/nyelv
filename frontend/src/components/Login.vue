@@ -2,6 +2,8 @@
 import { ref, onMounted } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { getCookie, parseJwt } from "../lib/common";
+import { username_store } from "../config/store";
+
 
 const username = ref("");
 const password = ref("");
@@ -39,7 +41,7 @@ function Login() {
         console.log(data);
 
         isRedirecting.value = true;
-
+        username_store.value = username.value;
         setTimeout(() => {
           router.push("/main");
         }, 2000);
