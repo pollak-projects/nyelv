@@ -12,6 +12,7 @@ onMounted(() => {
   const userObj = parseJwt(getCookie("access_token"));
 
   user.value = userObj;
+  console.log(user.value);
 });
 
 function userLevelName(level) {
@@ -76,7 +77,7 @@ function userLevelName(level) {
           <div class="container">
             <div class="mt-2 mb-10">
               <h4>Beginner</h4>
-              <ProgressBar :value="60"></ProgressBar>
+              <ProgressBar :value="user?.user_current_progress"></ProgressBar>
             </div>
             <hr />
             <div class="mt-2 disabled mb-10">

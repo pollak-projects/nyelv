@@ -1,11 +1,10 @@
 <script setup>
 import { Toolbar, Button, Avatar, Card, Timeline } from "primevue";
 import { RouterLink } from "vue-router";
-import { GetUserProgress, Logout } from "../config/script.js";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { getCookie, parseJwt } from "../lib/common.js";
-import { user_current_progress_store } from "../config/store.js";
+import { Logout } from "../config/script.js";
 
 const Logout2 = () => {
   Logout();
@@ -124,7 +123,7 @@ onMounted(async () => {
               <div class="mt-2 mb-10">
                 <h4>Beginner</h4>
                 <ProgressBar
-                  :value="user_current_progress_store.user_current_progress"
+                  :value="user?.user_current_progress"
                 ></ProgressBar>
               </div>
               <hr />

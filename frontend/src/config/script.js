@@ -1,5 +1,5 @@
 import { router } from "../config/routes";
-import { username_store } from "../config/store";
+
 
 export function Logout() {
   fetch(`http://localhost:3300/auth/logout`, {
@@ -37,13 +37,13 @@ export async function GetCurrentTask(taskId) {
   });
 }
 
-export async function GetUserProgress() {
+export async function GetUserProgress(username) {
   var requestOptions = {
     method: "GET",
   };
   return new Promise((resolve, reject) => {
     fetch(
-      `http://localhost:3300/user/getProgress?username=${username_store.username}`,
+      `http://localhost:3300/user/getProgress?username=${username}`,
       requestOptions
     )
       .then(async (result) => {

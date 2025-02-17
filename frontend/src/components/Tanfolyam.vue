@@ -3,9 +3,11 @@ import { Toolbar, Button, Avatar } from "primevue";
 import { RouterLink, useRouter } from "vue-router";
 import { Logout } from "../config/script.js";
 import ProgressBar from "primevue/progressbar";
-import { user_current_progress_store } from "../config/store.js";
+import { onMounted, ref } from "vue";
+import { getCookie, parseJwt } from "../lib/common.js";
 
 const router = useRouter();
+const user = ref(null);
 
 function ToTaskOne() {
   router.push("/taskone");
@@ -15,7 +17,10 @@ const Logout2 = () => {
   Logout();
 };
 
-console.log(user_current_progress_store.user_current_progress)
+onMounted(async () => {
+  const userObj = parseJwt(getCookie("access_token"));
+  user.value = userObj;
+});
 
 </script>
 
@@ -48,7 +53,7 @@ console.log(user_current_progress_store.user_current_progress)
     <h1 class="text-center">Tanfolyamok</h1>
     <div class="mt-2 mb-30">
       <h4>Beginner</h4>
-      <ProgressBar :value="user_current_progress_store.user_current_progress"></ProgressBar>
+      <ProgressBar :value="user?.user_current_progress"></ProgressBar>
       <div class="mt-2 flex" style="justify-content: flex-end">
       <Button @click="ToTaskOne" label="Folytatás" severity="success" rounded />
       </div>
