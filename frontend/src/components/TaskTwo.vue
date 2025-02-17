@@ -14,11 +14,32 @@ const selectPairEN = ref(-1);
 const re = ref(null);
 let NumberOfCorrectAnswers = ref(0);
 let progress = ref(0);
+let mixedHUId = []
+let mixedHU = []
+
+function RandomNumber(max) {
+   return Math.floor(Math.random() * max);
+}
 
 onMounted(async () => {
 re.value = await GetCurrentTaskPair(currentTaskId.value);
+console.log(re.value.length);
+for (let i = 0; i < re.value.length; i++) {
+}
 
+while (mixedHU.length < re.value.length) {
+    let szam = RandomNumber(re.value.length);
+    if (!mixedHU.includes(re.value[szam].magyar_par)) {
+        mixedHU.push(re.value[szam].magyar_par);
+        mixedHUId.push(re.value[szam].id);
+    }
+}
+for (let i = 0; i < mixedHU.length; i++) {
+    console.log(mixedHU[i]);
+    
+}
 });
+
 
 function SelectPairHU(buttonId){
     selectPairHU.value = document.getElementById("taskhu-"+buttonId).value;
@@ -56,12 +77,16 @@ function SelectPairEN(buttonId) {
 <h1>Angol Beginner</h1>
 <ProgressBar :value="progress"></ProgressBar>
 <p>2. fejezet</p>
+<div v-for="({ message }, index) in mixedHU" >
+    <p>{{ mixedHU[index] }} {{ mixedHUId[index] }}</p>
 
-<div class="text-center" v-for="task in re">
+</div>
+
+<div class="text-center" v-for="({ message }, index) in mixedHU">
     <div class="flex flex-row">
-        <div class="basis-1/3 mb-4 "><Button :value="'HU-'+task.id" :label="task.magyar_par" :id="'taskhu-' + task.magyar_par" severity="info" class="w-40" @click="SelectPairHU(task.magyar_par)"/></div>
+        <div class="basis-1/3 mb-4 "><Button :value="'HU-'+mixedHUId[index]" :label="mixedHU[index]" :id="'taskhu-' + mixedHU[index]" severity="info" class="w-40" @click="SelectPairHU(mixedHU[index])"/></div>
         <div class="basis-1/3"></div>
-        <div class="basis-1/3"><Button :value="'EN-'+task.id" :label="task.angol_par" severity="info" class="w-40" :id="'tasken-' + task.angol_par" @click="SelectPairEN(task.angol_par)"/></div>
+       <!-- <div class="basis-1/3"><Button :value="'EN-'+task.id" :label="task.angol_par" severity="info" class="w-40" :id="'tasken-' + task.angol_par" @click="SelectPairEN(task.angol_par)"/></div>-->
     </div>
 </div>
 <div v-if="NumberOfCorrectAnswers >= 5" class="mx-auto text-center align-middle">
