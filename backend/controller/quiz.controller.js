@@ -3,7 +3,7 @@ import {
   listAllQuizzes,
   listAllQuizzesPair,
   imageSaveToDB,
-  listAllQuizPairImg,
+  imageGetFromDB,
   listAllQuizzesListening
 } from "../service/quiz.service.js";
 
@@ -39,6 +39,6 @@ export { router };
 
 router.get("/getImages", async (req, res) => {
   const { kapottTipus } = req.query;
-  const data = await listAllQuizPairImg(kapottTipus);
+  const data = await imageGetFromDB(kapottTipus);
   res.status(200).json(data);
 });
