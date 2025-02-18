@@ -83,7 +83,6 @@ function SubmitAnswer() {
         placeholder="Write your answer here..."
         id="answereBox"
         type="text"
-        v-model="givenAnswer"
         variant="filled"
       />
       <Button @click="SubmitAnswer" label="Submit" severity="success" />

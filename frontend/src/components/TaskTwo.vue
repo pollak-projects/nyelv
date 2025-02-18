@@ -77,16 +77,11 @@ function SelectPairEN(buttonId) {
 <h1>Angol Beginner</h1>
 <ProgressBar :value="progress"></ProgressBar>
 <p>2. fejezet</p>
-<div v-for="({ message }, index) in mixedHU" >
-    <p>{{ mixedHU[index] }} {{ mixedHUId[index] }}</p>
-
-</div>
-
-<div class="text-center" v-for="({ message }, index) in mixedHU">
+<div class="text-center" v-for="({ task }, index) in re">
     <div class="flex flex-row">
-        <div class="basis-1/3 mb-4 "><Button :value="'HU-'+mixedHUId[index]" :label="mixedHU[index]" :id="'taskhu-' + mixedHU[index]" severity="info" class="w-40" @click="SelectPairHU(mixedHU[index])"/></div>
+        <div class="basis-1/3 mb-4"><Button :value="'HU-'+mixedHUId[index]" :label="mixedHU[index]" :id="'taskhu-' + mixedHU[index]" severity="info" class="w-40" @click="SelectPairHU(mixedHU[index])"/></div>
         <div class="basis-1/3"></div>
-       <!-- <div class="basis-1/3"><Button :value="'EN-'+task.id" :label="task.angol_par" severity="info" class="w-40" :id="'tasken-' + task.angol_par" @click="SelectPairEN(task.angol_par)"/></div>-->
+       <div class="basis-1/3 mb-4"><Button :value="'EN-'+re[index].id" :label="re[index].angol_par" severity="info" class="w-40" :id="'tasken-' + re[index].angol_par" @click="SelectPairEN(re[index].angol_par)"/></div>
     </div>
 </div>
 <div v-if="NumberOfCorrectAnswers >= 5" class="mx-auto text-center align-middle">
