@@ -55,7 +55,7 @@ export async function imageGetFromDB(kapottTipus) {
     },
   });
   data.forEach((element) => {
-    console.log(element.image);
+    //console.log(element.image);
     let buffer = Buffer.from(element.image);
     element.image = "data:image/png" + ";base64," + buffer.toString("base64");
   });

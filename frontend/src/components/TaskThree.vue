@@ -14,37 +14,52 @@ const question2 = ref([]);
 const question3 = ref([]);
 const question4 = ref([]);
 const question5 = ref([]);
+
+const correctAnswer1 = ref([]);
+const correctAnswer2 = ref([]);
+const correctAnswer3 = ref([]);
+const correctAnswer4 = ref([]);
+const correctAnswer5 = ref([]);
 const re = ref();
 let progress = ref(0);
 
 onMounted(async () => {
   re.value = await GetTaskThree(currentTaskId);
+  //console.log(re.value[0].image);  
   for (let i = 0; i < re.value.length; i++) {
     hungaryanTexts.value.push(re.value[i].text);
   }
-  question1.value.push(re.value[0].text);
-  question2.value.push(re.value[1].text);
-  question3.value.push(re.value[2].text);
-  question4.value.push(re.value[3].text);
-  question5.value.push(re.value[4].text);
+  question1.value.push(re.value[0].image);
+  correctAnswer1.value.push(re.value[0].text);
+  question2.value.push(re.value[1].image);
+  correctAnswer2.value.push(re.value[1].text);
+  question3.value.push(re.value[2].image);
+  correctAnswer3.value.push(re.value[2].text);
+  question4.value.push(re.value[3].image);
+  correctAnswer4.value.push(re.value[3].text);
+  question5.value.push(re.value[4].image);
+  correctAnswer5.value.push(re.value[4].text);
 });
 
 const correctAnswers = ref([]);
 
 
-function CheckTheMatch(corrcetId, listName) {
-  if (listName[0] == listName[1] && listName.length == 2) {
+function CheckTheMatch(corrcetId, listName1, listName2) {
+
+  if (listName1[0] == listName2[1] && listName2.length == 2) {
+    //console.log(listName[0] + " " + listName[1]); 
     alert("Correct Answer");
     console.log(corrcetId);
     correctAnswers.value.push(corrcetId);
     progress.value += 20;
-  } else if (listName.length == 2 && listName[0] != listName[1]) {
+  } else if (listName2.length == 2 && listName1[0] != listName2[1]) {
     alert("Incorrect Answer");
   }
 }
 
-function ChangeTest(corrcetId, listName) {
-  CheckTheMatch(corrcetId, listName);
+function ChangeTest(corrcetId, listName, listName2) {
+  //console.log(corrcetId);
+  CheckTheMatch(corrcetId, listName, listName2);
 }
 </script>
 
@@ -64,42 +79,42 @@ function ChangeTest(corrcetId, listName) {
       </div>
       <div class="basis-1/3"></div>
       <div class="basis-1/3">
-        <div id="list1-div" v-if="!correctAnswers.includes('question1')" :onchange="ChangeTest('question1', question1)">
+        <div id="list1-div" v-if="!correctAnswers.includes('question1')" :onchange="ChangeTest('question1', correctAnswer1, question1)">
           <draggable v-model="question1" tag="ul" group="meals" id="question1">
             <template #item="{ element: meal }">
-              <li>{{ meal }}</li>
+              <li> <img :src="meal" alt=""></li>
             </template>
           </draggable>
           <hr/>
         </div>
-        <div id="list2-div" v-if="!correctAnswers.includes('question2')" :onchange="ChangeTest('question2', question2)">
+        <div id="list2-div" v-if="!correctAnswers.includes('question2')" :onchange="ChangeTest('question2', correctAnswer2,question2)">
           <draggable v-model="question2" tag="ul" group="meals" id="question2">
             <template #item="{ element: meal }">
-              <li>{{ meal }}</li>
+              <li> <img :src="meal" alt=""></li>
             </template>
           </draggable>
           <hr>
         </div>
-        <div id="list3-div" v-if="!correctAnswers.includes('question3')" :onchange="ChangeTest('question3', question3)">
+        <div id="list3-div" v-if="!correctAnswers.includes('question3')" :onchange="ChangeTest('question3', correctAnswer3, question3)">
           <draggable v-model="question3" tag="ul" group="meals" id="question3">
             <template #item="{ element: meal }">
-              <li>{{ meal }}</li>
+              <li><img :src="meal" alt=""></li>
             </template>
           </draggable>
           <hr/>
         </div>
-        <div id="list4-div" v-if="!correctAnswers.includes('question4')" :onchange="ChangeTest('question4', question4)">
+        <div id="list4-div" v-if="!correctAnswers.includes('question4')" :onchange="ChangeTest('question4', correctAnswer4, question4)">
           <draggable v-model="question4" tag="ul" group="meals" id="question4">
             <template #item="{ element: meal }">
-              <li>{{ meal }}</li>
+              <li><img :src="meal" alt=""></li>
             </template>
           </draggable>
           <hr/>
         </div>
-        <div id="list5-div" v-if="!correctAnswers.includes('question5')" :onchange="ChangeTest('question5', question5)">
+        <div id="list5-div" v-if="!correctAnswers.includes('question5')" :onchange="ChangeTest('question5', correctAnswer5, question5)">
           <draggable v-model="question5" tag="ul" group="meals" id="question5">
             <template #item="{ element: meal }">
-              <li>{{ meal }}</li>
+              <li><img :src="meal" alt=""></li>
             </template>
           </draggable>
         </div> 

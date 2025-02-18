@@ -25,7 +25,7 @@ router.get("/getAllPair", async (req, res) => {
 router.get("/getAllListening", async (req, res) => {
   const { kapottTipus } = req.query;
   const data = await listAllQuizzesListening(kapottTipus);
-  console.log(data[0].audio);
+  //console.log(data[0].audio);
   res.status(200).json(data);
 });
 
