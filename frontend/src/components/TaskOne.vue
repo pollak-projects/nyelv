@@ -3,7 +3,7 @@ import InputText from 'primevue/inputtext';
 import { Button } from "primevue";
 import ProgressBar from 'primevue/progressbar';
 import { onMounted, ref } from 'vue';
-import { GetCurrentTask } from '../config/script';
+import { GetCurrentTask, SetProgress } from '../config/script';
 import { router } from '../config/routes';
 
 
@@ -32,6 +32,9 @@ function SubmitAnswer() {
             givenAnswer = "";
             isAnswerCorrect.value = 0;
             currentTaskNumber.value++;
+            if (currentTaskNumber.value > 5) {
+                SetProgress("Zete", 20);
+            }
             correctAnswer = re.value[currentTaskNumber.value-1].valasz;
         }, 2000);
     } else {

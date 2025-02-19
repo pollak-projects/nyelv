@@ -59,7 +59,7 @@ onMounted(async () => {
       </div>
     </div>
     <hr />
-    <div class="mt-2 disabled mb-30">
+    <div v-if="user?.user_current_progress >= 100" class="mt-2 disabled mb-30">
       <h4>Intermediate</h4>
       <ProgressBar :value="0"></ProgressBar>
     </div>

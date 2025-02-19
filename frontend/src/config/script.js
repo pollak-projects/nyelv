@@ -116,6 +116,27 @@ export async function GetTaskThree(kapottTipus) {
   });
 }
 
+export async function SetProgress(username, progress) {
+  let curentProgress = await GetUserProgress(username);
+ var requestOptions = {
+   method: "PUT",
+ };
+ return new Promise((resolve, reject) => {
+   fetch(
+     `http://localhost:3300/user/setProgress?username=${username}&progress=${curentProgress+progress}`,
+     requestOptions
+   )
+     .then(async (result) => {
+       const res = await result.text();
+       const valasz = JSON.parse(res);
+       resolve(valasz);
+     })
+     .catch((error) => console.log("error", error));
+ });
+
+}
+
+
 export async function GetCurrentTaskListening(taskId) {
   var requestOptions = {
     method: "GET",

@@ -1,6 +1,6 @@
 <script setup>
 import InputText from "primevue/inputtext";
-import { Button } from "primevue";
+import Button from "primevue/button";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { GetCurrentTaskListening } from "../config/script";
@@ -33,11 +33,10 @@ function GetCorrectAudio(taskNumber) {
   }
 }
 
-
 function SubmitAnswer() {
   let givenAnswer = document.getElementById("answereBox").value;
   console.log(correctAnswer.value);
-  if (givenAnswer == correctAnswer.value  ) {
+  if (givenAnswer == correctAnswer.value) {
     isAnswerCorrect.value = 1;
     progress.value += 20;
     setTimeout(() => {
@@ -56,52 +55,71 @@ function SubmitAnswer() {
   }
 
   unwrappedData = [];
-    for (let i = 0; i < 31000; i++) {
+  for (let i = 0; i < 31000; i++) {
     try {
-         const element = re.value[currentTaskNumber.value].audio[i];
-         unwrappedData.push(element); 
+      const element = re.value[currentTaskNumber.value].audio[i];
+      unwrappedData.push(element);
     } catch (error) {
       break;
     }
   }
-
 }
 </script>
-<template>
-  <h1>Angol Beginner</h1>
-  <ProgressBar :value="progress"></ProgressBar>
-  <p v-if="currentTaskNumber <= 5">
-    1. fejezet {{ currentTaskNumber+1 }}. feladat
-  </p>
-  <div class="mx-auto text-center align-middle" v-for="task in re">
-    <span v-if="task.id-1 == currentTaskNumber">
-      <audio controls class="mx-auto text-center align-middle mb-3">
-        <source :src="GetCorrectAudio(task.id-1)" type="audio/mp3" />
-        Your browser does not support the audio tag.
-      </audio>
-      <InputText
-        placeholder="Write your answer here..."
-        id="answereBox"
-        type="text"
-        variant="filled"
-      />
-      <Button @click="SubmitAnswer" label="Submit" severity="success" />
-    </span>
-  </div>
-  <div v-if="currentTaskNumber+1 > 5" class="mx-auto text-center align-middle">
-    <h1>Siker!</h1>
-  </div>
 
-  <div
-    v-if="isAnswerCorrect == 1"
-    class="fixed-bottom bg-emerald-400 h-40 w-full"
-  >
-    <h1 class="mb-5">Correct Answer</h1>
-    <p>Ide majd kiírjuk az összes mondatot.</p>
-  </div>
-  <div v-if="isAnswerCorrect == 2" class="fixed-bottom bg-red-600 h-40 w-full">
-    <h1 class="mb-5">Incorrect Answer</h1>
-    <p>Ide majd kiírjuk az összes mondatot.</p>
+<template>
+  <div class="min-h-screen bg-gray-100 py-8">
+    <div class="max-w-4xl mx-auto px-4">
+      <h1 class="text-3xl font-bold text-center mb-8">Angol Beginner</h1>
+      <ProgressBar :value="progress" class="mb-8"></ProgressBar>
+      <p v-if="currentTaskNumber <= 5" class="text-lg text-center mb-6">
+        1. fejezet {{ currentTaskNumber + 1 }}. feladat
+      </p>
+      <div
+        class="bg-white shadow-lg rounded-lg p-6"
+        v-for="task in re"
+        :key="task.id"
+      >
+        <div v-if="task.id - 1 == currentTaskNumber" class="space-y-6">
+          <audio controls class="w-full">
+            <source :src="GetCorrectAudio(task.id - 1)" type="audio/mp3" />
+            Your browser does not support the audio tag.
+          </audio>
+          <InputText
+            placeholder="Write your answer here..."
+            id="answereBox"
+            type="text"
+            class="w-full"
+          />
+          <Button
+            @click="SubmitAnswer"
+            label="Submit"
+            severity="success"
+            class="w-full"
+          />
+        </div>
+      </div>
+      <div
+        v-if="currentTaskNumber + 1 > 5"
+        class="text-center mt-8 bg-green-100 p-6 rounded-lg"
+      >
+        <h1 class="text-2xl font-bold text-green-700">Siker!</h1>
+      </div>
+
+      <div
+        v-if="isAnswerCorrect == 1"
+        class="fixed bottom-0 left-0 right-0 bg-emerald-400 p-6 text-white text-center"
+      >
+        <h1 class="text-2xl font-bold mb-3">Correct Answer</h1>
+        <p>Ide majd kiírjuk az összes mondatot.</p>
+      </div>
+      <div
+        v-if="isAnswerCorrect == 2"
+        class="fixed bottom-0 left-0 right-0 bg-red-600 p-6 text-white text-center"
+      >
+        <h1 class="text-2xl font-bold mb-3">Incorrect Answer</h1>
+        <p>Ide majd kiírjuk az összes mondatot.</p>
+      </div>
+    </div>
   </div>
 </template>
 

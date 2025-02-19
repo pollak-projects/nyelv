@@ -19,6 +19,17 @@ export async function getUserProgress(username) {
     return data.user_current_progress
 }
 
+export async function setUserProgress(username, progress) {
+    await prisma.user.update({
+        where: {
+            username: username
+        },
+        data: {
+            user_current_progress: progress
+        }
+    })
+}
+
 export async function login(username, password) {
     const user = await prisma.user.findUnique({
         where: {
