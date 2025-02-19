@@ -1,5 +1,5 @@
 import express from 'express'
-import { listAllUsers, addUser, deleteUser, updateUser, getUserProgress} from '../service/user.service.js';
+import { listAllUsers, addUser, deleteUser, updateUser} from '../service/user.service.js';
 
 const router = express.Router();
 
@@ -56,12 +56,6 @@ const router = express.Router();
  */
 router.get("/getAll", async (req, res) => {
     const data = await listAllUsers();
-    res.status(200).json(data);
-})
-
-router.get("/getProgress", async (req, res) => {
-    const username = req.query.username;
-    const data = await getUserProgress(username);
     res.status(200).json(data);
 })
 
@@ -221,5 +215,7 @@ router.put("/update", async (req, res) => {
         message: "Data successfully updated"
     })
 })
+
+
 
 export { router };

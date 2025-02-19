@@ -5,6 +5,7 @@ import { Logout } from "../config/script.js";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { getCookie, parseJwt } from "../lib/common.js";
+import { GetUserProgress } from "../config/script.js";
 
 const router = useRouter();
 const user = ref(null);
@@ -20,8 +21,11 @@ const Logout2 = () => {
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
+  if (userObj && userObj.username) {
+    const progress = await GetUserProgress(userObj.username);
+    user.value.user_current_progress = progress;
+  }
 });
-
 </script>
 
 <template>
@@ -55,7 +59,12 @@ onMounted(async () => {
       <h4>Beginner</h4>
       <ProgressBar :value="user?.user_current_progress"></ProgressBar>
       <div class="mt-2 flex" style="justify-content: flex-end">
-      <Button @click="ToTaskOne" label="Folytatás" severity="success" rounded />
+        <Button
+          @click="ToTaskOne"
+          label="Folytatás"
+          severity="success"
+          rounded
+        />
       </div>
     </div>
     <hr />

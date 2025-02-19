@@ -1,6 +1,5 @@
 import { router } from "../config/routes";
 
-
 export function Logout() {
   fetch(`http://localhost:3300/auth/logout`, {
     method: "POST",
@@ -43,7 +42,7 @@ export async function GetUserProgress(username) {
   };
   return new Promise((resolve, reject) => {
     fetch(
-      `http://localhost:3300/user/getProgress?username=${username}`,
+      `http://localhost:3300/self/getCurrentProgress?username=${username}`,
       requestOptions
     )
       .then(async (result) => {
@@ -133,5 +132,4 @@ export async function GetCurrentTaskListening(taskId) {
       .catch((error) => console.log("error", error));
   });
 }
-
 

@@ -3,10 +3,11 @@ import cookieParser from "cookie-parser";
 import { router as userRouter } from "./controller/user.controller.js";
 import { router as authRouter } from "./controller/auth.controller.js";
 import { router as quizRouter } from "./controller/quiz.controller.js";
+import { router as selfRouter } from "./controller/self.controller.js";
 import cors from "cors";
 import swaggerSpec from "./swagger.js";
 import swaggerUi from "swagger-ui-express";
-import disableMethodsForNonAdmin from "./middleware/auth.middleware.js";
+import { disableMethodsForNonAdmin } from "./middleware/auth.middleware.js";
 
 const app = express();
 const port = 3300;
@@ -21,8 +22,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -31,6 +31,7 @@ app.set("view engine", "ejs");
 app.use("/user", disableMethodsForNonAdmin, userRouter);
 app.use("/auth", authRouter);
 app.use("/quiz", quizRouter);
+app.use("/self", selfRouter);
 
 app.listen(port, () => {
   console.log(`App started at http://localhost:${port}`);
