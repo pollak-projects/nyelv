@@ -3,7 +3,6 @@ import { login, register } from "../service/auth.service.js";
 
 const router = express.Router();
 
-
 /**
  * @swagger
  * /register:
@@ -81,7 +80,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-
 /**
  * @swagger
  * /login:
@@ -155,12 +153,12 @@ router.post("/login", async (req, res) => {
     });
 
     return res.status(200).json(user);
+
   } catch (error) {
     console.error("Login error:", error);
     return res.status(400).json({ message: error.message });
   }
 });
-
 
 /**
  * @swagger
@@ -188,7 +186,5 @@ router.post("/logout", (req, res) => {
   });
   res.status(200).json({ message: "Sikeres kijelentkezés" });
 });
-
-
 
 export { router };

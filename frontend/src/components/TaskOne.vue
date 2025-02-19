@@ -61,33 +61,40 @@ function CheckLife() {
 </script>
 
 <template>
-<h1>Angol Beginner</h1>
-<ProgressBar :value="progress"></ProgressBar>
-<p v-if="currentTaskNumber <= 5">1. fejezet {{ currentTaskNumber }}. feladat</p>
+  <div class="flex flex-col items-center min-h-screen bg-gray-100 p-6">
+    <div class="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-6">
+      <h1 class="text-3xl font-bold text-gray-800 text-center mb-4">Angol Beginner</h1>
+      <ProgressBar :value="progress"></ProgressBar>
+      <p v-if="currentTaskNumber <= 5" class="text-lg text-gray-600 text-left">1. fejezet {{ currentTaskNumber }}. feladat</p>
+      
+      <div class="mt-6 bg-gray-50 p-4 rounded-lg shadow-md text-center" v-for="task in re" :key="task.id">
+        <span v-if="task.id == currentTaskNumber">
+          <h4 class="mb-5 text-xl font-semibold text-gray-700">{{ task.kerdes }}</h4>
+          <InputText placeholder="Write your answer here..." id="answereBox" type="text" variant="filled" class="border border-gray-300 rounded-lg px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <Button @click="SubmitAnswer" label="Submit" severity="success" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition" />
+        </span>
+      </div>
 
-<div class="mx-auto text-center align-middle" v-for="task in re">
-<span v-if="task.id == currentTaskNumber">
-<h4 class="mb-5" >{{task.kerdes}}</h4>
-<InputText placeholder="Write your answer here..." id="answereBox" type="text" variant="filled"/>
-<Button @click="SubmitAnswer" label="Submit" severity="success" />
-</span>
-</div>
-<div v-if="currentTaskNumber > 5" class="mx-auto text-center align-middle">
-<h1>Siker!</h1>
-<RouterLink to="/tasktwo"><Button label="Jöhet a következő fejezet!" severity="success" variant="text" /></RouterLink>
-<RouterLink to="/main"><Button label="Vissza a főoldalra" severity="info" variant="text" /></RouterLink>
-</div>
-
-
-<div v-if="isAnswerCorrect == 1" class="fixed-bottom bg-emerald-400 h-40 w-full">
-    <h1 class="mb-5">Correct Answer</h1>
-    <p>Ide majd kiírjuk az összes mondatot.</p>
-</div>
-<div v-if="isAnswerCorrect == 2" class="fixed-bottom bg-red-600 h-40 w-full">
-    <h1 class="mb-5">Incorrect Answer</h1>
-    <p>Ide majd kiírjuk az összes mondatot.</p>
-</div>
-
+      <div v-if="currentTaskNumber > 5" class="mx-auto text-center align-middle">
+        <h1 class="text-2xl font-bold text-green-600">Siker!</h1>
+        <RouterLink to="/tasktwo">
+          <Button label="Jöhet a következő fejezet!" severity="success" variant="text" class="mt-2" />
+        </RouterLink>
+        <RouterLink to="/main">
+          <Button label="Vissza a főoldalra" severity="info" variant="text" class="mt-2" />
+        </RouterLink>
+      </div>
+    </div>
+    
+    <div v-if="isAnswerCorrect == 1" class="fixed bottom-0 bg-emerald-400 h-40 w-full flex flex-col items-center justify-center">
+      <h1 class="text-2xl font-bold text-white">Correct Answer</h1>
+      <p class="text-white">Ide majd kiírjuk az összes mondatot.</p>
+    </div>
+    <div v-if="isAnswerCorrect == 2" class="fixed bottom-0 bg-red-600 h-40 w-full flex flex-col items-center justify-center">
+      <h1 class="text-2xl font-bold text-white">Incorrect Answer</h1>
+      <p class="text-white">Ide majd kiírjuk az összes mondatot.</p>
+    </div>
+  </div>
 </template>
 
 <style scoped>
