@@ -3,22 +3,29 @@ import InputText from 'primevue/inputtext';
 import { Button } from "primevue";
 import ProgressBar from 'primevue/progressbar';
 import { onMounted, ref } from 'vue';
-import { GetCurrentTask, SetProgress } from '../config/script';
+import { getCookie, parseJwt } from "../lib/common.js";
+import { GetCurrentTask, SetProgress, GetUserLevel } from '../config/script';
 import { router } from '../config/routes';
 
 
 const isAnswerCorrect = ref(0);
 const isAnswerWrong = ref(0);
-const currentTaskId = ref("beginner");
+const currentTaskLevel = ref("");
 const currentTaskNumber = ref(1);
+const currentTaskId = ref(1);
 const re = ref(null);
 let correctAnswer = ref("");
 let progress = ref(0);
+const user = ref(null);
+const level = ref(null);
 
 onMounted(async () => {
-re.value = await GetCurrentTask(currentTaskId.value);
+const userObj = parseJwt(getCookie("access_token"));
+user.value = userObj;
+currentTaskLevel.value = await GetUserLevel(user.value.username);
+re.value = await GetCurrentTask(currentTaskLevel.value);
+currentTaskId.value = re.value[currentTaskNumber.value-1].id;
 correctAnswer = re.value[currentTaskNumber.value-1].valasz;
-
 });
 
 
@@ -32,6 +39,7 @@ function SubmitAnswer() {
             givenAnswer = "";
             isAnswerCorrect.value = 0;
             currentTaskNumber.value++;
+            currentTaskId.value++;
             if (currentTaskNumber.value > 5) {
                 SetProgress("Zete", 20);
             }
@@ -49,6 +57,7 @@ function SubmitAnswer() {
                 SetProgress("Zete", 20);
             }
             currentTaskNumber.value++;
+            currentTaskId.value++;
             correctAnswer = re.value[currentTaskNumber.value-1].valasz;
         }, 2000);
     }
@@ -71,7 +80,7 @@ function CheckLife() {
       <p v-if="currentTaskNumber <= 5" class="text-lg text-gray-600 text-left">1. fejezet {{ currentTaskNumber }}. feladat</p>
       
       <div class="mt-6 bg-gray-50 p-4 rounded-lg shadow-md text-center" v-for="task in re" :key="task.id">
-        <span v-if="task.id == currentTaskNumber">
+        <span v-if="task.id == currentTaskId">
           <h4 class="mb-5 text-xl font-semibold text-gray-700">{{ task.kerdes }}</h4>
           <InputText placeholder="Write your answer here..." id="answereBox" type="text" variant="filled" class="border border-gray-300 rounded-lg px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
           <Button @click="SubmitAnswer" label="Submit" severity="success" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition" />

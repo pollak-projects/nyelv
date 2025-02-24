@@ -55,6 +55,7 @@ function ChangeTest(corrcetId, listName, listName2) {
 </script>
 
 <template>
+  
   <div class="min-h-screen bg-gray-100 py-8">
     <div class="max-w-4xl mx-auto px-4">
       <h1 class="text-3xl font-bold text-center mb-4">Angol Beginner</h1>
