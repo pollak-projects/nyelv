@@ -42,4 +42,4 @@ const disableMethodsForNonAdmin = (req, res, next) => {
 };
 
 
-export { disableMethodsForNonAdmin, checkAuth };
+export { disableMethodsForNonAdmin};

@@ -72,6 +72,16 @@ export async function updateUser(id, password, email) {
     })
 }
 
+export async function getUserLevel(username) {
+    const data = await prisma.user.findUnique({
+        where: {
+            username: username
+        }
+    })
+
+    return data.user_level
+}
+
 export async function deleteUser(id) {
     await prisma.user.delete({
         where: {

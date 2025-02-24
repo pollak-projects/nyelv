@@ -135,6 +135,43 @@ export async function SetProgress(username, progress) {
 
 }
 
+export async function GetUserLevel(username) {
+  var requestOptions = {
+   method: "GET",
+ };
+ return new Promise((resolve, reject) => {
+   fetch(
+     `http://localhost:3300/user/getUserLevel?username=${username}`,
+     requestOptions
+   )
+     .then(async (result) => {
+       const res = await result.text();
+       const valasz = JSON.parse(res);
+       resolve(valasz);
+     })
+     .catch((error) => console.log("error", error));
+ });
+
+}
+
+export async function GetDailyWord() {
+  var requestOptions = {
+    method: "GET",
+  };
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://localhost:3300/quiz/getDailyWord`,
+      requestOptions
+    )
+      .then(async (result) => {
+        const res = await result.text();
+        const valasz = JSON.parse(res);
+        resolve(valasz);
+      })
+      .catch((error) => console.log("error", error));
+  });
+ 
+}
 
 export async function GetCurrentTaskListening(taskId) {
   var requestOptions = {

@@ -8,7 +8,7 @@ model user {
     password String
     created_at DateTime
     updated_at DateTime
-    user_level Int @default(1)
+    user_level String @default("beginner")
     user_current_progress Int @default(0)
     isAdmin Int @default(0)
 }

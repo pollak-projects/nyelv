@@ -9,6 +9,7 @@ import swaggerSpec from "./swagger.js";
 import swaggerUi from "swagger-ui-express";
 import { disableMethodsForNonAdmin } from "./middleware/auth.middleware.js";
 
+
 const app = express();
 const port = 3300;
 

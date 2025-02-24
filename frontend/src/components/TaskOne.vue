@@ -45,6 +45,9 @@ function SubmitAnswer() {
             isAnswerCorrect.value = 0;
             isAnswerWrong.value += 1;
             CheckLife();
+            if (currentTaskNumber.value > 5) {
+                SetProgress("Zete", 20);
+            }
             currentTaskNumber.value++;
             correctAnswer = re.value[currentTaskNumber.value-1].valasz;
         }, 2000);

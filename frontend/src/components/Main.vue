@@ -4,13 +4,16 @@ import { RouterLink } from "vue-router";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { getCookie, parseJwt } from "../lib/common.js";
-import { Logout, GetUserProgress } from "../config/script.js";
+import { Logout, GetUserProgress, GetUserLevel, GetDailyWord } from "../config/script.js";
 
 const Logout2 = () => {
   Logout();
 };
 
 const user = ref(null);
+const level = ref(null);
+const dailyWordHU = ref(null);
+const dailyWordENG = ref(null);
 
 const timelineItems = ref([
   {
@@ -42,40 +45,48 @@ onMounted(async () => {
     const progress = await GetUserProgress(userObj.username)
   }
 
+  level.value = await GetUserLevel(userObj.username)
+  const dailyWord = await GetDailyWord()
+  dailyWordHU.value = dailyWord[1]
+  dailyWordENG.value = dailyWord[0]
+
 });
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Toolbar -->
-    <Toolbar class="bg-white shadow-md rounded-lg mx-4 mt-4 p-4">
-      <template #start>
-        <div class="flex items-center gap-4">
-          <RouterLink to="/main">
-            <Button label="Home" text plain class="p-2 hover:bg-gray-100 rounded" />
-          </RouterLink>
-          <Button label="Chat" text plain class="p-2 hover:bg-gray-100 rounded" />
-          <RouterLink to="/tanfolyam">
-            <Button label="Tanfolyamok" text plain class="p-2 hover:bg-gray-100 rounded" />
-          </RouterLink>
-        </div>
-      </template>
+    <Toolbar
+    style="border-radius: 3rem; padding: 1rem 1rem 1rem 1.5rem"
+    class="mt-1 ml-1 mr-1"
+  >
+    <template #start>
+      <div class="flex items-center gap-2">
+        <RouterLink to="/main">
+          <Button label="Home" text plain />
+        </RouterLink>
+        <RouterLink to="/chat"
+          ><Button label="Chat" text plain /></RouterLink>
+        <RouterLink to="/tanfolyam"
+          ><Button label="Tanfolyamok" text plain
+        /></RouterLink>
+      </div>
+    </template>
 
-      <template #end>
-        <div class="flex items-center gap-4">
-          <Button @click="Logout2" label="Kilépés" text plain class="p-2 hover:bg-gray-100 rounded" />
-          <RouterLink to="/profile">
-            <Avatar
-              image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
-              class="w-8 h-8 cursor-pointer"
-            />
-          </RouterLink>
-        </div>
-      </template>
-    </Toolbar>
+    <template #end>
+      <div class="flex items-center gap-2">
+        <Button @click="Logout2" label="Kilépés" text plain />
+        <RouterLink to="/profile"
+          ><Avatar
+            image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
+            style="width: 32px; height: 32px"
+        /></RouterLink>
+      </div>
+    </template>
+  </Toolbar>
 
     <!-- Welcome Message -->
     <h1 class="text-3xl font-bold text-center mt-8">Üdv {{ user?.username }}!</h1>
+    <h2>szinted: {{ level }}</h2>
 
     <!-- Course Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 mt-8">
@@ -107,8 +118,8 @@ onMounted(async () => {
         <template #header>
           <img alt="Discombobulate" src="../assets/napiszobackground.png" class="w-full h-48 object-cover" />
         </template>
-        <template #title>Discombobulate</template>
-        <template #subtitle>Szétzilál</template>
+        <template #title>{{ dailyWordENG }}</template>
+        <template #subtitle>{{dailyWordHU }}</template>
       </Card>
     </div>
 
