@@ -67,15 +67,18 @@ function SubmitAnswer() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100 py-8">
-    <div class="max-w-4xl mx-auto px-4">
-      <h1 class="text-3xl font-bold text-center mb-8">Angol Beginner</h1>
-      <ProgressBar :value="progress" class="mb-8"></ProgressBar>
-      <p v-if="currentTaskNumber <= 5" class="text-lg text-center mb-6">
-        1. fejezet {{ currentTaskNumber + 1 }}. feladat
+  <div class="flex flex-col items-center min-h-screen bg-gray-100 p-6">
+    <div class="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-6">
+      <h1 class="text-3xl font-bold text-gray-800 text-center mb-4">
+        Angol Beginner
+      </h1>
+      <ProgressBar :value="progress"></ProgressBar>
+      <p v-if="currentTaskNumber <= 5" class="text-lg text-gray-600 text-left">
+        4. fejezet {{ currentTaskNumber + 1 }}. feladat
       </p>
+
       <div
-        class="bg-white shadow-lg rounded-lg p-6"
+        class="mt-6 bg-gray-50 p-4 rounded-lg shadow-md text-center"
         v-for="task in re"
         :key="task.id"
       >
@@ -88,37 +91,47 @@ function SubmitAnswer() {
             placeholder="Write your answer here..."
             id="answereBox"
             type="text"
-            class="w-full"
+            variant="filled"
+            class="border border-gray-300 rounded-lg px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <Button
             @click="SubmitAnswer"
             label="Submit"
             severity="success"
-            class="w-full"
+            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
           />
         </div>
       </div>
-      <div
-        v-if="currentTaskNumber + 1 > 5"
-        class="text-center mt-8 bg-green-100 p-6 rounded-lg"
-      >
-        <h1 class="text-2xl font-bold text-green-700">Siker!</h1>
-      </div>
 
       <div
-        v-if="isAnswerCorrect == 1"
-        class="fixed bottom-0 left-0 right-0 bg-emerald-400 p-6 text-white text-center"
+        v-if="currentTaskNumber + 1 > 5"
+        class="mx-auto text-center align-middle"
       >
-        <h1 class="text-2xl font-bold mb-3">Correct Answer</h1>
-        <p>Ide majd kiírjuk az összes mondatot.</p>
+        <h1 class="text-2xl font-bold text-green-600">Siker!</h1>
+        <RouterLink to="/main">
+          <Button
+            label="Vissza a főoldalra"
+            severity="info"
+            variant="text"
+            class="mt-2"
+          />
+        </RouterLink>
       </div>
-      <div
-        v-if="isAnswerCorrect == 2"
-        class="fixed bottom-0 left-0 right-0 bg-red-600 p-6 text-white text-center"
-      >
-        <h1 class="text-2xl font-bold mb-3">Incorrect Answer</h1>
-        <p>Ide majd kiírjuk az összes mondatot.</p>
-      </div>
+    </div>
+
+    <div
+      v-if="isAnswerCorrect == 1"
+      class="fixed bottom-0 bg-emerald-400 h-40 w-full flex flex-col items-center justify-center"
+    >
+      <h1 class="text-2xl font-bold text-white">Correct Answer</h1>
+      <p class="text-white">Ide majd kiírjuk az összes mondatot.</p>
+    </div>
+    <div
+      v-if="isAnswerCorrect == 2"
+      class="fixed bottom-0 bg-red-600 h-40 w-full flex flex-col items-center justify-center"
+    >
+      <h1 class="text-2xl font-bold text-white">Incorrect Answer</h1>
+      <p class="text-white">Ide majd kiírjuk az összes mondatot.</p>
     </div>
   </div>
 </template>
