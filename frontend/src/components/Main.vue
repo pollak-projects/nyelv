@@ -89,8 +89,8 @@ onMounted(async () => {
     <h2>szinted: {{ level }}</h2>
 
     <!-- Course Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 mt-8">
-      <Card class="shadow-lg rounded-lg overflow-hidden">
+    <div class="flex gap-6 px-4 mt-8 justify-evenly flex-wrap">
+      <Card class="shadow-lg rounded-lg overflow-hidden w-1/3 min-w-72">
         <template #header>
           <img alt="English Course" src="../assets/england.png" class="w-full h-48 object-cover" />
         </template>
@@ -102,19 +102,9 @@ onMounted(async () => {
         </template>
       </Card>
 
-      <Card class="shadow-lg rounded-lg overflow-hidden">
-        <template #header>
-          <img alt="German Course" src="../assets/germany.png" class="w-full h-48 object-cover" />
-        </template>
-        <template #title>Német kurzus</template>
-        <template #subtitle>
-          <RouterLink to="/tanfolyam">
-            <Button label="Folytatás" class="w-full mt-4" />
-          </RouterLink>
-        </template>
-      </Card>
+      
 
-      <Card class="shadow-lg rounded-lg overflow-hidden">
+      <Card class="shadow-lg rounded-lg overflow-hidden w-1/3 min-w-72">
         <template #header>
           <img alt="Discombobulate" src="../assets/napiszobackground.png" class="w-full h-48 object-cover" />
         </template>
@@ -131,7 +121,7 @@ onMounted(async () => {
         <Timeline :value="timelineItems" layout="horizontal" align="bottom">
           <template #content="slotProps">
             <div class="p-4 bg-gray-50 rounded-lg">
-              <strong>{{ slotProps.item.status }}</strong>
+              <p class="h-10 font-bold">{{ slotProps.item.status }}</p>
               <small class="block text-gray-500">{{ slotProps.item.date }}</small>
             </div>
           </template>

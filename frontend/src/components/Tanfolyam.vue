@@ -1,11 +1,9 @@
 <script setup>
-import { Toolbar, Button, Avatar } from "primevue";
+import { Toolbar, Button, Avatar, ProgressBar, Card } from "primevue";
 import { RouterLink, useRouter } from "vue-router";
-import { Logout } from "../config/script.js";
-import ProgressBar from "primevue/progressbar";
+import { Logout, GetUserProgress } from "../config/script.js";
 import { onMounted, ref } from "vue";
 import { getCookie, parseJwt } from "../lib/common.js";
-import { GetUserProgress } from "../config/script.js";
 
 const router = useRouter();
 const user = ref(null);
@@ -29,62 +27,74 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="card">
-    <Toolbar style="border-radius: 3rem; padding: 1rem 1rem 1rem 1.5rem">
-      <template #start>
-        <div class="flex items-center gap-2">
-          <RouterLink to="/main"><Button label="Home" text plain /></RouterLink>
-          <Button label="Chat" text plain />
-          <RouterLink to="/tanfolyam"
-            ><Button label="Tanfolyamok" text plain
-          /></RouterLink>
-        </div>
-      </template>
-
-      <template #end>
-        <div class="flex items-center gap-2">
-          <Button @click="Logout2" label="Kilépés" text plain />
-          <RouterLink to="/profile"
-            ><Avatar
-              image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
-              style="width: 32px; height: 32px"
-          /></RouterLink>
-        </div>
-      </template>
-    </Toolbar>
-  </div>
-  <div class="mt-4">
-    <h1 class="text-center">Tanfolyamok</h1>
-    <div class="mt-2 mb-30">
-      <h4>Beginner</h4>
-      <ProgressBar :value="user?.user_current_progress"></ProgressBar>
-      <div class="mt-2 flex" style="justify-content: flex-end">
-        <Button
-          @click="ToTaskOne"
-          label="Folytatás"
-          severity="success"
-          rounded
-        />
+   <Toolbar
+    style="border-radius: 3rem; padding: 1rem 1rem 1rem 1.5rem"
+    class="mt-1 ml-1 mr-1"
+  >
+    <template #start>
+      <div class="flex items-center gap-2">
+        <RouterLink to="/main">
+          <Button label="Home" text plain />
+        </RouterLink>
+        <RouterLink to="/chat"
+          ><Button label="Chat" text plain /></RouterLink>
+        <RouterLink to="/tanfolyam"
+          ><Button label="Tanfolyamok" text plain
+        /></RouterLink>
       </div>
+    </template>
+
+    <template #end>
+      <div class="flex items-center gap-2">
+        <Button @click="Logout2" label="Kilépés" text plain />
+        <RouterLink to="/profile"
+          ><Avatar
+            image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
+            style="width: 32px; height: 32px"
+        /></RouterLink>
+      </div>
+    </template>
+  </Toolbar>
+  <div class="container mx-auto p-6">
+  
+
+    <div class="mt-10 text-center">
+      <h1 class="text-3xl font-bold text-gray-800">Tanfolyamok</h1>
     </div>
-    <hr />
-    <div v-if="user?.user_current_progress >= 100" class="mt-2 disabled mb-30">
-      <h4>Intermediate</h4>
-      <ProgressBar :value="0"></ProgressBar>
-    </div>
-    <hr />
-    <div class="mt-2 disabled">
-      <h4>Polyglot master</h4>
-      <ProgressBar :value="0"></ProgressBar>
+
+    <div class="mt-6 space-y-6">
+      <Card class="p-6 shadow-md border border-gray-200 rounded-lg">
+        <template #content>
+          <h4 class="text-lg font-semibold text-gray-700">Beginner</h4>
+          <ProgressBar :value="user?.user_current_progress" class="mt-2" />
+          <div class="mt-4 flex justify-end">
+            <Button @click="ToTaskOne" label="Folytatás" class="bg-green-500 text-white px-4 py-2 rounded-lg" />
+          </div>
+        </template>
+      </Card>
+      
+      <Card class="p-6 shadow-md border border-gray-200 rounded-lg disabled">
+        <template #content>
+          <h4 class="text-lg font-semibold text-gray-700">Intermediate</h4>
+          <ProgressBar :value="0" class="mt-2" />
+        </template>
+      </Card>
+      
+      <Card class="p-6 shadow-md border border-gray-200 rounded-lg disabled">
+        <template #content>
+          <h4 class="text-lg font-semibold text-gray-700">Polyglot Master</h4>
+          <ProgressBar :value="0" class="mt-2" />
+        </template>
+      </Card>
     </div>
   </div>
 </template>
 
 <style scoped>
 .disabled {
-  pointer-events: none; /* Nem lehet kattintani */
-  opacity: 0.5; /* Halványabb megjelenés */
-  filter: grayscale(100%); /* Szürkeárnyalatúvá teszi */
-  cursor: not-allowed; /* Tiltott kurzor */
+  pointer-events: none;
+  opacity: 0.5;
+  filter: grayscale(100%);
+  cursor: not-allowed;
 }
 </style>

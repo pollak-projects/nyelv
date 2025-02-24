@@ -7,7 +7,7 @@ import {
   listAllQuizzesListening
 } from "../service/quiz.service.js";
 import OpenAI from "openai/index.mjs";
-import { APIKEY } from "../apikey.js";
+
 
 const router = express.Router();
 
@@ -45,9 +45,9 @@ router.get("/getImages", async (req, res) => {
   res.status(200).json(data);
 });
 
-
+/*
 const openai = new OpenAI({
-  apiKey: APIKEY,
+  //apiKey: APIKEY,
 });
 
 async function Compilt() {
@@ -55,7 +55,7 @@ async function Compilt() {
     model: "gpt-4o",
     messages: [
       { role: "system", content: "You are a english teacher assistant." },
-      { role: "user", content: "Tell me a interesting english word must be something other than Petrichor and just the hungarian definition of the word not the english. in this format: word:definition don't put a space after the : no yap" },
+      { role: "user", content: "Tell me an interesting english word, it must be something other than Petrichor and just the hungarian definition of the word not the english. in this format: word:definition don't put a space after the : no yap" },
     ],
   });
   
@@ -72,3 +72,4 @@ router.get("/getDailyWord", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch chat response" });
   }
 });
+*/
