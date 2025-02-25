@@ -191,3 +191,31 @@ export async function GetCurrentTaskListening(taskId) {
   });
 }
 
+export async function UpdateUserLevel(username, level) {
+  let newLevel = "";
+  if(level=="beginner"){
+    newLevel = "intermediate";
+  }else if(level=="intermediate"){
+    newLevel = "polyglot_master";
+  }else{
+    alert("Valami hiba történt a szintlépés közben");
+    return;
+  }
+  var requestOptions = {
+    method: "PUT",
+  };
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://localhost:3300/user/setUserLevel?username=${username}&level=${newLevel}`,
+      requestOptions
+    )
+      .then(async (result) => {
+        const res = await result.text();
+        const valasz = JSON.parse(res);
+        resolve(valasz);
+      })
+      .catch((error) => console.log("error", error));
+  });
+
+}
+

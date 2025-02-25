@@ -1,5 +1,5 @@
 import express from 'express'
-import { listAllUsers, addUser, deleteUser, updateUser, getUserProgress, setUserProgress, getUserLevel} from '../service/user.service.js';
+import { listAllUsers, addUser, deleteUser, updateUser, getUserProgress, setUserProgress, getUserLevel, setUserLevel} from '../service/user.service.js';
 
 const router = express.Router();
 
@@ -80,6 +80,17 @@ router.put("/setProgress", async (req, res) => {
     })
 
 })
+
+router.put("/setUserLevel", async (req, res) => {
+  const username = req.query.username;
+  const level = req.query.level;
+  console.log(username, level);
+  await setUserLevel(username, level);
+  res.status(200).json({
+    message: "Data successfully updated",
+  });
+});
+
 
 /** 
  * @swagger

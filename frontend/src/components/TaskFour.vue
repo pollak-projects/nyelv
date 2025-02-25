@@ -3,7 +3,8 @@ import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
-import { GetCurrentTaskListening } from "../config/script";
+import { GetCurrentTaskListening, UpdateUserLevel } from "../config/script";
+import { getCookie, parseJwt } from "../lib/common.js";
 
 const isAnswerCorrect = ref(0);
 const currentTaskId = ref("beginner");
@@ -12,8 +13,11 @@ const re = ref(null);
 let correctAnswer = ref("");
 let progress = ref(0);
 let audioBlobUrl = ref("");
+const user = ref(null);
 
 onMounted(async () => {
+  const userObj = parseJwt(getCookie("access_token"));
+  user.value = userObj;
   re.value = await GetCurrentTaskListening(currentTaskId.value);
 });
 
@@ -43,6 +47,9 @@ function SubmitAnswer() {
       givenAnswer = "";
       isAnswerCorrect.value = 0;
       currentTaskNumber.value++;
+      if (currentTaskNumber.value == 5) {
+        UpdateUserLevel(user.value.username, "beginner");
+      }
     }, 2000);
   } else {
     isAnswerCorrect.value = 2;

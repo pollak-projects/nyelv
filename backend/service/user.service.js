@@ -82,6 +82,17 @@ export async function getUserLevel(username) {
     return data.user_level
 }
 
+export async function setUserLevel(username, level) {
+    const data = await prisma.user.update({
+        where: {
+            username: username
+        },
+        data: {
+            user_level: level
+        }
+    })
+}
+
 export async function deleteUser(id) {
     await prisma.user.delete({
         where: {

@@ -85,8 +85,7 @@ onMounted(async () => {
   </Toolbar>
 
     <!-- Welcome Message -->
-    <h1 class="text-3xl font-bold text-center mt-8">Üdv {{ user?.username }}!</h1>
-    <h2>szinted: {{ level }}</h2>
+    <h1 class="text-3xl font-bold ps-4 pt-4">Üdv {{ user?.username }}!</h1>
 
     <!-- Course Cards -->
     <div class="flex gap-6 px-4 mt-8 justify-evenly flex-wrap">
