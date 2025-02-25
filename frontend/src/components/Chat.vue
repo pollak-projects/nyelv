@@ -53,7 +53,7 @@ onMounted(async () => {
  
     <div class="basis-1/3 mb-4 mt-5">
   <div class="ml-150 font-bold">  {{ user?.username }} </div>
-    <div class="border-2 border-solid rounded-xl bg-amber-100">
+    <div class="border-2 border-solid rounded-xl bg-amber-50 h-12 text-right">
     safsafsafsaf
     </div>
  </div> <div class="basis-1/3 mb-4 mt-5 ">
@@ -61,7 +61,7 @@ onMounted(async () => {
     
  </div> <div class="basis-1/3 mb-4 mt-20">
   <div class="mr-150 font-bold">  {{ user?.username }} </div>
-    <div class="border-2 border-solid rounded-xl bg-amber-100 ">
+    <div class="border-2 border-solid rounded-xl bg-amber-50 h-12 text-left">
     eadfgdygdsg
 
     

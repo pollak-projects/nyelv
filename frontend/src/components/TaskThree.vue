@@ -62,18 +62,8 @@ function ChangeTest(corrcetId, listName, listName2) {
       <ProgressBar :value="progress" class="mb-8"></ProgressBar>
       <p class="text-lg text-center mb-6">3. fejezet</p>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Draggable Texts -->
-        <div class="bg-white shadow-lg rounded-lg p-6 text-center">
-          
-          <draggable v-model="hungaryanTexts" tag="ul" group="meals">
-            <template #item="{ element: text }">
-              <li class="p-3 mb-2 bg-gray-200 rounded-lg cursor-pointer hover:bg-gray-300">
-                {{ text }}
-              </li>
-            </template>
-          </draggable>
-        </div>
+     
+       
 
         <!-- Draggable Images -->
         <div class="col-span-2">
@@ -91,7 +81,7 @@ function ChangeTest(corrcetId, listName, listName2) {
                 </template>
               </draggable>
             </div>
-
+<!--
             <div
               v-if="!correctAnswers.includes('question2')"
               class="bg-white shadow-lg rounded-lg p-6"
@@ -146,18 +136,33 @@ function ChangeTest(corrcetId, listName, listName2) {
                   </li>
                 </template>
               </draggable>
+              -->
             </div>
           </div>
         </div>
       </div>
+
+
+       <!-- Draggable Texts -->
+<div class="bg-white shadow-lg rounded-lg p-6 text-center ">
+  <draggable v-model="hungaryanTexts" tag="ul" group="meals" class="flex flex-wrap justify-center gap-3">
+    <template #item="{ element: text }">
+      <li class="p-4 text-lg  bg-gray-200 rounded-lg cursor-pointer hover:bg-gray-300">
+        {{ text }}
+      </li>
+    </template>
+  </draggable>
+</div>
+
+
 
       <!-- Success Message -->
       <div v-if="progress == 100" class="mt-8 text-center">
         <h1 class="text-4xl font-bold text-green-600 mb-4">Siker!</h1>
         <p class="text-xl text-gray-700">Gratulálunk, minden feladatot sikeresen teljesítettél!</p>
       </div>
-    </div>
-  </div>
+  <!--  </div> -->
+ 
 </template>
 
 <style scoped>
