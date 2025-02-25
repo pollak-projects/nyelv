@@ -73,7 +73,7 @@ function SelectPairEN(buttonId) {
 <template>
   <div class="flex flex-col items-center min-h-screen bg-gray-100 p-10">
     <div class="w-full max-w-4xl bg-white shadow-2xl rounded-3xl p-10">
-      <h1 class="text-5xl font-bold text-gray-800 text-center mb-6">
+      <h1 class="text-5xl font-bold text-gray-800 text-center mb-12 pb-4">
         Angol Beginner
       </h1>
       <ProgressBar :value="progress" class="mb-6 h-6" />
@@ -91,7 +91,7 @@ function SelectPairEN(buttonId) {
               :label="mixedHU[index]"
               :id="'taskhu-' + mixedHU[index]"
               severity="info"
-              class="w-52 h-16 text-xl"
+              class="w-28 h-16 text-xl"
               @click="SelectPairHU(mixedHU[index])"
             />
             <div class="flex-grow"></div>
@@ -100,7 +100,7 @@ function SelectPairEN(buttonId) {
               :label="re[index].angol_par"
               :id="'tasken-' + re[index].angol_par"
               severity="info"
-              class="w-52 h-16 text-xl"
+              class="w-28 h-16 text-xl"
               @click="SelectPairEN(re[index].angol_par)"
             />
           </div>
