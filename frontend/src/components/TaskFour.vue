@@ -3,8 +3,9 @@ import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
-import { GetCurrentTaskListening, UpdateUserLevel } from "../config/script";
+import { GetCurrentTaskListening, UpdateUserLevel, GetUserProgress, SetProgress } from "../config/script";
 import { getCookie, parseJwt } from "../lib/common.js";
+import { router } from "../config/routes";
 
 const isAnswerCorrect = ref(0);
 const currentTaskId = ref("beginner");
@@ -18,6 +19,13 @@ const user = ref(null);
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
+  if (userObj && userObj.username) {
+    const progress = await GetUserProgress(userObj.username);
+    if (progress != 75) {
+      router.push("/tanfolyam");
+    }
+  }
+
   re.value = await GetCurrentTaskListening(currentTaskId.value);
 });
 
@@ -25,7 +33,6 @@ function GetCorrectAudio(taskNumber) {
   const audioByteArray = Object.values(re.value[taskNumber].audio);
   correctAnswer.value = re.value[taskNumber].valasz;
 
-  console.log(audioByteArray);
 
   if (audioByteArray && audioByteArray.length > 0) {
     const audioBlob = new Blob([new Uint8Array(audioByteArray)], {
@@ -47,7 +54,10 @@ function SubmitAnswer() {
       givenAnswer = "";
       isAnswerCorrect.value = 0;
       currentTaskNumber.value++;
-      if (currentTaskNumber.value == 5) {
+
+      if (currentTaskNumber.value == 5) 
+      {
+        SetProgress("Zete", 25);
         UpdateUserLevel(user.value.username, "beginner");
       }
     }, 2000);

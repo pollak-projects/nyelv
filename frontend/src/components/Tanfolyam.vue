@@ -8,8 +8,16 @@ import { getCookie, parseJwt } from "../lib/common.js";
 const router = useRouter();
 const user = ref(null);
 
-function ToTaskOne() {
-  router.push("/taskone");
+function ToCorrectTask(progress) {
+  if (progress == 0) {
+    router.push("/taskone");
+  } else if (progress == 25) {
+    router.push("/tasktwo");
+  } else if (progress == 50) {
+    router.push("/taskthree");
+  } else if (progress == 75) {
+    router.push("/taskfour");
+  }
 }
 
 const Logout2 = () => {
@@ -24,6 +32,7 @@ onMounted(async () => {
     user.value.user_current_progress = progress;
   }
 });
+
 </script>
 
 <template>
@@ -68,7 +77,7 @@ onMounted(async () => {
           <h4 class="text-lg font-semibold text-gray-700">Beginner</h4>
           <ProgressBar :value="user?.user_current_progress" class="mt-2" />
           <div class="mt-4 flex justify-end">
-            <Button @click="ToTaskOne" label="Folytatás" class="bg-green-500 text-white px-4 py-2 rounded-lg" />
+            <Button @click="ToCorrectTask(user?.user_current_progress)" label="Folytatás" class="bg-green-500 text-white px-4 py-2 rounded-lg" />
           </div>
         </template>
       </Card>

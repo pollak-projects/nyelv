@@ -3,26 +3,43 @@ import InputText from "primevue/inputtext";
 import { Button } from "primevue";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
-import { GetCurrentTaskPair } from "../config/script";
+import { GetCurrentTaskPair, GetUserLevel } from "../config/script";
+import { getCookie, parseJwt } from "../lib/common.js";
+import { GetUserProgress, SetProgress } from "../config/script";
+import { router } from "../config/routes";
 
 const isAnswerCorrect = ref(0);
-const currentTaskId = ref("beginner");
+const currentTaskLevel = ref("");
 const currentTaskNumber = ref(1);
+const currentTaskId = ref(1);
 const selectPairHU = ref(0);
 const selectPairEN = ref(-1);
+const addProgress = ref(0);
 const re = ref(null);
 let NumberOfCorrectAnswers = ref(0);
+const listLength = ref(0);
 let progress = ref(0);
 let mixedHUId = [];
 let mixedHU = [];
+const user = ref(null);
 
 function RandomNumber(max) {
   return Math.floor(Math.random() * max);
 }
 
 onMounted(async () => {
-  re.value = await GetCurrentTaskPair(currentTaskId.value);
-  console.log(re.value.length);
+  const userObj = parseJwt(getCookie("access_token"));
+  user.value = userObj;
+  if (userObj && userObj.username) {
+    const progress = await GetUserProgress(userObj.username);
+    if (progress != 25) {
+      router.push("/tanfolyam")
+    }
+  }
+  currentTaskLevel.value = await GetUserLevel(user.value.username);
+  re.value = await GetCurrentTaskPair(currentTaskLevel.value);
+  listLength.value = re.value.length;
+  addProgress.value = (100 / re.value.length);
   for (let i = 0; i < re.value.length; i++) {}
 
   while (mixedHU.length < re.value.length) {
@@ -54,9 +71,12 @@ function SelectPairEN(buttonId) {
     elementHU.remove();
     elementEN.remove();
     NumberOfCorrectAnswers.value++;
-    progress.value += 20;
+    progress.value += addProgress.value;
     isAnswerCorrect.value = 1;
     setTimeout(() => {
+      if (NumberOfCorrectAnswers >= listLength.value) {
+         
+      }
       isAnswerCorrect.value = 0;
     }, 1000);
   } else {
@@ -91,7 +111,7 @@ function SelectPairEN(buttonId) {
               :label="mixedHU[index]"
               :id="'taskhu-' + mixedHU[index]"
               severity="info"
-              class="w-52 h-16 text-xl"
+              class="w-30 h-16 text-xl"
               @click="SelectPairHU(mixedHU[index])"
             />
             <div class="flex-grow"></div>
@@ -100,7 +120,7 @@ function SelectPairEN(buttonId) {
               :label="re[index].angol_par"
               :id="'tasken-' + re[index].angol_par"
               severity="info"
-              class="w-52 h-16 text-xl"
+              class="w-30 h-16 text-xl"
               @click="SelectPairEN(re[index].angol_par)"
             />
           </div>
@@ -108,7 +128,7 @@ function SelectPairEN(buttonId) {
       </div>
 
       <div
-        v-if="NumberOfCorrectAnswers >= 5"
+        v-if="NumberOfCorrectAnswers >= listLength"
         class="mx-auto text-center align-middle mt-10"
       >
         <h1 class="text-4xl font-bold text-green-600">Siker!</h1>

@@ -4,7 +4,7 @@ import { Button } from "primevue";
 import ProgressBar from 'primevue/progressbar';
 import { onMounted, ref } from 'vue';
 import { getCookie, parseJwt } from "../lib/common.js";
-import { GetCurrentTask, SetProgress, GetUserLevel } from '../config/script';
+import { GetCurrentTask, SetProgress, GetUserLevel, GetUserProgress } from '../config/script';
 import { router } from '../config/routes';
 
 
@@ -20,8 +20,16 @@ const user = ref(null);
 const level = ref(null);
 
 onMounted(async () => {
-const userObj = parseJwt(getCookie("access_token"));
-user.value = userObj;
+  const userObj = parseJwt(getCookie("access_token"));
+  user.value = userObj;
+  if (userObj && userObj.username) {
+    const progress = await GetUserProgress(userObj.username);
+    if (progress != 0) {
+      router.push("/tanfolyam")
+    }
+  }
+
+
 currentTaskLevel.value = await GetUserLevel(user.value.username);
 re.value = await GetCurrentTask(currentTaskLevel.value);
 currentTaskId.value = re.value[currentTaskNumber.value-1].id;
@@ -41,7 +49,7 @@ function SubmitAnswer() {
             currentTaskNumber.value++;
             currentTaskId.value++;
             if (currentTaskNumber.value > 5) {
-                SetProgress("Zete", 20);
+                SetProgress("Zete", 25);
             }
             correctAnswer = re.value[currentTaskNumber.value-1].valasz;
         }, 2000);
