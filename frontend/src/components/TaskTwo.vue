@@ -88,6 +88,12 @@ function SelectPairEN(buttonId) {
     }, 1000);
   }
 }
+
+function SubmitTaskTwo() {
+  if (NumberOfCorrectAnswers.value >= listLength.value) {
+    SetProgress("Zete", 25);
+  }
+}
 </script>
 
 <template>
@@ -112,7 +118,7 @@ function SelectPairEN(buttonId) {
               :id="'taskhu-' + mixedHU[index]"
               severity="info"
               class="w-28 h-16 text-xl"
-              @click="SelectPairHU(mixedHU[index])"
+              @click="SubmitTaskTwo(SelectPairHU(mixedHU[index]))"
             />
             <div class="flex-grow"></div>
             <Button
@@ -121,17 +127,22 @@ function SelectPairEN(buttonId) {
               :id="'tasken-' + re[index].angol_par"
               severity="info"
               class="w-28 h-16 text-xl"
-              @click="SelectPairEN(re[index].angol_par)"
+              @click="SubmitTaskTwo(SelectPairEN(re[index].angol_par))"
             />
           </div>
         </div>
       </div>
-
       <div
         v-if="NumberOfCorrectAnswers >= listLength"
         class="mx-auto text-center align-middle mt-10"
       >
-        <h1 class="text-4xl font-bold text-green-600">Siker!</h1>
+      <h1 class="text-2xl font-bold text-green-600">Siker!</h1>
+        <RouterLink to="/taskthree">
+          <Button label="Jöhet a következő fejezet!" severity="success" variant="text" class="mt-2" />
+        </RouterLink>
+        <RouterLink to="/main">
+          <Button label="Vissza a főoldalra" severity="info" variant="text" class="mt-2" />
+        </RouterLink>
       </div>
     </div>
   </div>

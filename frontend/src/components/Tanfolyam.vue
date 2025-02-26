@@ -1,8 +1,8 @@
 <script setup>
 import { Toolbar, Button, Avatar, ProgressBar, Card } from "primevue";
 import { RouterLink, useRouter } from "vue-router";
-import { Logout, GetUserProgress } from "../config/script.js";
-import { onMounted, ref } from "vue";
+import { Logout, GetUserProgress, SetProgress } from "../config/script.js";
+import { onMounted, ref} from "vue";
 import { getCookie, parseJwt } from "../lib/common.js";
 
 const router = useRouter();
@@ -17,6 +17,12 @@ function ToCorrectTask(progress) {
     router.push("/taskthree");
   } else if (progress == 75) {
     router.push("/taskfour");
+  } 
+}
+
+function RevertLevel(progress) {
+  if (progress != 0) {
+    SetProgress("Zete", -(progress));
   }
 }
 
@@ -32,7 +38,6 @@ onMounted(async () => {
     user.value.user_current_progress = progress;
   }
 });
-
 </script>
 
 <template>
@@ -75,9 +80,9 @@ onMounted(async () => {
       <Card class="p-6 shadow-md border border-gray-200 rounded-lg">
         <template #content>
           <h4 class="text-lg font-semibold text-gray-700">Beginner</h4>
-          <ProgressBar :value="user?.user_current_progress" class="mt-2" />
+            <ProgressBar :value="Math.min(user?.user_current_progress, 100)" class="mt-2" />
           <div class="mt-4 flex justify-end">
-            <Button @click="ToCorrectTask(user?.user_current_progress)" label="Folytatás" class="bg-green-500 text-white px-4 py-2 rounded-lg" />
+            <Button @click="FinishedLevel(ToCorrectTask(user?.user_current_progress))" label="Folytatás" class="bg-green-500 text-white px-4 py-2 rounded-lg" />
           </div>
         </template>
       </Card>
@@ -85,16 +90,17 @@ onMounted(async () => {
       <Card class="p-6 shadow-md border border-gray-200 rounded-lg disabled">
         <template #content>
           <h4 class="text-lg font-semibold text-gray-700">Intermediate</h4>
-          <ProgressBar :value="0" class="mt-2" />
+          <ProgressBar :value="Math.min(user?.user_current_progress - 100, 100)" class="mt-2" />
         </template>
       </Card>
       
       <Card class="p-6 shadow-md border border-gray-200 rounded-lg disabled">
         <template #content>
           <h4 class="text-lg font-semibold text-gray-700">Polyglot Master</h4>
-          <ProgressBar :value="0" class="mt-2" />
+          <ProgressBar :value="Math.min(user?.user_current_progress - 200, 100)" class="mt-2" />
         </template>
       </Card>
+      <Button @click="RevertLevel(user?.user_current_progress)" label="Újrakezdés" class="bg-green-500 text-white px-4 py-2 rounded-lg" />
     </div>
   </div>
 </template>
@@ -106,4 +112,5 @@ onMounted(async () => {
   filter: grayscale(100%);
   cursor: not-allowed;
 }
+
 </style>
