@@ -15,13 +15,23 @@ let correctAnswer = ref("");
 let progress = ref(0);
 let audioBlobUrl = ref("");
 const user = ref(null);
+const levelTitle = ref("Angol Beginner");
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
   if (userObj && userObj.username) {
     const progress = await GetUserProgress(userObj.username);
-    if (progress != 75) {
+    if (progress === 175) {
+      levelTitle.value = "Angol Intermediate";
+    }
+    else if (progress === 275) {
+      levelTitle.value = "Angol Polyglot Master";
+    }
+    if (progress === 75 || progress === 175 || progress === 275) {
+      router.push("/taskfour")
+    }
+    else {
       router.push("/tanfolyam");
     }
   }
@@ -87,7 +97,7 @@ function SubmitAnswer() {
   <div class="flex flex-col items-center min-h-screen bg-gray-100 p-6">
     <div class="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-6">
       <h1 class="text-3xl font-bold text-gray-800 text-center mb-4">
-        Angol Beginner
+        {{ levelTitle }}
       </h1>
       <ProgressBar :value="progress"></ProgressBar>
       <p v-if="currentTaskNumber <= 5" class="text-lg text-gray-600 text-left">

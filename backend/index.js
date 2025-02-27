@@ -33,10 +33,10 @@ app.use("/user", disableMethodsForNonAdmin, userRouter);
 app.use("/auth", authRouter);
 app.use("/quiz", quizRouter);
 app.use("/self", selfRouter);
-/*
+
 app.listen(port, () => {
   console.log(`App started at http://localhost:${port}`);
 });
-*/
+
 
 export default app;

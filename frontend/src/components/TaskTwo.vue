@@ -22,6 +22,7 @@ let progress = ref(0);
 let mixedHUId = [];
 let mixedHU = [];
 const user = ref(null);
+const levelTitle = ref("Angol Beginner");
 
 function RandomNumber(max) {
   return Math.floor(Math.random() * max);
@@ -32,8 +33,17 @@ onMounted(async () => {
   user.value = userObj;
   if (userObj && userObj.username) {
     const progress = await GetUserProgress(userObj.username);
-    if (progress != 25) {
-      router.push("/tanfolyam")
+    if (progress === 125) {
+      levelTitle.value = "Angol Intermediate";
+    }
+    else if (progress === 225) {
+      levelTitle.value = "Angol Polyglot Master";
+    }
+    if (progress === 25 || progress === 125 || progress === 250) {
+      router.push("/tasktwo")
+    }
+    else {
+      router.push("/tanfolyam");
     }
   }
   currentTaskLevel.value = await GetUserLevel(user.value.username);
@@ -100,7 +110,7 @@ function SubmitTaskTwo() {
   <div class="flex flex-col items-center min-h-screen bg-gray-100 p-10">
     <div class="w-full max-w-4xl bg-white shadow-2xl rounded-3xl p-10">
       <h1 class="text-5xl font-bold text-gray-800 text-center mb-12 pb-4">
-        Angol Beginner
+        {{ levelTitle }}
       </h1>
       <ProgressBar :value="progress" class="mb-6 h-6" />
       <p class="text-2xl text-gray-600 text-left">2. fejezet</p>

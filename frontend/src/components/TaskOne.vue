@@ -18,14 +18,24 @@ let correctAnswer = ref("");
 let progress = ref(0);
 const user = ref(null);
 const level = ref(null);
+const levelTitle = ref("Angol Beginner");
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
   if (userObj && userObj.username) {
     const progress = await GetUserProgress(userObj.username);
-    if (progress != 0) {
-      router.push("/tanfolyam")
+    if (progress === 100) {
+      levelTitle.value = "Angol Intermediate";
+    }
+    else if (progress === 200) {
+      levelTitle.value = "Angol Polyglot Master";
+    }
+    if (progress === 0 || progress === 100 || progress === 200) {
+      router.push("/taskone")
+    }
+    else {
+      router.push("/tanfolyam");
     }
   }
 
@@ -83,7 +93,7 @@ function CheckLife() {
 <template>
   <div class="flex flex-col items-center min-h-screen bg-gray-100 p-6">
     <div class="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-6">
-      <h1 class="text-3xl font-bold text-gray-800 text-center mb-4">Angol Beginner</h1>
+      <h1 class="text-3xl font-bold text-gray-800 text-center mb-4">{{ levelTitle }}</h1>
       <ProgressBar :value="progress"></ProgressBar>
       <p v-if="currentTaskNumber <= 5" class="text-lg text-gray-600 text-left">1. fejezet {{ currentTaskNumber }}. feladat</p>
       

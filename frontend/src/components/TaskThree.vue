@@ -23,13 +23,23 @@ const correctAnswer5 = ref([]);
 const re = ref();
 let progress = ref(0);
 const user = ref(null);
+const levelTitle = ref("Angol Beginner");
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
   if (userObj && userObj.username) {
     const progress = await GetUserProgress(userObj.username);
-    if (progress != 50) {
+    if (progress === 150) {
+      levelTitle.value = "Angol Intermediate";
+    }
+    else if (progress === 250) {
+      levelTitle.value = "Angol Polyglot Master";
+    }
+    if (progress === 50 || progress === 150 || progress === 250) {
+      router.push("/taskthree")
+    }
+    else {
       router.push("/tanfolyam");
     }
   }
@@ -73,7 +83,7 @@ function ChangeTest(corrcetId, listName, listName2) {
 <template>
   <div class="min-h-screen bg-gray-100 py-8">
     <div class="max-w-4xl mx-auto px-4">
-      <h1 class="text-3xl font-bold text-center mb-4">Angol Beginner</h1>
+      <h1 class="text-3xl font-bold text-center mb-4">{{ levelTitle }}</h1>
       <ProgressBar :value="progress" class="mb-8"></ProgressBar>
       <p class="text-lg text-center mb-6">3. fejezet</p>
 
