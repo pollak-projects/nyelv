@@ -7,7 +7,6 @@ import { getCookie, parseJwt } from "../lib/common.js";
 import { GetCurrentTask, SetProgress, GetUserLevel, GetUserProgress } from '../config/script';
 import { router } from '../config/routes';
 
-
 const isAnswerCorrect = ref(0);
 const isAnswerWrong = ref(0);
 const currentTaskLevel = ref("");
@@ -71,8 +70,9 @@ function SubmitAnswer() {
             isAnswerCorrect.value = 0;
             isAnswerWrong.value += 1;
             CheckLife();
-            if (currentTaskNumber.value > 5) {
-                SetProgress("Zete", 20);
+            console.log(currentTaskNumber.value);
+            if (currentTaskNumber.value >= 5) {
+                SetProgress("Zete", 25);
             }
             currentTaskNumber.value++;
             currentTaskId.value++;

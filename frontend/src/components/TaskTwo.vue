@@ -9,6 +9,7 @@ import { GetUserProgress, SetProgress } from "../config/script";
 import { router } from "../config/routes";
 
 const isAnswerCorrect = ref(0);
+const isAnswerWrong = ref(0);
 const currentTaskLevel = ref("");
 const currentTaskNumber = ref(1);
 const currentTaskId = ref(1);
@@ -22,7 +23,7 @@ let progress = ref(0);
 let mixedHUId = [];
 let mixedHU = [];
 const user = ref(null);
-const levelTitle = ref("Angol Beginner");
+const levelTitle = ref("Angol ");
 
 function RandomNumber(max) {
   return Math.floor(Math.random() * max);
@@ -33,13 +34,8 @@ onMounted(async () => {
   user.value = userObj;
   if (userObj && userObj.username) {
     const progress = await GetUserProgress(userObj.username);
-    if (progress === 125) {
-      levelTitle.value = "Angol Intermediate";
-    }
-    else if (progress === 225) {
-      levelTitle.value = "Angol Polyglot Master";
-    }
-    if (progress === 25 || progress === 125 || progress === 250) {
+    levelTitle.value = levelTitle.value + user.value.level;
+    if (progress === 25) {
       router.push("/tasktwo")
     }
     else {
@@ -58,9 +54,6 @@ onMounted(async () => {
       mixedHU.push(re.value[szam].magyar_par);
       mixedHUId.push(re.value[szam].id);
     }
-  }
-  for (let i = 0; i < mixedHU.length; i++) {
-    console.log(mixedHU[i]);
   }
 });
 
@@ -90,13 +83,21 @@ function SelectPairEN(buttonId) {
       isAnswerCorrect.value = 0;
     }, 1000);
   } else {
-    console.log("Incorrect Answer");
+    isAnswerWrong.value++;
+    CheckLife();
     selectPairHU.value = 0;
     isAnswerCorrect.value = 2;
     setTimeout(() => {
       isAnswerCorrect.value = 0;
     }, 1000);
   }
+}
+
+function CheckLife() {
+    if (isAnswerWrong.value == 3) {
+        alert("Vesztettél!");
+        router.push("/tanfolyam");
+    }
 }
 
 function SubmitTaskTwo() {

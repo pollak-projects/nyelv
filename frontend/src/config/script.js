@@ -197,7 +197,10 @@ export async function UpdateUserLevel(username, level) {
     newLevel = "intermediate";
   }else if(level=="intermediate"){
     newLevel = "polyglot_master";
-  }else{
+  }else if(level=="polyglot_master"){
+    newLevel = "beginner";
+  }
+  else{
     alert("Valami hiba történt a szintlépés közben");
     return;
   }

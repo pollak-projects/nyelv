@@ -89,12 +89,14 @@ export async function getUserLevel(username) {
 }
 
 export async function setUserLevel(username, level) {
+  console.log("vagyok itt");
   const data = await prisma.user.update({
     where: {
       username: username,
     },
     data: {
       user_level: level,
+      user_current_progress: 0,
     },
   });
 }

@@ -9,6 +9,7 @@ import { router } from "../config/routes";
 
 const hungaryanTexts = ref([]);
 const currentTaskId = ref("beginner");
+const currentNumber = ref(1);
 const question1 = ref([]);
 const question2 = ref([]);
 const question3 = ref([]);
@@ -60,18 +61,31 @@ onMounted(async () => {
   correctAnswer5.value.push(re.value[4].text);
 });
 
+
 const correctAnswers = ref([]);
 
 function CheckTheMatch(corrcetId, listName1, listName2) {
   if (listName1[0] == listName2[1] && listName2.length == 2) {
     alert("Correct Answer");
     correctAnswers.value.push(corrcetId);
-    if (currentTaskNumber.value > 5) {
+    currentNumber.value += 1;
+    if (currentNumber.value > 5) {
+      console.log("Task Completed");
                 SetProgress("Zete", 25);
     }
     progress.value += 20;
   } else if (listName2.length == 2 && listName1[0] != listName2[1]) {
+    correctAnswers.value.push(corrcetId);
+    console.log(listName1[0]);
+    hungaryanTexts.value.reduceRight((acc, item, index) => {
+      if (item === listName1[0]) {
+        hungaryanTexts.value.splice(index, 1);
+      }
+    }, 0);
+    hungaryanTexts.value.push(listName2[1]);
+    currentNumber.value += 1;
     alert("Incorrect Answer");
+    progress.value += 20;
   }
 }
 
@@ -89,17 +103,17 @@ function ChangeTest(corrcetId, listName, listName2) {
 
       <!-- Draggable Images -->
       <div class="col-span-2">
-        <div class="space-y-6">
+        <div class="space-y-4">
           <div
             v-if="!correctAnswers.includes('question1')"
             class="bg-white shadow-lg rounded-lg p-6"
-            :onchange="ChangeTest('question1', correctAnswer1, question1)"
+            :onchange="ChangeTest(`question${currentNumber}`, correctAnswer1, question1)"
           >
             <draggable
               v-model="question1"
               tag="ul"
               group="meals"
-              id="question1"
+              :id="'question' + currentNumber"
             >
               <template #item="{ element: meal }">
                 <li class="flex justify-center">
@@ -112,62 +126,99 @@ function ChangeTest(corrcetId, listName, listName2) {
               </template>
             </draggable>
           </div>
-          <!--
-            <div
-              v-if="!correctAnswers.includes('question2')"
-              class="bg-white shadow-lg rounded-lg p-6"
-              :onchange="ChangeTest('question2', correctAnswer2, question2)"
-            >
-              <draggable v-model="question2" tag="ul" group="meals" id="question2">
-                <template #item="{ element: meal }">
-                  <li class="flex justify-center">
-                    <img :src="meal" alt="Question 2 Image" class="max-w-full h-auto rounded-lg" />
-                  </li>
-                </template>
-              </draggable>
-            </div>
 
-            <div
-              v-if="!correctAnswers.includes('question3')"
-              class="bg-white shadow-lg rounded-lg p-6"
-              :onchange="ChangeTest('question3', correctAnswer3, question3)"
+          <div
+            v-if="currentNumber == 2"
+            class="bg-white shadow-lg rounded-lg p-6"
+            :onchange="ChangeTest(`question2`, correctAnswer2, question2)"
+          >
+            <draggable
+              v-model="question2"
+              tag="ul"
+              group="meals"
+              :id="'question' + currentNumber"
             >
-              <draggable v-model="question3" tag="ul" group="meals" id="question3">
-                <template #item="{ element: meal }">
-                  <li class="flex justify-center">
-                    <img :src="meal" alt="Question 3 Image" class="max-w-full h-auto rounded-lg" />
-                  </li>
-                </template>
-              </draggable>
-            </div>
+              <template #item="{ element: meal }">
+                <li class="flex justify-center">
+                  <img
+                    :src="meal"
+                    alt="Question 1 Image"
+                    class="max-w-full h-auto rounded-lg"
+                  />
+                </li>
+              </template>
+            </draggable>
+          </div>
 
-            <div
-              v-if="!correctAnswers.includes('question4')"
-              class="bg-white shadow-lg rounded-lg p-6"
-              :onchange="ChangeTest('question4', correctAnswer4, question4)"
+          <div
+            v-if="currentNumber == 3"
+            class="bg-white shadow-lg rounded-lg p-6"
+            :onchange="ChangeTest(`question3`, correctAnswer3, question3)"
+          >
+            <draggable
+              v-model="question3"
+              tag="ul"
+              group="meals"
+              :id="'question' + currentNumber"
             >
-              <draggable v-model="question4" tag="ul" group="meals" id="question4">
-                <template #item="{ element: meal }">
-                  <li class="flex justify-center">
-                    <img :src="meal" alt="Question 4 Image" class="max-w-full h-auto rounded-lg" />
-                  </li>
-                </template>
-              </draggable>
-            </div>
+              <template #item="{ element: meal }">
+                <li class="flex justify-center">
+                  <img
+                    :src="meal"
+                    alt="Question 1 Image"
+                    class="max-w-full h-auto rounded-lg"
+                  />
+                </li>
+              </template>
+            </draggable>
+          </div>
 
-            <div
-              v-if="!correctAnswers.includes('question5')"
-              class="bg-white shadow-lg rounded-lg p-6"
-              :onchange="ChangeTest('question5', correctAnswer5, question5)"
+          <div
+            v-if="currentNumber == 4"
+            class="bg-white shadow-lg rounded-lg p-6"
+            :onchange="ChangeTest(`question4`, correctAnswer4, question4)"
+          >
+            <draggable
+              v-model="question4"
+              tag="ul"
+              group="meals"
+              :id="'question' + currentNumber"
             >
-              <draggable v-model="question5" tag="ul" group="meals" id="question5">
-                <template #item="{ element: meal }">
-                  <li class="flex justify-center">
-                    <img :src="meal" alt="Question 5 Image" class="max-w-full h-auto rounded-lg" />
-                  </li>
-                </template>
-              </draggable>
-              -->
+              <template #item="{ element: meal }">
+                <li class="flex justify-center">
+                  <img
+                    :src="meal"
+                    alt="Question 1 Image"
+                    class="max-w-full h-auto rounded-lg"
+                  />
+                </li>
+              </template>
+            </draggable>
+          </div>
+
+          <div
+            v-if="currentNumber == 5"
+            class="bg-white shadow-lg rounded-lg p-6"
+            :onchange="ChangeTest(`question5`, correctAnswer5, question5)"
+          >
+            <draggable
+              v-model="question5"
+              tag="ul"
+              group="meals"
+              :id="'question' + currentNumber"
+            >
+              <template #item="{ element: meal }">
+                <li class="flex justify-center">
+                  <img
+                    :src="meal"
+                    alt="Question 1 Image"
+                    class="max-w-full h-auto rounded-lg"
+                  />
+                </li>
+              </template>
+            </draggable>
+          </div>
+          
         </div>
       </div>
     </div>

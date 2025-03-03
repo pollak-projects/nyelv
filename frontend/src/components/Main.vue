@@ -150,6 +150,7 @@ onMounted(async () => {
           </div>
         </template>
       </Card>
+      
     </div>
 
     <!-- Footer -->
@@ -162,7 +163,7 @@ onMounted(async () => {
             <a href="https://instagram.com" target="_blank" rel="noopener" class="hover:text-gray-400">Instagram</a>
           </div>
           <div class="text-sm text-gray-400">
-            &copy; 2023 Your Company. All rights reserved.
+            &copy; 2025 Your Company. All rights reserved.
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
-import { GetCurrentTaskListening, UpdateUserLevel, GetUserProgress, SetProgress } from "../config/script";
+import { GetCurrentTaskListening, UpdateUserLevel, GetUserProgress, SetProgress, GetUserLevel } from "../config/script";
 import { getCookie, parseJwt } from "../lib/common.js";
 import { router } from "../config/routes";
 
@@ -15,13 +15,16 @@ let correctAnswer = ref("");
 let progress = ref(0);
 let audioBlobUrl = ref("");
 const user = ref(null);
-const levelTitle = ref("Angol Beginner");
+const userLevel = ref(null);
+const levelTitle = ref("Angol");
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
   if (userObj && userObj.username) {
+    console.log(userObj);
     const progress = await GetUserProgress(userObj.username);
+    userLevel.value = await GetUserLevel(userObj.username);
     if (progress === 175) {
       levelTitle.value = "Angol Intermediate";
     }
@@ -67,8 +70,14 @@ function SubmitAnswer() {
 
       if (currentTaskNumber.value == 5) 
       {
-        SetProgress("Zete", 25);
-        UpdateUserLevel(user.value.username, "beginner");
+        if (userLevel.value == "polyglot_master") {
+          SetProgress(user.value.username, 25);
+          
+        } else {
+        SetProgress("Zete", -75);
+        UpdateUserLevel(user.value.username, userLevel.value);
+        }
+
       }
     }, 2000);
   } else {
@@ -81,15 +90,7 @@ function SubmitAnswer() {
     }, 2000);
   }
 
-  unwrappedData = [];
-  for (let i = 0; i < 31000; i++) {
-    try {
-      const element = re.value[currentTaskNumber.value].audio[i];
-      unwrappedData.push(element);
-    } catch (error) {
-      break;
-    }
-  }
+ 
 }
 </script>
 
