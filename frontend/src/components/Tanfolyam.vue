@@ -41,8 +41,8 @@ onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
   if (userObj && userObj.username) {
-    const progress = await GetUserProgress(userObj.username);
-    const level = await GetUserLevel(userObj.username);
+    const progress = await GetUserProgress(user.value.sub);
+    const level = await GetUserLevel(user.value.sub);
     user.value.user_current_progress = progress;
     user.value.level = level;
   }

@@ -42,10 +42,10 @@ onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
   if (userObj && userObj.username){
-    const progress = await GetUserProgress(userObj.username)
+    const progress = await GetUserProgress(userObj.sub)
   }
 
-  level.value = await GetUserLevel(userObj.username)
+  level.value = await GetUserLevel(userObj.sub)
   const dailyWord = await GetDailyWord()
   dailyWordHU.value = dailyWord[1]
   dailyWordENG.value = dailyWord[0]

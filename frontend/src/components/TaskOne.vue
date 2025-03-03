@@ -23,7 +23,7 @@ onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
   if (userObj && userObj.username) {
-    const progress = await GetUserProgress(userObj.username);
+    const progress = await GetUserProgress(userObj.sub);
     if (progress === 100) {
       levelTitle.value = "Angol Intermediate";
     }
@@ -39,7 +39,7 @@ onMounted(async () => {
   }
 
 
-currentTaskLevel.value = await GetUserLevel(user.value.username);
+currentTaskLevel.value = await GetUserLevel(user.value.sub);
 re.value = await GetCurrentTask(currentTaskLevel.value);
 currentTaskId.value = re.value[currentTaskNumber.value-1].id;
 correctAnswer = re.value[currentTaskNumber.value-1].valasz;

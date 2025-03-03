@@ -1,5 +1,5 @@
 model user {
-    id Int @id @default(autoincrement())
+    id String @id @default(uuid())
     username String @unique
     first_name String
     last_name String

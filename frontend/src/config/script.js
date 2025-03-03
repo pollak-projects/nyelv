@@ -36,13 +36,13 @@ export async function GetCurrentTask(taskId) {
   });
 }
 
-export async function GetUserProgress(username) {
+export async function GetUserProgress(userId) {
   var requestOptions = {
     method: "GET",
   };
   return new Promise((resolve, reject) => {
     fetch(
-      `http://localhost:3300/self/getCurrentProgress?username=${username}`,
+      `http://localhost:3300/user/getProgress?userId=${userId}`,
       requestOptions
     )
       .then(async (result) => {
@@ -135,13 +135,13 @@ export async function SetProgress(username, progress) {
 
 }
 
-export async function GetUserLevel(username) {
+export async function GetUserLevel(userId) {
   var requestOptions = {
    method: "GET",
  };
  return new Promise((resolve, reject) => {
    fetch(
-     `http://localhost:3300/user/getUserLevel?username=${username}`,
+     `http://localhost:3300/user/getUserLevel?userId=${userId}`,
      requestOptions
    )
      .then(async (result) => {

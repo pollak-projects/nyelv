@@ -60,14 +60,15 @@ router.get("/getAll", async (req, res) => {
 })
 
 router.get("/getProgress", async (req, res) => {
-    const username = req.query.username;
-    const data = await getUserProgress(username);
+    const userId = req.query.userId;
+    console.log(userId);
+    const data = await getUserProgress(userId);
     res.status(200).json(data);
 })
 
 router.get("/getUserLevel", async (req, res) => {
-    const username = req.query.username;
-    const data = await getUserLevel(username);
+    const userId = req.query.userId;
+    const data = await getUserLevel(userId);
     res.status(200).json(data);
 })
 

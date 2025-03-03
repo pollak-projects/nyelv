@@ -9,10 +9,10 @@ export async function listAllUsers() {
   return data;
 }
 
-export async function getUserProgress(username) {
+export async function getUserProgress(userId) {
   const data = await prisma.user.findUnique({
     where: {
-      username: username,
+      id: userId,
     },
   });
 
@@ -78,10 +78,10 @@ export async function updateUser(id, password, email) {
   });
 }
 
-export async function getUserLevel(username) {
+export async function getUserLevel(userId) {
   const data = await prisma.user.findUnique({
     where: {
-      username: username,
+      id: userId,
     },
   });
 
@@ -89,7 +89,6 @@ export async function getUserLevel(username) {
 }
 
 export async function setUserLevel(username, level) {
-  console.log("vagyok itt");
   const data = await prisma.user.update({
     where: {
       username: username,
