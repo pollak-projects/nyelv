@@ -8,7 +8,7 @@ import cors from "cors";
 import swaggerSpec from "./swagger.js";
 import swaggerUi from "swagger-ui-express";
 import { disableMethodsForNonAdmin } from "./middleware/auth.middleware.js";
-
+import { listAllUsers } from "./service/user.service.js";
 
 const app = express();
 const port = 3300;
@@ -26,17 +26,28 @@ const corsOptions = {
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(cors(corsOptions));
+app.set("view engine", "ejs");
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.set("view engine", "ejs");
 app.use("/user", disableMethodsForNonAdmin, userRouter);
 app.use("/auth", authRouter);
 app.use("/quiz", quizRouter);
 app.use("/self", selfRouter);
 
+app.get("/", async (req, res) => {
+  const data = await listAllUsers();
+  console.log(data);
+  res.render("index", {
+    felhasznalok: data,
+  });
+});
+
+app.get("/login", async (req, res) => {
+  res.render("login");
+});
+
 app.listen(port, () => {
   console.log(`App started at http://localhost:${port}`);
 });
-
 
 export default app;
