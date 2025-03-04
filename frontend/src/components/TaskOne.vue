@@ -17,19 +17,15 @@ let correctAnswer = ref("");
 let progress = ref(0);
 const user = ref(null);
 const level = ref(null);
-const levelTitle = ref("Angol Beginner");
+const levelTitle = ref("Angol ");
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
   if (userObj) {
     const progress = await GetUserProgress(userObj.sub);
-    if (progress === 100) {
-      levelTitle.value = "Angol Intermediate";
-    }
-    else if (progress === 200) {
-      levelTitle.value = "Angol Polyglot Master";
-    }
+    currentTaskLevel.value = await GetUserLevel(user.value.sub);
+    levelTitle.value += currentTaskLevel.value
     if (progress === 0 || progress === 100 || progress === 200) {
       router.push("/taskone")
     }

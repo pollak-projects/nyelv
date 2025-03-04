@@ -18,7 +18,7 @@ let progress = ref(0);
 let audioBlobUrl = ref("");
 const user = ref(null);
 const userLevel = ref(null);
-const levelTitle = ref("Angol");
+const levelTitle = ref("Angol ");
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
@@ -28,13 +28,7 @@ onMounted(async () => {
     const progress = await GetUserProgress(userObj.sub);
     userLevel.value = await GetUserLevel(userObj.sub);
     currentTaskLevel.value = await GetUserLevel(user.value.sub);
-    console.log(currentTaskLevel.value);
-    if (progress === 175) {
-      levelTitle.value = "Angol Intermediate";
-    }
-    else if (progress === 275) {
-      levelTitle.value = "Angol Polyglot Master";
-    }
+    levelTitle.value += currentTaskLevel.value
     if (progress === 75 || progress === 175 || progress === 275) {
       router.push("/taskfour")
     }
