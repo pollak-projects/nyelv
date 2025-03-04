@@ -10,6 +10,7 @@ export async function listAllUsers() {
 }
 
 export async function getUserProgress(userId) {
+  console.log(userId);
   const data = await prisma.user.findUnique({
     where: {
       id: userId,
@@ -19,10 +20,10 @@ export async function getUserProgress(userId) {
   return data.user_current_progress;
 }
 
-export async function setUserProgress(username, progress) {
+export async function setUserProgress(userId, progress) {
   await prisma.user.update({
     where: {
-      username: username,
+      id: userId
     },
     data: {
       user_current_progress: progress,
@@ -88,10 +89,10 @@ export async function getUserLevel(userId) {
   return data.user_level;
 }
 
-export async function setUserLevel(username, level) {
+export async function setUserLevel(userId, level) {
   const data = await prisma.user.update({
     where: {
-      username: username,
+      id: userId
     },
     data: {
       user_level: level,

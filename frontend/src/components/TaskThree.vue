@@ -3,7 +3,7 @@ import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { GetTaskThree } from "../config/script";
 import draggable from "vuedraggable";
-import { GetUserProgress, SetProgress } from "../config/script";
+import { GetUserProgress, SetProgress, GetUserLevel } from "../config/script";
 import { getCookie, parseJwt } from "../lib/common.js";
 import { router } from "../config/routes";
 
@@ -30,7 +30,9 @@ onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
   if (userObj && userObj.username) {
-    const progress = await GetUserProgress(userObj.username);
+    const progress = await GetUserProgress(user.value.sub);
+    currentTaskId.value = await GetUserLevel(user.value.sub);
+    console.log(currentTaskId.value);
     if (progress === 150) {
       levelTitle.value = "Angol Intermediate";
     }
@@ -45,7 +47,7 @@ onMounted(async () => {
     }
   }
 
-  re.value = await GetTaskThree(currentTaskId);
+  re.value = await GetTaskThree(currentTaskId.value);
   for (let i = 0; i < re.value.length; i++) {
     hungaryanTexts.value.push(re.value[i].text);
   }
@@ -71,7 +73,7 @@ function CheckTheMatch(corrcetId, listName1, listName2) {
     currentNumber.value += 1;
     if (currentNumber.value > 5) {
       console.log("Task Completed");
-                SetProgress("Zete", 25);
+                SetProgress(user.value.sub, 25);
     }
     progress.value += 20;
   } else if (listName2.length == 2 && listName1[0] != listName2[1]) {

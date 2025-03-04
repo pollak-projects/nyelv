@@ -26,9 +26,9 @@ function ToCorrectTask(progress) {
 
 function RevertLevel(progress) {
   if (progress == 100) {
-    SetProgress("Zete", -(progress));
-    UpdateUserLevel("Zete", "polyglot_master");
-    
+    SetProgress(user.value.sub, -(progress));
+    UpdateUserLevel(user.value.sub, "polyglot_master");
+    location.reload();
   }
 }
 

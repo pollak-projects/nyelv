@@ -22,7 +22,7 @@ const levelTitle = ref("Angol Beginner");
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
-  if (userObj && userObj.username) {
+  if (userObj) {
     const progress = await GetUserProgress(userObj.sub);
     if (progress === 100) {
       levelTitle.value = "Angol Intermediate";
@@ -43,6 +43,7 @@ currentTaskLevel.value = await GetUserLevel(user.value.sub);
 re.value = await GetCurrentTask(currentTaskLevel.value);
 currentTaskId.value = re.value[currentTaskNumber.value-1].id;
 correctAnswer = re.value[currentTaskNumber.value-1].valasz;
+
 });
 
 
@@ -58,7 +59,7 @@ function SubmitAnswer() {
             currentTaskNumber.value++;
             currentTaskId.value++;
             if (currentTaskNumber.value > 5) {
-                SetProgress("Zete", 25);
+                SetProgress(user.value.sub, 25);
             }
             correctAnswer = re.value[currentTaskNumber.value-1].valasz;
         }, 2000);
@@ -72,7 +73,7 @@ function SubmitAnswer() {
             CheckLife();
             console.log(currentTaskNumber.value);
             if (currentTaskNumber.value >= 5) {
-                SetProgress("Zete", 25);
+                SetProgress(user.value.sub, 25);
             }
             currentTaskNumber.value++;
             currentTaskId.value++;

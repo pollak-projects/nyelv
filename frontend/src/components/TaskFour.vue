@@ -8,8 +8,10 @@ import { getCookie, parseJwt } from "../lib/common.js";
 import { router } from "../config/routes";
 
 const isAnswerCorrect = ref(0);
-const currentTaskId = ref("beginner");
-const currentTaskNumber = ref(0);
+const currentTaskLevel = ref("beginner");
+const currentTaskNumber = ref(1);
+const maxTaskNumber = ref(5);
+const currentTaskId = ref(1);
 const re = ref(null);
 let correctAnswer = ref("");
 let progress = ref(0);
@@ -23,8 +25,10 @@ onMounted(async () => {
   user.value = userObj;
   if (userObj && userObj.username) {
     console.log(userObj);
-    const progress = await GetUserProgress(userObj.username);
-    userLevel.value = await GetUserLevel(userObj.username);
+    const progress = await GetUserProgress(userObj.sub);
+    userLevel.value = await GetUserLevel(userObj.sub);
+    currentTaskLevel.value = await GetUserLevel(user.value.sub);
+    console.log(currentTaskLevel.value);
     if (progress === 175) {
       levelTitle.value = "Angol Intermediate";
     }
@@ -39,12 +43,15 @@ onMounted(async () => {
     }
   }
 
-  re.value = await GetCurrentTaskListening(currentTaskId.value);
+  re.value = await GetCurrentTaskListening(currentTaskLevel.value);
+  currentTaskId.value = re.value[currentTaskNumber.value-1].id;
+  maxTaskNumber.value = re.value.length;
 });
 
 function GetCorrectAudio(taskNumber) {
-  const audioByteArray = Object.values(re.value[taskNumber].audio);
-  correctAnswer.value = re.value[taskNumber].valasz;
+  const audioByteArray = Object.values(re.value[taskNumber-1].audio);
+  correctAnswer.value = re.value[taskNumber-1].valasz;
+  console.log(correctAnswer.value);
 
 
   if (audioByteArray && audioByteArray.length > 0) {
@@ -64,18 +71,19 @@ function SubmitAnswer() {
     isAnswerCorrect.value = 1;
     progress.value += 20;
     setTimeout(() => {
+      currentTaskId.value++;
       givenAnswer = "";
       isAnswerCorrect.value = 0;
       currentTaskNumber.value++;
 
-      if (currentTaskNumber.value == 5) 
+      if (currentTaskNumber.value > maxTaskNumber.value) 
       {
         if (userLevel.value == "polyglot_master") {
-          SetProgress(user.value.username, 25);
+          SetProgress(user.value.sub, 25);
           
         } else {
-        SetProgress("Zete", -75);
-        UpdateUserLevel(user.value.username, userLevel.value);
+        SetProgress(user.value.sub, -75);
+        UpdateUserLevel(user.value.sub, userLevel.value);
         }
 
       }
@@ -84,9 +92,22 @@ function SubmitAnswer() {
     isAnswerCorrect.value = 2;
     progress.value += 20;
     setTimeout(() => {
+      currentTaskId.value++;
       givenAnswer = "";
       isAnswerCorrect.value = 0;
       currentTaskNumber.value++;
+
+      if (currentTaskNumber.value > maxTaskNumber.value) 
+      {
+        if (userLevel.value == "polyglot_master") {
+          SetProgress(user.value.sub, 25);
+          
+        } else {
+        SetProgress(user.value.sub, -75);
+        UpdateUserLevel(user.value.sub, userLevel.value);
+        }
+
+      }
     }, 2000);
   }
 
@@ -110,9 +131,10 @@ function SubmitAnswer() {
         v-for="task in re"
         :key="task.id"
       >
-        <div v-if="task.id - 1 == currentTaskNumber" class="space-y-6">
+        <div v-if="task.id == currentTaskId" class="space-y-6">
+
           <audio controls class="w-full">
-            <source :src="GetCorrectAudio(task.id - 1)" type="audio/mp3" />
+            <source :src="GetCorrectAudio(currentTaskNumber)" type="audio/mp3" />
             Your browser does not support the audio tag.
           </audio>
           <InputText
@@ -132,7 +154,7 @@ function SubmitAnswer() {
       </div>
 
       <div
-        v-if="currentTaskNumber + 1 > 5"
+        v-if="currentTaskNumber > maxTaskNumber"
         class="mx-auto text-center align-middle"
       >
         <h1 class="text-2xl font-bold text-green-600">Siker!</h1>

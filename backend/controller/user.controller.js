@@ -73,9 +73,9 @@ router.get("/getUserLevel", async (req, res) => {
 })
 
 router.put("/setProgress", async (req, res) => {
-    const username = req.query.username;
+    const userId = req.query.userId;
     const progress = Number(req.query.progress);
-    await setUserProgress(username, progress);
+    await setUserProgress(userId, progress);
     res.status(200).json({
         message: "Data successfully updated"
     })
@@ -83,10 +83,10 @@ router.put("/setProgress", async (req, res) => {
 })
 
 router.put("/setUserLevel", async (req, res) => {
-  const username = req.query.username;
+  const userId = req.query.userId;
   const level = req.query.level;
   const progress = Number(req.query.progress);
-  await setUserLevel(username, level, progress);
+  await setUserLevel(userId, level, progress);
   res.status(200).json({
     message: "Data successfully updated",
   });

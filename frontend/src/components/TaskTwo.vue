@@ -32,8 +32,8 @@ function RandomNumber(max) {
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
   user.value = userObj;
-  if (userObj && userObj.username) {
-    const progress = await GetUserProgress(userObj.username);
+  if (userObj) {
+    const progress = await GetUserProgress(userObj.sub);
     levelTitle.value = levelTitle.value + user.value.level;
     if (progress === 25) {
       router.push("/tasktwo")
@@ -42,7 +42,7 @@ onMounted(async () => {
       router.push("/tanfolyam");
     }
   }
-  currentTaskLevel.value = await GetUserLevel(user.value.username);
+  currentTaskLevel.value = await GetUserLevel(user.value.sub);
   re.value = await GetCurrentTaskPair(currentTaskLevel.value);
   listLength.value = re.value.length;
   addProgress.value = (100 / re.value.length);
@@ -102,7 +102,7 @@ function CheckLife() {
 
 function SubmitTaskTwo() {
   if (NumberOfCorrectAnswers.value >= listLength.value) {
-    SetProgress("Zete", 25);
+    SetProgress(user.value.sub, 25);
   }
 }
 </script>

@@ -7,6 +7,7 @@ import {
   listAllQuizzesListening
 } from "../service/quiz.service.js";
 import OpenAI from "openai/index.mjs";
+import { APIKEY } from "../apikey.js";
 
 
 const router = express.Router();
@@ -47,29 +48,31 @@ router.get("/getImages", async (req, res) => {
 
 /*
 const openai = new OpenAI({
-  //apiKey: APIKEY,
+  apiKey: APIKEY,
 });
+let usedWords = "";
 
 async function Compilt() {
   const response = await openai.chat.completions.create({
     model: "gpt-4o",
     messages: [
-      { role: "system", content: "You are a english teacher assistant." },
-      { role: "user", content: "Tell me an interesting english word, it must be something other than Petrichor and just the hungarian definition of the word not the english. in this format: word:definition don't put a space after the : no yap" },
-    ],
+      { role: "system", content: "You are a knowledgeable English teacher assistant who provides interesting and unique English words along with their Hungarian definitions." },
+      { role: "user", content: "Give me an uncommon English word you can choose any word in the enlgish dictionary but non if this: "+ usedWords + ". Provide only the Hungarian definition, in the format: word:definition (without a space after the colon). The definition should be at least 15 words long and explain the meaning in depth." },
+],
   });
   
   return response.choices[0].message.content;
 }
-
+*/
 router.get("/getDailyWord", async (req, res) => {
   try {
     const data = await Compilt();
     const splited = data.split(":");
+    usedWords += splited[0] + ", ";
+    console.log(usedWords);
     res.status(200).json(splited);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch chat response" });
   }
 });
-*/

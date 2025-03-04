@@ -103,7 +103,7 @@ export async function GetTaskThree(kapottTipus) {
   };
   return new Promise((resolve, reject) => {
     fetch(
-      `http://localhost:3300/quiz/getImages?kapottTipus=beginner`,
+      `http://localhost:3300/quiz/getImages?kapottTipus=${kapottTipus}`,
       requestOptions
     )
       .then(async (result) => {
@@ -115,14 +115,14 @@ export async function GetTaskThree(kapottTipus) {
   });
 }
 
-export async function SetProgress(username, progress) {
-  let curentProgress = await GetUserProgress(username);
+export async function SetProgress(userId, progress) {
+  let curentProgress = await GetUserProgress(userId);
  var requestOptions = {
    method: "PUT",
  };
  return new Promise((resolve, reject) => {
    fetch(
-     `http://localhost:3300/user/setProgress?username=${username}&progress=${curentProgress+progress}`,
+     `http://localhost:3300/user/setProgress?userId=${userId}&progress=${curentProgress+progress}`,
      requestOptions
    )
      .then(async (result) => {
@@ -191,7 +191,7 @@ export async function GetCurrentTaskListening(taskId) {
   });
 }
 
-export async function UpdateUserLevel(username, level) {
+export async function UpdateUserLevel(userId, level) {
   let newLevel = "";
   if(level=="beginner"){
     newLevel = "intermediate";
@@ -209,7 +209,7 @@ export async function UpdateUserLevel(username, level) {
   };
   return new Promise((resolve, reject) => {
     fetch(
-      `http://localhost:3300/user/setUserLevel?username=${username}&level=${newLevel}`,
+      `http://localhost:3300/user/setUserLevel?userId=${userId}&level=${newLevel}`,
       requestOptions
     )
       .then(async (result) => {
