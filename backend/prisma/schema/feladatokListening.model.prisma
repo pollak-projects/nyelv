@@ -1,6 +1,6 @@
 model feladatokListeningAudio{
     id          Int         @id @default(autoincrement())
     valasz       String @unique     
-    audio       Bytes       @db.Blob
+    audio       Bytes       @db.LongBlob
     tipus String
 }
