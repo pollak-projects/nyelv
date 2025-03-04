@@ -34,7 +34,7 @@ app.use("/auth", authRouter);
 app.use("/quiz", quizRouter);
 app.use("/self", selfRouter);
 
-app.get("/", async (req, res) => {
+app.get("/admintable", disableMethodsForNonAdmin, async (req, res) => {
   const data = await listAllUsers();
   console.log(data);
   res.render("index", {
@@ -42,7 +42,7 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.get("/login", async (req, res) => {
+app.get("/", async (req, res) => {
   res.render("login");
 });
 

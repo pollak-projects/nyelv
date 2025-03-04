@@ -7,7 +7,7 @@ import {
   listAllQuizzesListening
 } from "../service/quiz.service.js";
 import OpenAI from "openai/index.mjs";
-import { APIKEY } from "../apikey.js";
+// import { APIKEY } from "../apikey.js";
 
 
 const router = express.Router();
