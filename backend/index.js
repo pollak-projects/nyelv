@@ -9,15 +9,25 @@ import swaggerSpec from "./swagger.js";
 import swaggerUi from "swagger-ui-express";
 import { disableMethodsForNonAdmin } from "./middleware/auth.middleware.js";
 import { listAllUsers } from "./service/user.service.js";
-import {Server} from "socket.io";
-import {createServer} from "http";
+import { Server } from "socket.io";
+import { createServer } from "http";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const app = express();
 const server = createServer(app);
 const port = 3300;
-const io = new Server(server);
+
+const io = new Server(server, {
+  cors: {
+    origin: [
+      "http://localhost:5173",
+      "https://pollak.info",
+      /https:\/\/[a-z0-9]+\.pollak\.info/,
+    ],
+    credentials: true,
+  },
+});
 
 const corsOptions = {
   origin: [
@@ -34,6 +44,7 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 app.set("view engine", "ejs");
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 app.use("/user", disableMethodsForNonAdmin, userRouter);
 app.use("/auth", authRouter);
@@ -63,7 +74,6 @@ async function SendToDB(msg) {
     },
   });
 }
-
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
