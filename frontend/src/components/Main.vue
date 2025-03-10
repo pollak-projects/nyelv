@@ -14,6 +14,8 @@ const user = ref(null);
 const level = ref(null);
 const dailyWordHU = ref(null);
 const dailyWordENG = ref(null);
+const dailyWordGame = ref(null);
+const dailyWordGameGiven = ref(null);
 
 const timelineItems = ref([
   {
@@ -49,8 +51,43 @@ onMounted(async () => {
   const dailyWord = await GetDailyWord()
   dailyWordHU.value = dailyWord[1]
   dailyWordENG.value = dailyWord[0]
+  //dailyWordGame.value = "brisk"
 
+    
+console.log(dailyWordGame.value.split(""));
+  
 });
+
+function SplitDailyWord(wordToSplit){
+    const splitWord = wordToSplit.split('');
+    return splitWord
+  } 
+
+
+function CheckLetter() {
+  let letter1 = document.getElementById("letter1").value
+  let letter2 = document.getElementById("letter2").value
+  let letter3 = document.getElementById("letter3").value
+  let letter4 = document.getElementById("letter4").value
+  let letter5 = document.getElementById("letter5").value
+  let dailyWordGameGiven = letter1 + letter2 + letter3 + letter4 + letter5
+  console.log(dailyWordGameGiven)
+  CompareLetters(dailyWordGame, dailyWordGameGiven)
+}
+
+function CompareLetters(params, params2) {
+   const word = SplitDailyWord("params")
+   const word2 = SplitDailyWord("params")
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] == word2[i]) {
+      console.log("Good job")
+    } else {
+      console.log("Try again")
+    }
+   }
+  }
+
+
 </script>
 
 <template>
@@ -116,15 +153,14 @@ onMounted(async () => {
     <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 px-4 mt-8">
       <!-- Timeline -->
       <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-bold mb-4">Aktivitások</h2>
-        <Timeline :value="timelineItems" layout="horizontal" align="bottom">
-          <template #content="slotProps">
-            <div class="p-4 bg-gray-50 rounded-lg">
-              <p class="h-10 font-bold">{{ slotProps.item.status }}</p>
-              <small class="block text-gray-500">{{ slotProps.item.date }}</small>
-            </div>
-          </template>
-        </Timeline>
+        <h2 class="text-xl font-bold mb-4">Találd ki a szót</h2>
+        <input id="letter1" type="text" class="w-10 border border-gray-300 rounded-lg p-2" /> &nbsp;
+        <input id="letter2" type="text" class="w-10 border border-gray-300 rounded-lg p-2" /> &nbsp;
+        <input id="letter3" type="text" class="w-10 border border-gray-300 rounded-lg p-2" /> &nbsp;
+        <input id="letter4" type="text" class="w-10 border border-gray-300 rounded-lg p-2" /> &nbsp;
+        <input id="letter5" type="text" class="w-10 border border-gray-300 rounded-lg p-2" /> &nbsp; 
+        <button @click="CheckLetter">Send</button>
+        
       </div>
 
       <!-- Progress Card -->

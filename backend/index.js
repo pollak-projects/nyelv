@@ -9,9 +9,15 @@ import swaggerSpec from "./swagger.js";
 import swaggerUi from "swagger-ui-express";
 import { disableMethodsForNonAdmin } from "./middleware/auth.middleware.js";
 import { listAllUsers } from "./service/user.service.js";
+import {Server} from "socket.io";
+import {createServer} from "http";
+import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
 const app = express();
+const server = createServer(app);
 const port = 3300;
+const io = new Server(server);
 
 const corsOptions = {
   origin: [
@@ -46,7 +52,33 @@ app.get("/login", async (req, res) => {
   res.render("login");
 });
 
-app.listen(port, () => {
+app.get("/chat", async (req, res) => {
+  res.render("chat");
+});
+
+async function SendToDB(msg) {
+  await prisma.chatMessages.create({
+    data: {
+      message: msg,
+    },
+  });
+}
+
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  socket.on("chat message", (msg) => {
+    SendToDB(msg);
+    io.emit("chat message", msg); // Mindenkinek továbbítja az üzenetet
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
+server.listen(port, () => {
   console.log(`App started at http://localhost:${port}`);
 });
 
