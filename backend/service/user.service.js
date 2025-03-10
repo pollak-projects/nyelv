@@ -67,14 +67,15 @@ export async function addUser(username, password, email, birth_date) {
     });
 }
 
-export async function updateUser(id, password, email) {
+export async function updateUser(id, username, email, isAdmin) {
   await prisma.user.update({
     where: {
       id: id,
     },
     data: {
-      password: password,
+      username: username,
       email: email,
+      isAdmin: isAdmin,
     },
   });
 }

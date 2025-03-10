@@ -10,6 +10,7 @@ import { router } from "../config/routes";
 const hungaryanTexts = ref([]);
 const currentTaskId = ref("beginner");
 const currentNumber = ref(1);
+const currentTaskLevel = ref();
 const question1 = ref([]);
 const question2 = ref([]);
 const question3 = ref([]);
@@ -24,7 +25,7 @@ const correctAnswer5 = ref([]);
 const re = ref();
 let progress = ref(0);
 const user = ref(null);
-const levelTitle = ref("Angol Beginner");
+const levelTitle = ref("Angol ");
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
@@ -32,13 +33,8 @@ onMounted(async () => {
   if (userObj && userObj.username) {
     const progress = await GetUserProgress(user.value.sub);
     currentTaskId.value = await GetUserLevel(user.value.sub);
-    console.log(currentTaskId.value);
-    if (progress === 150) {
-      levelTitle.value = "Angol Intermediate";
-    }
-    else if (progress === 250) {
-      levelTitle.value = "Angol Polyglot Master";
-    }
+    currentTaskLevel.value = await GetUserLevel(user.value.sub);
+    levelTitle.value += currentTaskLevel.value
     if (progress === 50 || progress === 150 || progress === 250) {
       router.push("/taskthree")
     }
