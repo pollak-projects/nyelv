@@ -12,6 +12,7 @@ import { listAllUsers } from "./service/user.service.js";
 import {Server} from "socket.io";
 import {createServer} from "http";
 import { PrismaClient } from "@prisma/client";
+import OpenAI from "openai";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -56,21 +57,51 @@ app.get("/chat", async (req, res) => {
   res.render("chat");
 });
 
-async function SendToDB(msg) {
+async function SendToDB(msg, flag) {
   await prisma.chatMessages.create({
     data: {
       message: msg,
+      flag: flag,
     },
   });
+}
+
+async function Moderation(msg){
+  const openai = new OpenAI({
+    apiKey:
+      "",
+  });
+  let flagged = 0;
+
+  const moderation = await openai.moderations.create({
+    model: "omni-moderation-latest",
+    input: msg,
+  });
+
+  for (const key in moderation.results[0].categories){
+    if (Object.prototype.hasOwnProperty.call(moderation.results[0].categories, key)) {
+      const element = moderation.results[0].categories[key];
+      if (element == true) {
+        flagged = 1
+      }
+    }
+  }
+  console.log(flagged)
+  return flagged
+  
 }
 
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  socket.on("chat message", (msg) => {
-    SendToDB(msg);
-    io.emit("chat message", msg); // Mindenkinek továbbítja az üzenetet
+  socket.on("chat message", async (msg) => {
+    let flag = await Moderation(msg)
+    
+    if (flag == 0) {
+       io.emit("chat message", msg); 
+    }
+    SendToDB(msg, flag)
   });
 
   socket.on("disconnect", () => {
