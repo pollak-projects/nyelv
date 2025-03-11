@@ -69,6 +69,11 @@ const router = createRouter({
       name: "ForgotPassword",
       component: () => import("../components/Forgotpassword.vue"),
     },
+    {
+      path: "/newpassword",
+      name: "NewPassword",
+      component: () => import("../components/Newpassword.vue"),
+    },
   ],
 });
 
@@ -80,6 +85,7 @@ router.beforeEach((to, from, next) => {
     to.name === "Login" &&
     to.name === "Register" &&
     to.name === "ForgotPassword" &&
+    to.name !== "NewPassword" &&
     accessToken &&
     parsedToken &&
     parsedToken.userGroup === "ADMIN"
@@ -89,7 +95,8 @@ router.beforeEach((to, from, next) => {
     (!accessToken &&
       to.name !== "Login" &&
       to.name !== "Register" &&
-      to.name !== "ForgotPassword") ||
+      to.name !== "ForgotPassword" &&
+      to.name !== "NewPassword") ||
     (to.name === "Register" && accessToken)
   ) {
     next({ name: "Login" });
