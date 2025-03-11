@@ -54,7 +54,7 @@ const router = createRouter({
       name: "Picture",
       component: () => import("../components/PicturesUpload.vue"),
     },
-       {
+    {
       path: "/chat",
       name: "Chat",
       component: () => import("../components/Chat.vue"),
@@ -63,7 +63,12 @@ const router = createRouter({
       path: "/chatroom",
       name: "ChatRoom",
       component: () => import("../components/Chat2.vue"),
-    }
+    },
+    {
+      path: "/forgotpassword",
+      name: "ForgotPassword",
+      component: () => import("../components/Forgotpassword.vue"),
+    },
   ],
 });
 
@@ -74,13 +79,17 @@ router.beforeEach((to, from, next) => {
   if (
     to.name === "Login" &&
     to.name === "Register" &&
+    to.name === "ForgotPassword" &&
     accessToken &&
     parsedToken &&
     parsedToken.userGroup === "ADMIN"
   ) {
     next({ name: "Kezdés" });
   } else if (
-    (!accessToken && to.name !== "Login" && to.name !== "Register") ||
+    (!accessToken &&
+      to.name !== "Login" &&
+      to.name !== "Register" &&
+      to.name !== "ForgotPassword") ||
     (to.name === "Register" && accessToken)
   ) {
     next({ name: "Login" });
