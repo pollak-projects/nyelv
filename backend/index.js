@@ -80,7 +80,7 @@ async function SendToDB(msg, flag) {
 async function Moderation(msg){
   const openai = new OpenAI({
     apiKey:
-      "",
+      "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",
   });
   let flagged = 0;
 
@@ -107,10 +107,14 @@ io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
   socket.on("chat message", async (msg) => {
-    let flag = await Moderation(msg)
+    let flag = await Moderation(msg.text)
     
     if (flag == 0) {
-       io.emit("chat message", msg); 
+
+       io.emit("chat message", {
+        text: msg.text,
+        userId: msg.userId,
+       }); 
     }
     SendToDB(msg, flag)
   });

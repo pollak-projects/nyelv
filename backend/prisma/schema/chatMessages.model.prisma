@@ -1,6 +1,9 @@
 model chatMessages {
-    id Int @id @default(autoincrement())
-    message String
-    flag Int @default(0)
-    timestamp DateTime @default(now())
-}   
+  id        Int      @id @default(autoincrement())
+  userId    String
+  message   String
+  flag      Int      @default(0)
+  timestamp DateTime @default(now())
+
+  user user @relation(fields: [userId], references: [id])
+}
