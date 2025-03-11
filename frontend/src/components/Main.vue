@@ -22,6 +22,17 @@ const dailyWordENG = ref(null);
 const dailyWordGame = ref(null);
 const dailyWordGameGiven = ref(null);
 const userLevel = ref(null);
+const siker = ref(0)
+const firstLetterCorrect = ref(false)
+const secondLetterCorrect = ref(false)
+const thirdLetterCorrect = ref(false)
+const fourthLetterCorrect = ref(false)
+const fifthLetterCorrect = ref(false)
+const firstLetterContains = ref(false)
+const secondLetterContains = ref(false)
+const thirdLetterContains = ref(false)
+const fourthLetterContains = ref(false)
+const fifthLetterContains = ref(false)
 const beginnerProgress = ref(0);
 const intermediateProgress = ref(0);
 const polyglotProgress = ref(0);
@@ -75,16 +86,16 @@ onMounted(async () => {
   const dailyWord = await GetDailyWord();
   dailyWordHU.value = dailyWord[1];
   dailyWordENG.value = dailyWord[0];
-  //dailyWordGame.value = "brisk"
+  dailyWordGame.value = "brisk"
 
   console.log(dailyWordGame.value.split(""));
 });
-
+/*
 function SplitDailyWord(wordToSplit) {
   const splitWord = wordToSplit.split("");
   return splitWord;
 }
-
+*/
 function CheckLetter() {
   let letter1 = document.getElementById("letter1").value;
   let letter2 = document.getElementById("letter2").value;
@@ -92,19 +103,90 @@ function CheckLetter() {
   let letter4 = document.getElementById("letter4").value;
   let letter5 = document.getElementById("letter5").value;
   let dailyWordGameGiven = letter1 + letter2 + letter3 + letter4 + letter5;
-  console.log(dailyWordGameGiven);
-  CompareLetters(dailyWordGame, dailyWordGameGiven);
+  console.log(dailyWordGameGiven.split(""));
+  CompareLetters(dailyWordGame.value.split(""), dailyWordGameGiven.split(""));
 }
 
 function CompareLetters(params, params2) {
-  const word = SplitDailyWord("params");
-  const word2 = SplitDailyWord("params");
+  const word = params;
+  const word2 = params2;
+
   for (let i = 0; i < word.length; i++) {
     if (word[i] == word2[i]) {
       console.log("Good job");
+      
+      console.log(siker)
+      
     } else {
       console.log("Try again");
     }
+
+     if (word[0] == word2[0]) {
+      
+      firstLetterCorrect.value = true
+      
+    } 
+
+    if (word[1] == word2[1]) {
+      
+      secondLetterCorrect.value = true
+      
+    } 
+
+    if (word[2] == word2[2]) {
+      
+      thirdLetterCorrect.value = true
+      
+    } 
+
+    if (word[3] == word2[3]) {
+      
+     fourthLetterCorrect.value = true
+      
+    } 
+
+    if (word[4] == word2[4]) {
+      
+      fifthLetterCorrect.value = true
+      
+    } 
+
+
+
+   if (word.includes(word2[0]) ) {
+      
+    firstLetterContains.value = true
+      
+    } 
+
+     if (word.includes(word2[1]) ) {
+      
+    secondLetterContains.value = true
+      
+    }
+
+
+     if (word.includes(word2[2]) ) {
+      
+    thirdLetterContains.value = true
+      
+    }
+
+     if (word.includes(word2[3]) ) {
+      
+    fourthLetterContains.value = true
+      
+    }
+
+      if (word.includes(word2[4]) ) {
+      
+    fifthLetterContains.value = true
+      
+    }
+    
+
+
+
   }
 }
 </script>
@@ -173,43 +255,186 @@ function CompareLetters(params, params2) {
       </Card>
     </div>
 
-    <!-- Timeline and Progress Section -->
+    <!-- Word game  -->
     <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 px-4 mt-8">
       <!-- Timeline -->
-      <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-xl font-bold mb-4">Találd ki a szót</h2>
+      <div  class="bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-xl font-bold mb-4">Találd ki a szót!</h2>
+        <!--first row-->
         <input
           id="letter1"
           type="text"
           class="w-10 border border-gray-300 rounded-lg p-2"
+          maxlength="1"
         />
-        &nbsp;
+      
         <input
           id="letter2"
           type="text"
           class="w-10 border border-gray-300 rounded-lg p-2"
+          maxlength="1"
         />
-        &nbsp;
+     
         <input
           id="letter3"
           type="text"
           class="w-10 border border-gray-300 rounded-lg p-2"
+          maxlength="1"
         />
-        &nbsp;
+       
         <input
           id="letter4"
           type="text"
           class="w-10 border border-gray-300 rounded-lg p-2"
+          maxlength="1"
         />
-        &nbsp;
+     
         <input
           id="letter5"
           type="text"
           class="w-10 border border-gray-300 rounded-lg p-2"
+          maxlength="1"
         />
-        &nbsp;
+      
         <button @click="CheckLetter">Send</button>
+        <div v-if="firstLetterCorrect && secondLetterCorrect && thirdLetterCorrect && fourthLetterCorrect && fifthLetterCorrect">Siker!</div>
+        <div><input
+          v-if="firstLetterCorrect"
+          id="letter1"
+          type="text"
+          
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-emerald-400"
+          maxlength="1"
+        />
+
+        <input
+          v-if="!firstLetterCorrect&&!firstLetterContains"
+          id="letter1"
+          type="text"
+          
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-red-600"
+          maxlength="1"
+        />
+
+        <input
+          v-if="firstLetterContains&&!firstLetterCorrect"
+          id="letter1"
+          type="text"
+          
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-amber-300"
+          maxlength="1"
+        />
+
+        
+      
+        <input
+        v-if="secondLetterCorrect"
+          id="letter2"
+          type="text"
+          class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
+          maxlength="1"
+        />
+
+         <input
+        v-if="!secondLetterCorrect&& !secondLetterContains"
+          id="letter2"
+          type="text"
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-red-600"
+          maxlength="1"
+        />
+       
+           <input
+          v-if="secondLetterContains&&!secondLetterCorrect"
+          id="letter1"
+          type="text"
+          
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-amber-300"
+          maxlength="1"
+        />
+
+        <input
+        v-if="thirdLetterCorrect"
+          id="letter3"
+          type="text"
+          class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
+          maxlength="1"
+        />
+
+         <input
+        v-if="!thirdLetterCorrect && !thirdLetterContains"
+          id="letter3"
+          type="text"
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-red-600"
+          maxlength="1"
+        />
+
+            <input
+          v-if="thirdLetterContains&&!thirdLetterCorrect"
+          id="letter1"
+          type="text"
+          
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-amber-300"
+          maxlength="1"
+        />
+        
+        <input
+        v-if="fourthLetterCorrect "
+          id="letter4"
+          type="text"
+          class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
+          maxlength="1"
+        />
+
+          <input
+        v-if="!fourthLetterCorrect && !fourthLetterContains"
+          id="letter4"
+          type="text"
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-red-600"
+          maxlength="1"
+        />
+        
+
+          <input
+          v-if="fourthLetterContains&&!fourthLetterCorrect"
+          id="letter1"
+          type="text"
+          
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-amber-300"
+          maxlength="1"
+        />
+        
+        <input
+        v-if="fifthLetterCorrect"
+          id="letter5"
+          type="text"
+          class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
+          maxlength="1"
+        />
+
+         <input
+        v-if="!fifthLetterCorrect && !fifthLetterContains"
+          id="letter5"
+          type="text"
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-red-600"
+          maxlength="1"
+        />
+
+         <input
+          v-if="fifthLetterContains&&!fifthLetterCorrect"
+          id="letter1"
+          type="text"
+          
+          class="w-10 border border-gray-300 rounded-lg p-2  bg-amber-300"
+          maxlength="1"
+        />
+        </div>
+
+        
+
+        
       </div>
+
+      
 
       <!-- Progress Card -->
       <Card class="shadow-lg rounded-lg">
