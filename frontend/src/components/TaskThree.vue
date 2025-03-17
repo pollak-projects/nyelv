@@ -34,11 +34,10 @@ onMounted(async () => {
     const progress = await GetUserProgress(user.value.sub);
     currentTaskId.value = await GetUserLevel(user.value.sub);
     currentTaskLevel.value = await GetUserLevel(user.value.sub);
-    levelTitle.value += currentTaskLevel.value
+    levelTitle.value += currentTaskLevel.value;
     if (progress === 50 || progress === 150 || progress === 250) {
-      router.push("/taskthree")
-    }
-    else {
+      router.push("/taskthree");
+    } else {
       router.push("/tanfolyam");
     }
   }
@@ -59,7 +58,6 @@ onMounted(async () => {
   correctAnswer5.value.push(re.value[4].text);
 });
 
-
 const correctAnswers = ref([]);
 
 function CheckTheMatch(corrcetId, listName1, listName2) {
@@ -69,7 +67,7 @@ function CheckTheMatch(corrcetId, listName1, listName2) {
     currentNumber.value += 1;
     if (currentNumber.value > 5) {
       console.log("Task Completed");
-                SetProgress(user.value.sub, 25);
+      SetProgress(user.value.sub, 25);
     }
     progress.value += 20;
   } else if (listName2.length == 2 && listName1[0] != listName2[1]) {
@@ -105,7 +103,9 @@ function ChangeTest(corrcetId, listName, listName2) {
           <div
             v-if="!correctAnswers.includes('question1')"
             class="bg-white shadow-lg rounded-lg p-6"
-            :onchange="ChangeTest(`question${currentNumber}`, correctAnswer1, question1)"
+            :onchange="
+              ChangeTest(`question${currentNumber}`, correctAnswer1, question1)
+            "
           >
             <draggable
               v-model="question1"
@@ -216,28 +216,26 @@ function ChangeTest(corrcetId, listName, listName2) {
               </template>
             </draggable>
           </div>
-          
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Draggable Texts -->
-  <div class="bg-white shadow-lg rounded-lg p-6 text-center">
-    <draggable
-      v-model="hungaryanTexts"
-      tag="ul"
-      group="meals"
-      class="flex flex-wrap justify-center gap-3"
-    >
-      <template #item="{ element: text }">
-        <li
-          class="p-4 text-lg bg-gray-200 rounded-lg cursor-pointer hover:bg-gray-300"
+      <!-- Draggable Texts -->
+      <div class="bg-white shadow-lg rounded-lg p-6 mt-2 text-center">
+        <draggable
+          v-model="hungaryanTexts"
+          tag="ul"
+          group="meals"
+          class="flex flex-wrap justify-center gap-3"
         >
-          {{ text }}
-        </li>
-      </template>
-    </draggable>
+          <template #item="{ element: text }">
+            <li
+              class="p-4 text-lg bg-gray-200 rounded-lg cursor-pointer hover:bg-gray-300"
+            >
+              {{ text }}
+            </li>
+          </template>
+        </draggable>
+      </div>
+    </div>
   </div>
 
   <!-- Success Message -->

@@ -117,7 +117,7 @@ function SubmitAnswer() {
       </h1>
       <ProgressBar :value="progress"></ProgressBar>
       <p v-if="currentTaskNumber <= 5" class="text-lg text-gray-600 text-left">
-        4. fejezet {{ currentTaskNumber + 1 }}. feladat
+        4. fejezet {{ currentTaskNumber}}. feladat
       </p>
 
       <div
