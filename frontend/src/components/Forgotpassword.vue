@@ -16,6 +16,34 @@ onMounted(() => {
   }
 });
 
+
+function UpdatePassword(password) {
+  fetch(`http://localhost:3300/updatepassword`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify({
+      useremail: email.value,
+      password: password,
+    }),
+  })
+    .then(async (res) => {
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message || "Jelszó sikeresen frissítve. Email elküldve.");
+      } else {
+        alert(data.message || "Nem sikerült a jelszó frissítése.");
+      }
+    })
+    .catch((error) => {
+      console.error("Hiba történt a jelszó frissítésekor:", error);
+      alert("Valami hiba történt. Próbáld meg később!");
+    });
+}
+
+
+
 function EmailSend() {
   isLoading.value = true;
   console.log(email.value);
@@ -73,7 +101,7 @@ function EmailSend() {
           <div class="d-flex justify-content-center">
             <button
               class="btn btn-primary w-100"
-              @click="EmailSend"
+              @click="EmailSend(UpdatePassword)"
               :disabled="isLoading"
             >
               <span v-if="isLoading">E-mail küldése...</span>
