@@ -46,9 +46,10 @@ router.get("/getImages", async (req, res) => {
   res.status(200).json(data);
 });
 
-/*
+
 const openai = new OpenAI({
-  apiKey: APIKEY,
+  apiKey:
+    "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",
 });
 let usedWords = "";
 
@@ -63,7 +64,7 @@ async function Compilt() {
   
   return response.choices[0].message.content;
 }
-*/
+
 router.get("/getDailyWord", async (req, res) => {
   try {
     const data = await Compilt();

@@ -110,7 +110,7 @@ function CheckLetter() {
 function CompareLetters(params, params2) {
   const word = params;
   const word2 = params2;
-
+/*
   for (let i = 0; i < word.length; i++) {
     if (word[i] == word2[i]) {
       console.log("Good job");
@@ -187,7 +187,7 @@ function CompareLetters(params, params2) {
 
 
 
-  }
+  }*/
 }
 </script>
 
@@ -250,14 +250,14 @@ function CompareLetters(params, params2) {
             class="w-full h-48 object-cover"
           />
         </template>
-        <template #title>{{ dailyWordENG }}</template>
+        <template #title> <span v-if="dailyWordENG">{{ dailyWordENG }} </span> <span v-if="!dailyWordENG" class="loader"></span></template>
         <template #subtitle>{{ dailyWordHU }}</template>
       </Card>
     </div>
 
     <!-- Word game  -->
     <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 px-4 mt-8">
-      <!-- Timeline -->
+
       <div  class="bg-white shadow-lg rounded-lg p-6">
         <h2 class="text-xl font-bold mb-4">Találd ki a szót!</h2>
         <!--first row-->
@@ -498,5 +498,31 @@ function CompareLetters(params, params2) {
 </template>
 
 <style scoped>
-/* Additional custom styles if needed */
+.loader {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: block;
+  margin:15px auto;
+  position: relative;
+  background: #FFF;
+  box-shadow: -24px 0 #FFF, 24px 0 #FFF;
+  box-sizing: border-box;
+  animation: shadowPulse 2s linear infinite;
+}
+
+@keyframes shadowPulse {
+  33% {
+    background: #FFF;
+    box-shadow: -24px 0 #10b981, 24px 0 #FFF;
+  }
+  66% {
+    background: #10b981;
+    box-shadow: -24px 0 #FFF, 24px 0 #FFF;
+  }
+  100% {
+    background: #FFF;
+    box-shadow: -24px 0 #FFF, 24px 0 #10b981;
+  }
+}
 </style>

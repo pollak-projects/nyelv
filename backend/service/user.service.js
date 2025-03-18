@@ -9,6 +9,16 @@ export async function listAllUsers() {
   return data;
 }
 
+export async function getUserByEmail(email) {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+  });
+
+  return user;
+}
+
 export async function getUserProgress(userId) {
   console.log(userId);
   const data = await prisma.user.findUnique({

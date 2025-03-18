@@ -3,18 +3,19 @@ import cookieParser from "cookie-parser";
 import { router as userRouter } from "./controller/user.controller.js";
 import { router as authRouter } from "./controller/auth.controller.js";
 import { router as quizRouter } from "./controller/quiz.controller.js";
-import {router as emailsenderRouter} from "./controller/emailsender.controller.js";
+import { router as emailsenderRouter } from "./controller/emailsender.controller.js";
+import { router as chatRouter } from "./controller/chatmessages.controller.js";
 import { router as selfRouter } from "./controller/self.controller.js";
 import cors from "cors";
 import swaggerSpec from "./swagger.js";
 import swaggerUi from "swagger-ui-express";
 import { disableMethodsForNonAdmin } from "./middleware/auth.middleware.js";
 import { listAllUsers } from "./service/user.service.js";
+import { listAllMessages } from "./service/chatmessages.service.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
 import { PrismaClient } from "@prisma/client";
 import OpenAI from "openai";
-
 const prisma = new PrismaClient();
 const app = express();
 const server = createServer(app);
@@ -28,6 +29,7 @@ const io = new Server(server, {
       /https:\/\/[a-z0-9]+\.pollak\.info/,
     ],
     credentials: true,
+    optionsSuccessStatus: 200,
   },
 });
 
@@ -47,26 +49,26 @@ app.use(cors(corsOptions));
 app.set("view engine", "ejs");
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-
 app.use("/user", disableMethodsForNonAdmin, userRouter);
 app.use("/auth", authRouter);
 app.use("/quiz", quizRouter);
 app.use("/self", selfRouter);
 app.use("/emailsender", emailsenderRouter);
-
+app.use("/chat", chatRouter);
 
 app.get("/admintable", disableMethodsForNonAdmin, async (req, res) => {
   const data = await listAllUsers();
+  const chatdata = await listAllMessages();
   console.log(data);
   res.render("index", {
     felhasznalok: data,
+    chat: chatdata,
   });
 });
 
 app.get("/", async (req, res) => {
   res.render("login");
 });
-
 
 app.get("/chat", async (req, res) => {
   res.render("chat");
@@ -105,17 +107,21 @@ async function Moderation(msg){
     input: msg,
   });
 
-  for (const key in moderation.results[0].categories){
-    if (Object.prototype.hasOwnProperty.call(moderation.results[0].categories, key)) {
+  for (const key in moderation.results[0].categories) {
+    if (
+      Object.prototype.hasOwnProperty.call(
+        moderation.results[0].categories,
+        key
+      )
+    ) {
       const element = moderation.results[0].categories[key];
       if (element == true) {
-        flagged = 1
+        flagged = 1;
       }
     }
   }
-  console.log(flagged)
-  return flagged
-  
+  console.log(flagged);
+  return flagged;
 }
 
 const bannedWords = ["cum", "dick", "hitler", "asshole", "foreskin", "shit", "jerk"];

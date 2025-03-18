@@ -1,24 +1,21 @@
 import jwt from "jsonwebtoken";
 
-// Define the decodeToken function within the same file
 const decodeToken = (token) => {
   try {
-    // Decoding the token without verifying its signature
-    const decoded = jwt.decode(token); // Decodes the payload
+    const decoded = jwt.decode(token);
 
     if (!decoded) {
       console.error("Failed to decode token");
-      return null; // Return null if decoding fails
+      return null;
     }
 
-    return decoded; // This will return the decoded user object (payload)
+    return decoded;
   } catch (err) {
     console.error("Token decoding error:", err);
     return null;
   }
 };
 
-// Middleware to disable methods for non-admin users
 const disableMethodsForNonAdmin = (req, res, next) => {
   const accessToken = req.cookies.access_token;
   const refreshToken = req.cookies.refresh_token;

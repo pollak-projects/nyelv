@@ -8,47 +8,60 @@ import { getCookie, parseJwt } from "../lib/common.js";
 
 
 const user = ref(null);
+const userLevel = ref(null)
+const beginnerProgress = ref(0);
+const intermediateProgress = ref(0);
+const polyglotProgress = ref(0);
 
 onMounted(() => {
   const userObj = parseJwt(getCookie("access_token"));
 
   user.value = userObj;
-  console.log(user.value);
+  userLevel.value = user.value.level;
+    if (user.value.level == "beginner") {
+    beginnerProgress.value = user.value.user_current_progress;
+    console.log(user.value.user_current_progress)
+  } else if (userLevel.value == "intermediate") {
+    beginnerProgress.value = 100;
+    intermediateProgress.value = user.value.user_current_progress;
+  } else if (userLevel.value == "polyglot_master") {
+    beginnerProgress.value = 100;
+    intermediateProgress.value = 100;
+    polyglotProgress.value = user.value.user_current_progress;
+  }
+  console.log(beginnerProgress.value)
 });
 
-function userLevelName(level) {
-  switch (level) {
-    case 1:
-      return "Beginner";
-    case 2:
-      return "Intermediate";
-    case 3:
-      return "Polyglot master";
-    default:
-      return "Unknown";
-  }
-}
+
 </script>
 
 <template>
-  <div class="p-4 space-y-6">
+  <div class="space-y-6">
     <!-- Navigation Toolbar -->
-    <Toolbar class="rounded-3xl bg-white shadow-md">
+   <Toolbar
+      style="border-radius: 3rem; padding: 1rem 1rem 1rem 1.5rem"
+      class="mt-1 ml-1 mr-1"
+    >
       <template #start>
-        <div class="flex items-center gap-4">
-          <RouterLink to="/main"><Button label="Home" text /></RouterLink>
-          <Button label="Chat" text />
-          <Button label="Tanfolyamok" text />
+        <div class="flex items-center gap-2">
+          <RouterLink to="/main">
+            <Button label="Home" text plain />
+          </RouterLink>
+          <RouterLink to="/chat"><Button label="Chat" text plain /></RouterLink>
+          <RouterLink to="/tanfolyam"
+            ><Button label="Tanfolyamok" text plain
+          /></RouterLink>
         </div>
       </template>
+
       <template #end>
-        <div class="flex items-center gap-4">
-          <Button @click="Logout" label="Kilépés" text />
-          <Avatar
-            v-if="user"
-            :image="user.avatarUrl || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
-            class="w-10 h-10 border border-gray-300 shadow-sm rounded-full"
-          />
+        <div class="flex items-center gap-2">
+          <Button @click="Logout2" label="Kilépés" text plain />
+          <RouterLink to="/profile"
+            ><Avatar
+              image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
+              style="width: 32px; height: 32px"
+          /></RouterLink>
         </div>
       </template>
     </Toolbar>
@@ -70,21 +83,21 @@ function userLevelName(level) {
           <p class="text-center text-xl font-semibold">{{ user?.username || "Loading..." }}</p>
         </template>
         <template #subtitle>
-          <p class="text-center text-gray-500">{{ userLevelName(user?.level) || "Loading..." }}</p>
+          <p class="text-center text-gray-500">{{ userLevel|| "Loading..." }}</p>
         </template>
         <template #content>
           <div class="space-y-4">
             <div>
               <h4 class="text-lg font-medium">Beginner</h4>
-              <ProgressBar :value="user?.user_current_progress"></ProgressBar>
+              <ProgressBar :value="beginnerProgress"></ProgressBar>
             </div>
             <div>
               <h4 class="text-lg font-medium text-gray-400">Intermediate</h4>
-              <ProgressBar :value="0" class="opacity-50"></ProgressBar>
+              <ProgressBar :value="intermediateProgress" class="opacity-50"></ProgressBar>
             </div>
             <div>
               <h4 class="text-lg font-medium text-gray-400">Polyglot Master</h4>
-              <ProgressBar :value="0" class="opacity-50"></ProgressBar>
+              <ProgressBar :value="polyglotProgress" class="opacity-50"></ProgressBar>
             </div>
           </div>
         </template>
