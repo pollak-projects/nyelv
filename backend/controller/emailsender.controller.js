@@ -12,13 +12,18 @@ router.post("/forgotpasswordmail", async (req, res) => {
 
     if (user) {
       await Kuldes(useremail);
-      res.status(200).json({ message: "Email elküldve" });
+      res.status(200).json({
+        message:
+          "A jelszó visszaállító email sikeresen elküldve. Kérjük, ellenőrizd az email fiókodat.",
+      });
     } else {
-      res.status(400).json({ message: "Nem létezik ez az email cím" });
+      res.status(400).json({ message: "Nem létezik a megadott email cím." });
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Nem sikerült az email küldés: ", error });
+    res
+      .status(500)
+      .json({ message: "Nem sikerült az email küldés: üres a beviteli mező." });
   }
 });
 
@@ -43,7 +48,9 @@ router.put("/updatepassword", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Nem sikerült a jelszó frissítés: ", error });
+    res
+      .status(500)
+      .json({ message: "Nem sikerült a jelszó frissítés: ", error });
   }
 });
 

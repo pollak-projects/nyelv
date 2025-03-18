@@ -2,11 +2,22 @@
 import { ref, onMounted } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { getCookie, parseJwt } from "../lib/common";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
 
+const toast = useToast();
 const email = defineModel();
 const router = useRouter();
 const isLoading = ref(false);
 const isRedirecting = ref(false);
+const showSuccess = (data) => {
+  toast.add({
+    severity: "contrast",
+    summary: "Jelszó visszaállítás",
+    detail: data,
+    life: 5000,
+  });
+};
 
 onMounted(() => {
   const access_token = getCookie("access_token");
@@ -15,7 +26,6 @@ onMounted(() => {
     const jocookie = parseJwt(access_token);
   }
 });
-
 
 function UpdatePassword(password) {
   fetch(`http://localhost:3300/updatepassword`, {
@@ -31,9 +41,9 @@ function UpdatePassword(password) {
     .then(async (res) => {
       const data = await res.json();
       if (res.ok) {
-        alert(data.message || "Jelszó sikeresen frissítve. Email elküldve.");
+        showSuccess(data.message);
       } else {
-        alert(data.message || "Nem sikerült a jelszó frissítése.");
+        showError(data.message);
       }
     })
     .catch((error) => {
@@ -41,8 +51,6 @@ function UpdatePassword(password) {
       alert("Valami hiba történt. Próbáld meg később!");
     });
 }
-
-
 
 function EmailSend() {
   isLoading.value = true;
@@ -68,7 +76,8 @@ function EmailSend() {
           router.push("/");
         }, 2000);
       } else {
-        alert(data.message || "Érvénytelen e-mail cím.");
+        // alert(data.message || "Érvénytelen e-mail cím.");
+        showSuccess(data.message);
       }
     })
     .catch((error) => {
@@ -122,6 +131,8 @@ function EmailSend() {
       </div>
     </div>
   </div>
+
+  <Toast />
 </template>
 
 <style scoped>

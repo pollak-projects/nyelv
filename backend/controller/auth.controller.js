@@ -74,7 +74,7 @@ router.post("/register", async (req, res) => {
       email,
       password
     );
-    res.status(201).json(user);
+    res.status(201).json({message: "Sikeres regisztráció"});
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -152,7 +152,7 @@ router.post("/login", async (req, res) => {
       path: "/",
     });
 
-    return res.status(200).json(user);
+    return res.status(200).json({message: "Sikeres bejelentkezés"});
 
   } catch (error) {
     console.error("Login error:", error);

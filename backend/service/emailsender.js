@@ -14,7 +14,6 @@ export const transporter = nodemailer.createTransport({
   },
 });
 
-
 // async..await is not allowed in global scope, must use a wrapper
 export async function Kuldes(useremail) {
   const randomPassword = await generateAndSetNewPassword(useremail);
@@ -33,18 +32,22 @@ export async function Kuldes(useremail) {
     subject: "Jelszó-visszaállítás",
     text: "",
     html:
-      "<div style='font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; width: 100%; max-width: 600px;margin: 0 auto;background-color: #ffffff;padding: 20px;border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);'>" +
-      "<div style=' text-align: center; margin-bottom: 20px;'>" +
+      "<div style='font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);'>" +
+      "<div style='text-align: center; margin-bottom: 30px;'>" +
+      "<img src='https://i.ibb.co/BHbgWn0V/polyglot-logo.png' alt='Polyglot Logo' style='width: 200px'>" +
       "</div>" +
-      "<div style='text-align: center; margin-bottom: 20px; color: #333;'>" +
-      "<h2 style=' color: #000000;'>Elfelejtett jelszó</h2> <br>" +
-      "<p>Kedves " + user.last_name + user.first_name + "!</p>" +
-      "<p>Az új jelszó a profilodhoz: " + randomPassword + "</p>" +
-      "<p> Ha nem te voltál akkor ezt az emailt hagyd figyelmen kívül.</p>" +
+      "<div style='text-align: center; margin-bottom: 30px; color: #333;'>" +
+      "<h2 style='font-size: 24px; color: #333; font-weight: 600;'>Elfelejtett jelszó</h2>" +
+      "<p style='font-size: 16px; color: #555; line-height: 1.5;'>Kedves " +
+      user.first_name +
+      "!</p>" +
+      "<p style='font-size: 16px; color: #555; line-height: 1.5;'>Az új jelszó a profilodhoz: <strong style='color: #000; font-weight: bold;'>" +
+      randomPassword +
+      "</strong></p>" +
       "</div>" +
-      "<div style='text-align: center; font-size: 12px; color: #777; margin-top: 20px;'>" +
+      "<div style='text-align: center; font-size: 14px; color: #777; margin-top: 30px;'>" +
       "<p>Üdvözlettel,</p>" +
-      "<p>Polyglot csapata</p>" +
+      "<p><strong>Polyglot csapata</strong></p>" +
       "</div>" +
       "</div>",
   });
