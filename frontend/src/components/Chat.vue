@@ -1,5 +1,5 @@
 <script setup>
-import { Toolbar, Button, Avatar, Card, Timeline, InputText } from "primevue";
+import { Toolbar, Button, Avatar, InputText, Dialog  } from "primevue";
 import { ref, onMounted, onUnmounted } from "vue";
 import socket from "../socket.js";
 import { RouterLink } from "vue-router";
@@ -13,7 +13,8 @@ const Logout2 = () => {
 const messages = ref([]);
 const Mymessages = ref([]);
 const newMessage = ref("");
-const userId = "a42f9192-5cb5-4554-a63f-3d96200a9bac";
+const visible = ref(true);
+const userId = "41596d56-5630-4223-b2c2-1d8d126fbd46";
 const sendMessage = () => {
   if (newMessage.value.trim()) {
     socket.emit("chat message", {text: newMessage.value, userId});
@@ -26,8 +27,10 @@ onMounted(() => {
     if (msg.userId === "Zete") {
       msg.userId = "Én";
       Mymessages.value.push(msg);
+      console.log(Mymessages.value)
     }else{
       messages.value.push(msg);
+
     }
   });
 });
@@ -65,26 +68,55 @@ onUnmounted(() => {
       </div>
     </template>
   </Toolbar>
-  <div class="flex flex-row text-center">
-    <div class="basis-1/3 mb-4 mt-5">
-      <div class="mr-150 font-bold" v-for="(msg, index) in messages" :key="index">{{msg.userId}}</div>
-      <div class="border-2 border-solid rounded-xl bg-amber-50 h-12 text-left">
-        {{ messages }}
+  <div class="flex flex-row justify-center mt-6">
+    <div class="w-1/3 p-4">
+      <div v-for="(msg, index) in messages" :key="index" class="mb-3">
+        <div class="font-bold pl-2 text-gray-700">{{ msg.userId }}</div>
+        <div class="bg-purple-100 rounded-xl p-3 shadow-md">
+          {{ msg.text }}
+        </div>
       </div>
     </div>
-    <div class="basis-1/3 mb-4 mt-5"></div>
-    <div class="basis-1/3 mb-4 mt-20">
-      <div class="mr-150 font-bold" v-for="(msg, index) in Mymessages" :key="index">{{msg.userId}}</div>
-      <div class="border-2 border-solid rounded-xl bg-amber-50 h-12 text-left">
-        {{ Mymessages.text}}
+
+    <div class="w-1/3">
+
+<Dialog v-model:visible="visible" modal header="Chat Rules" :style="{ width: '30rem' }" class="rounded-lg">
+  <div class=" space-y-3 text-gray-700">
+    <p>To ensure a friendly and respectful environment, please follow these rules:</p>
+    <ul class="list-disc p-4 space-y-1">
+      <li><strong>English Only</strong> - Please communicate only in English.</li>
+      <li><strong>Be Respectful</strong> - Treat others with kindness and respect.</li>
+      <li><strong>No Hate Speech</strong> - Discrimination or offensive language is prohibited.</li>
+      <li><strong>No Spamming</strong> - Avoid excessive messages or repetition.</li>
+      <li><strong>No NSFW Content</strong> - Keep the chat appropriate for all users.</li>
+      <li><strong>No Personal Info</strong> - Do not share sensitive personal information.</li>
+      <li><strong>Follow Moderation</strong> - Respect moderators and their decisions.</li>
+    </ul>
+    <p class="text-red-600 font-semibold mt-3">
+      Breaking the rules may result in a temporary or permanent ban!
+    </p>
+  </div>
+  <div class="flex justify-end gap-2 mt-4">
+    <Button type="button" label="Accept" severity="secondary" class="px-4 py-2 rounded-lg" @click="visible = false"></Button>
+  </div>
+</Dialog></div>
+
+    <div class="w-1/3 p-4">
+      <div v-for="(msg, index) in Mymessages" :key="index" class="mb-3">
+        <div class="font-bold text-right pr-2 text-gray-700">{{ msg.userId }}</div>
+        <div class="bg-blue-100 rounded-xl p-3 shadow-md text-right">
+          {{ msg.text }}
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="absolute inset-x-0 bottom-0 h-16 flex ...">
-    <InputText type="text" v-model="newMessage" @keyup.enter="sendMessage" class="w-5/6" />
-    <Button label="Küldés" class="w-1/6"  @click="sendMessage" />
+  <div class="fixed bottom-0 inset-x-0 p-4 bg-white shadow-lg flex items-center gap-4">
+    <InputText type="text" v-model="newMessage" @keyup.enter="sendMessage" class="w-5/6 p-2 border rounded-lg" placeholder="Írj egy üzenetet..." />
+    <Button label="Küldés" class="w-1/6 p-button-primary" @click="sendMessage" />
   </div>
 </template>
 
-<script setup></script>
+<style scoped>
+
+</style>
