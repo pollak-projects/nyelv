@@ -11,8 +11,9 @@ const Logout2 = () => {
 };
 
 const messages = ref([]);
+const Mymessages = ref([]);
 const newMessage = ref("");
-const userId = parseJwt(getCookie("token")).id;
+const userId = "a42f9192-5cb5-4554-a63f-3d96200a9bac";
 const sendMessage = () => {
   if (newMessage.value.trim()) {
     socket.emit("chat message", {text: newMessage.value, userId});
@@ -22,7 +23,12 @@ const sendMessage = () => {
 
 onMounted(() => {
   socket.on("chat message", (msg) => {
-    messages.value.push(msg);
+    if (msg.userId === "Zete") {
+      msg.userId = "Én";
+      Mymessages.value.push(msg);
+    }else{
+      messages.value.push(msg);
+    }
   });
 });
 
@@ -61,16 +67,16 @@ onUnmounted(() => {
   </Toolbar>
   <div class="flex flex-row text-center">
     <div class="basis-1/3 mb-4 mt-5">
-      <div class="ml-150 font-bold">{{ user?.username }}</div>
-      <div class="border-2 border-solid rounded-xl bg-amber-50 h-12 text-right">
-        safsafsafsaf
+      <div class="mr-150 font-bold" v-for="(msg, index) in messages" :key="index">{{msg.userId}}</div>
+      <div class="border-2 border-solid rounded-xl bg-amber-50 h-12 text-left">
+        {{ messages }}
       </div>
     </div>
     <div class="basis-1/3 mb-4 mt-5"></div>
-    <div class="basis-1/3 mb-4 mt-20" v-for="(msg, index) in messages" :key="index">
-      <div class="mr-150 font-bold">{{msg.userId}}</div>
+    <div class="basis-1/3 mb-4 mt-20">
+      <div class="mr-150 font-bold" v-for="(msg, index) in Mymessages" :key="index">{{msg.userId}}</div>
       <div class="border-2 border-solid rounded-xl bg-amber-50 h-12 text-left">
-        {{ msg.text }}
+        {{ Mymessages.text}}
       </div>
     </div>
   </div>

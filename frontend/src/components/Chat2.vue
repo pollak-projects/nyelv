@@ -16,6 +16,7 @@ onMounted(() => {
   socket.on("chat message", (msg) => {
     messages.value.push(msg);
   });
+
 });
 
 onUnmounted(() => {

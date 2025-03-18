@@ -59,6 +59,7 @@ router.get("/getAll", async (req, res) => {
     res.status(200).json(data);
 })
 
+
 router.get("/getProgress", async (req, res) => {
     const userId = req.query.userId;
     console.log(userId);

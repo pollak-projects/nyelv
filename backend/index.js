@@ -72,13 +72,25 @@ app.get("/chat", async (req, res) => {
   res.render("chat");
 });
 
-async function SendToDB(msg, flag) {
+async function SendToDB(msg, flag, id) {
   await prisma.chatMessages.create({
     data: {
       message: msg,
       flag: flag,
+      user: {
+        connect: { id: id }
+      }
     },
   });
+}
+
+async function GetUsername(id) {
+  const data = await prisma.user.findUnique({
+    where: {
+      id: id
+    }
+  })
+  return data.username
 }
 
 async function Moderation(msg){
@@ -106,6 +118,8 @@ async function Moderation(msg){
   
 }
 
+const bannedWords = ["cum", "dick", "hitler", "asshole", "foreskin", "shit", "jerk"];
+
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
@@ -114,13 +128,22 @@ io.on("connection", (socket) => {
     let flag = await Moderation(msg.text)
     
     if (flag == 0) {
-
-       io.emit("chat message", {
-        text: msg.text,
-        userId: msg.userId,
-       }); 
+      let nemMehetKi = false
+      for (let i = 0; i < bannedWords.length; i++) {
+        if (msg.text.toLowerCase().includes(bannedWords[i])) {
+          console.log("Kellett utánszűrni")
+          nemMehetKi = true
+          flag = 1
+        }
+      }
+      if (!nemMehetKi) {
+        io.emit("chat message", {
+          text: msg.text,
+          userId: await GetUsername(msg.userId),
+         }); 
+      } 
     }
-    SendToDB(msg, flag)
+    SendToDB(msg.text, flag, msg.userId)
   });
 
   socket.on("disconnect", () => {
