@@ -50,8 +50,9 @@
         })
           .then((res) => res.json())
           .then((data) => {
-            const parse = parseJwt(data.access_token);
-            console.log(parse);
+            console.log(data)
+            const access_token = getCookie("access_token");
+            const parse = parseJwt(access_token);
 
             if (parse.isAdmin === 1) {
               window.location.href = "/admintable";
@@ -78,6 +79,18 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload);
   }
 
+
+function getCookie(access_token) {
+  let cookieArr = document.cookie.split(";");
+
+  for (let i = 0; i < cookieArr.length; i++) {
+    let cookie = cookieArr[i].trim();
+    if (cookie.indexOf(access_token + "=") === 0) {
+      return cookie.substring(access_token.length + 1);
+    }
+  }
+  return "";
+}
     </script>
   </body>
 </html>
