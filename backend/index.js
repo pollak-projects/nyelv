@@ -59,7 +59,6 @@ app.use("/chat", chatRouter);
 app.get("/admintable", disableMethodsForNonAdmin, async (req, res) => {
   const data = await listAllUsers();
   const chatdata = await listAllMessages();
-  console.log(data);
   res.render("index", {
     felhasznalok: data,
     chat: chatdata,
@@ -98,7 +97,7 @@ async function GetUsername(id) {
 async function Moderation(msg){
   const openai = new OpenAI({
     apiKey:
-      "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",
+      "",
   });
   let flagged = 0;
 
@@ -124,7 +123,7 @@ async function Moderation(msg){
   return flagged;
 }
 
-const bannedWords = ["cum", "dick", "hitler", "asshole", "foreskin", "shit", "jerk"];
+const bannedWords = ["cum", "dick", "hitler", "asshole", "foreskin", "shit", "jerk", "goon"];
 
 
 io.on("connection", (socket) => {

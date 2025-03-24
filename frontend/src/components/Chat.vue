@@ -15,6 +15,7 @@ const Mymessages = ref([]);
 const newMessage = ref("");
 const visible = ref(true);
 const userId = "41596d56-5630-4223-b2c2-1d8d126fbd46";
+
 const sendMessage = () => {
   if (newMessage.value.trim()) {
     socket.emit("chat message", {text: newMessage.value, userId});
@@ -25,9 +26,8 @@ const sendMessage = () => {
 onMounted(() => {
   socket.on("chat message", (msg) => {
     if (msg.userId === "Zete") {
-      msg.userId = "Én";
+      msg.userId = "Me";
       Mymessages.value.push(msg);
-      console.log(Mymessages.value)
     }else{
       messages.value.push(msg);
 

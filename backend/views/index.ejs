@@ -108,6 +108,7 @@
           <% chat.forEach(element => { %>
           <tr>
             <td><%= element.id %></td>
+            <td><%= element.user.username %></td>
             <td><%= element.message %></td>
             <td><%= element.flag %></td>
             <td><%= element.timestamp %></td>

@@ -3,7 +3,11 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function listAllMessages() {
-  const data = await prisma.chatMessages.findMany();
+  const data = await prisma.chatMessages.findMany({
+    include: {
+      user: true
+    }
+  });
 
   return data;
 }
