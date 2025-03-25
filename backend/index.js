@@ -16,38 +16,40 @@ import { Server } from "socket.io";
 import { createServer } from "http";
 import { PrismaClient } from "@prisma/client";
 import OpenAI from "openai";
+
 const prisma = new PrismaClient();
 const app = express();
 const server = createServer(app);
 const port = 3300;
 
-const io = new Server(server, {
-  cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://pollak.info",
-      /https:\/\/[a-z0-9]+\.pollak\.info/,
-    ],
-    credentials: true,
-    optionsSuccessStatus: 200,
-  },
-});
+const allowedOrigins = ["http://localhost:5173", "https://pollak.info"];
 
 const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "https://pollak.info",
-    /https:\/\/[a-z0-9]+\.pollak\.info/,
-  ],
+  origin: (origin, callback) => {
+    if (
+      !origin ||
+      allowedOrigins.includes(origin) ||
+      /^https:\/\/[a-z0-9]+\.pollak\.info$/.test(origin)
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
 };
 
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
-app.use(cors(corsOptions));
 app.set("view engine", "ejs");
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+const io = new Server(server, {
+  cors: corsOptions,
+});
 
 app.use("/user", disableMethodsForNonAdmin, userRouter);
 app.use("/auth", authRouter);
@@ -78,26 +80,21 @@ async function SendToDB(msg, flag, id) {
     data: {
       message: msg,
       flag: flag,
-      user: {
-        connect: { id: id }
-      }
+      user: { connect: { id: id } },
     },
   });
 }
 
 async function GetUsername(id) {
   const data = await prisma.user.findUnique({
-    where: {
-      id: id
-    }
-  })
-  return data.username
+    where: { id: id },
+  });
+  return data.username;
 }
 
-async function Moderation(msg){
+async function Moderation(msg) {
   const openai = new OpenAI({
-    apiKey:
-      "",
+    apiKey: "your-openai-api-key",
   });
   let flagged = 0;
 
@@ -107,48 +104,43 @@ async function Moderation(msg){
   });
 
   for (const key in moderation.results[0].categories) {
-    if (
-      Object.prototype.hasOwnProperty.call(
-        moderation.results[0].categories,
-        key
-      )
-    ) {
-      const element = moderation.results[0].categories[key];
-      if (element == true) {
-        flagged = 1;
-      }
+    if (moderation.results[0].categories[key]) {
+      flagged = 1;
     }
   }
-  console.log(flagged);
   return flagged;
 }
 
-const bannedWords = ["cum", "dick", "hitler", "asshole", "foreskin", "shit", "jerk", "goon"];
-
+const bannedWords = [
+  "cum",
+  "dick",
+  "hitler",
+  "asshole",
+  "foreskin",
+  "shit",
+  "jerk",
+];
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
   socket.on("chat message", async (msg) => {
-    let flag = await Moderation(msg.text)
-    
-    if (flag == 0) {
-      let nemMehetKi = false
-      for (let i = 0; i < bannedWords.length; i++) {
-        if (msg.text.toLowerCase().includes(bannedWords[i])) {
-          console.log("Kellett utánszűrni")
-          nemMehetKi = true
-          flag = 1
-        }
-      }
+    let flag = await Moderation(msg.text);
+
+    if (flag === 0) {
+      let nemMehetKi = bannedWords.some((word) =>
+        msg.text.toLowerCase().includes(word)
+      );
       if (!nemMehetKi) {
         io.emit("chat message", {
           text: msg.text,
           userId: await GetUsername(msg.userId),
-         }); 
-      } 
+        });
+      } else {
+        flag = 1;
+      }
     }
-    SendToDB(msg.text, flag, msg.userId)
+    SendToDB(msg.text, flag, msg.userId);
   });
 
   socket.on("disconnect", () => {
