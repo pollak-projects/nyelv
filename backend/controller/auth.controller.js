@@ -75,7 +75,7 @@ router.post("/register", async (req, res) => {
       email,
       password
     );
-    res.status(201).json({message: "Sikeres regisztráció"});
+    res.status(201).json({ message: "Sikeres regisztráció" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

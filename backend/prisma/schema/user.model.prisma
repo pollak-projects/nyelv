@@ -10,6 +10,6 @@ model user {
   updated_at            DateTime
   user_level            String         @default("beginner")
   user_current_progress Int            @default(0)
-  isAdmin               Int            @default(0)
+  user_role             String         @default("user")
   chatMessages          chatMessages[]
 }

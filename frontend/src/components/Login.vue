@@ -3,7 +3,6 @@ import { ref, onMounted } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { getCookie, parseJwt } from "../lib/common";
 
-
 const username = ref("");
 const password = ref("");
 const router = useRouter();
@@ -35,9 +34,9 @@ function Login() {
     .then(async (res) => {
       const data = await res.json();
       isLoading.value = false;
-      console.log(data)
-      if (!data.message && data.access_token) {
-        
+
+      if (res.ok) {
+        console.log(data);
 
         isRedirecting.value = true;
         setTimeout(() => {
