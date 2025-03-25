@@ -63,6 +63,7 @@ const router = express.Router();
  */
 
 router.post("/register", async (req, res) => {
+  console.log("Vagyok")
   const { username, first_name, last_name, birth_date, email, password } =
     req.body;
   try {
@@ -152,7 +153,7 @@ router.post("/login", async (req, res) => {
       path: "/",
     });
 
-    return res.status(200).json({message: "Sikeres bejelentkezés"});
+    return res.status(200).json({ access_token: user.access_token });
 
   } catch (error) {
     console.error("Login error:", error);

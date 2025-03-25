@@ -35,9 +35,9 @@ function Login() {
     .then(async (res) => {
       const data = await res.json();
       isLoading.value = false;
-
+      console.log(data)
       if (!data.message && data.access_token) {
-        console.log(data);
+        
 
         isRedirecting.value = true;
         setTimeout(() => {

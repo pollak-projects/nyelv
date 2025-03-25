@@ -93,7 +93,7 @@ function ChangeTest(corrcetId, listName, listName2) {
 <template>
   <div class="min-h-screen bg-gray-100 py-8">
     <div class="max-w-4xl mx-auto px-4">
-      <h1 class="text-3xl font-bold text-center mb-4">{{ levelTitle }}</h1>
+      <h1 class="text-3xl font-bold text-center mb-4 ">{{ levelTitle }}</h1>
       <ProgressBar :value="progress" class="mb-8"></ProgressBar>
       <p class="text-lg text-center mb-6">3. fejezet</p>
 
