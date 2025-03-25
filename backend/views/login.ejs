@@ -54,7 +54,7 @@
             const access_token = getCookie("access_token");
             const parse = parseJwt(access_token);
 
-            if (parse.isAdmin === 1) {
+            if (parse.user_role == "admin") {
               window.location.href = "/admintable";
           }
           else {

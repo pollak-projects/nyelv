@@ -62,7 +62,7 @@ export async function login(username, password) {
       username: user.username,
       email: user.email,
       level: user.user_level,
-      isAdmin: user.isAdmin,
+      user_role: user.user_role,
       user_current_progress: user.user_current_progress,
     },
     "test",

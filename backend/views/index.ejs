@@ -68,8 +68,8 @@
             </td>
             <td>
               <input
-                id="<%= element.id %>isAdmin"
-                value="<%= element.isAdmin %>"
+                id="<%= element.id %>user_role"
+                value="<%= element.user_role %>"
               />
             </td>
             <td>
@@ -117,7 +117,7 @@
                 class="btn btn-warning"
                 onclick="UpdateChat('<%= element.id %>')"
               >
-                Módosítás
+                Flag módosítás
               </button>
             </td>
           </tr>
@@ -162,7 +162,7 @@
   function UpdateUser(id) {
     const username = document.getElementById(id + "username");
     const email = document.getElementById(id + "email");
-    const isAdmin = document.getElementById(id + "isAdmin");
+    const user_role = document.getElementById(id + "user_role");
 
     fetch(`http://localhost:3300/user/update?id=${id}`, {
       method: "PUT",
@@ -174,7 +174,7 @@
         id: id,
         username: username.value,
         email: email.value,
-        isAdmin: parseInt(isAdmin.value),
+        user_role: user_role.value,
       }),
     })
       .then((res) => res.json())
@@ -242,4 +242,43 @@
       })
       .catch((error) => console.error("Error during logout:", error));
   }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const cookie = getCookie("access_token");
+    if (!cookie) {
+      alert("Access denied. No token found.");
+      window.location.href = "http://localhost:5173/main";
+      return;
+    }
+
+    const token = parseJwt(cookie);
+    if (token.user_role !== "admin" && token.user_role !== "moderator") {
+      alert("Access denied. Admins and moderators only.");
+      window.location.href = "http://localhost:5173/main";
+    }
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+    const cookie = getCookie("access_token");
+    if (!cookie) {
+      alert("Access denied. No token found.");
+      window.location.href = "http://localhost:5173/main";
+      return;
+    }
+
+    const token = parseJwt(cookie);
+    if (token.user_role === "moderator") {
+      const inputs = document.querySelectorAll(".table-responsive input");
+      const buttons = document.querySelectorAll(".table-responsive button");
+
+      inputs.forEach((input) => {
+        input.disabled = true;
+      });
+
+      buttons.forEach((button) => {
+        if (button.innerText === "Módosítás" || button.innerText === "Törlés") {
+          button.disabled = true;
+        }
+      });
+    }
+  });
 </script>

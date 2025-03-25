@@ -22,17 +22,17 @@ const dailyWordENG = ref(null);
 const dailyWordGame = ref(null);
 const dailyWordGameGiven = ref(null);
 const userLevel = ref(null);
-const siker = ref(0)
-const firstLetterCorrect = ref(false)
-const secondLetterCorrect = ref(false)
-const thirdLetterCorrect = ref(false)
-const fourthLetterCorrect = ref(false)
-const fifthLetterCorrect = ref(false)
-const firstLetterContains = ref(false)
-const secondLetterContains = ref(false)
-const thirdLetterContains = ref(false)
-const fourthLetterContains = ref(false)
-const fifthLetterContains = ref(false)
+const siker = ref(0);
+const firstLetterCorrect = ref(false);
+const secondLetterCorrect = ref(false);
+const thirdLetterCorrect = ref(false);
+const fourthLetterCorrect = ref(false);
+const fifthLetterCorrect = ref(false);
+const firstLetterContains = ref(false);
+const secondLetterContains = ref(false);
+const thirdLetterContains = ref(false);
+const fourthLetterContains = ref(false);
+const fifthLetterContains = ref(false);
 const beginnerProgress = ref(0);
 const intermediateProgress = ref(0);
 const polyglotProgress = ref(0);
@@ -86,7 +86,7 @@ onMounted(async () => {
   const dailyWord = await GetDailyWord();
   dailyWordHU.value = dailyWord[1];
   dailyWordENG.value = dailyWord[0];
-  dailyWordGame.value = "brisk"
+  dailyWordGame.value = "brisk";
 
   console.log(dailyWordGame.value.split(""));
 });
@@ -107,10 +107,14 @@ function CheckLetter() {
   CompareLetters(dailyWordGame.value.split(""), dailyWordGameGiven.split(""));
 }
 
+function redirectToAdmin() {
+  window.location.replace("http://localhost:3300/admintable");
+}
+
 function CompareLetters(params, params2) {
   const word = params;
   const word2 = params2;
-/*
+  /*
   for (let i = 0; i < word.length; i++) {
     if (word[i] == word2[i]) {
       console.log("Good job");
@@ -206,6 +210,16 @@ function CompareLetters(params, params2) {
           <RouterLink to="/tanfolyam"
             ><Button label="Tanfolyamok" text plain
           /></RouterLink>
+          <template v-if="user?.user_role === 'admin'">
+            <RouterLink>
+              <Button @click="redirectToAdmin" label="Admin" text plain />
+            </RouterLink>
+          </template>
+          <template v-if="user?.user_role === 'moderator'">
+            <RouterLink>
+              <Button @click="redirectToAdmin" label="Moderator" text plain />
+            </RouterLink>
+          </template>
         </div>
       </template>
 
@@ -250,15 +264,17 @@ function CompareLetters(params, params2) {
             class="w-full h-48 object-cover"
           />
         </template>
-        <template #title> <span v-if="dailyWordENG">{{ dailyWordENG }} </span> <span v-if="!dailyWordENG" class="loader"></span></template>
+        <template #title>
+          <span v-if="dailyWordENG">{{ dailyWordENG }} </span>
+          <span v-if="!dailyWordENG" class="loader"></span
+        ></template>
         <template #subtitle>{{ dailyWordHU }}</template>
       </Card>
     </div>
 
     <!-- Word game  -->
     <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 px-4 mt-8">
-
-      <div  class="bg-white shadow-lg rounded-lg p-6">
+      <div class="bg-white shadow-lg rounded-lg p-6">
         <h2 class="text-xl font-bold mb-4">Találd ki a szót!</h2>
         <!--first row-->
         <input
@@ -267,174 +283,169 @@ function CompareLetters(params, params2) {
           class="w-10 border border-gray-300 rounded-lg p-2"
           maxlength="1"
         />
-      
+
         <input
           id="letter2"
           type="text"
           class="w-10 border border-gray-300 rounded-lg p-2"
           maxlength="1"
         />
-     
+
         <input
           id="letter3"
           type="text"
           class="w-10 border border-gray-300 rounded-lg p-2"
           maxlength="1"
         />
-       
+
         <input
           id="letter4"
           type="text"
           class="w-10 border border-gray-300 rounded-lg p-2"
           maxlength="1"
         />
-     
+
         <input
           id="letter5"
           type="text"
           class="w-10 border border-gray-300 rounded-lg p-2"
           maxlength="1"
         />
-      
+
         <button @click="CheckLetter">Send</button>
-        <div v-if="firstLetterCorrect && secondLetterCorrect && thirdLetterCorrect && fourthLetterCorrect && fifthLetterCorrect">Siker!</div>
-        <div><input
-          v-if="firstLetterCorrect"
-          id="letter1"
-          type="text"
-          
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-emerald-400"
-          maxlength="1"
-        />
-
-        <input
-          v-if="!firstLetterCorrect&&!firstLetterContains"
-          id="letter1"
-          type="text"
-          
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-red-600"
-          maxlength="1"
-        />
-
-        <input
-          v-if="firstLetterContains&&!firstLetterCorrect"
-          id="letter1"
-          type="text"
-          
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-amber-300"
-          maxlength="1"
-        />
-
-        
-      
-        <input
-        v-if="secondLetterCorrect"
-          id="letter2"
-          type="text"
-          class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
-          maxlength="1"
-        />
-
-         <input
-        v-if="!secondLetterCorrect&& !secondLetterContains"
-          id="letter2"
-          type="text"
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-red-600"
-          maxlength="1"
-        />
-       
-           <input
-          v-if="secondLetterContains&&!secondLetterCorrect"
-          id="letter1"
-          type="text"
-          
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-amber-300"
-          maxlength="1"
-        />
-
-        <input
-        v-if="thirdLetterCorrect"
-          id="letter3"
-          type="text"
-          class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
-          maxlength="1"
-        />
-
-         <input
-        v-if="!thirdLetterCorrect && !thirdLetterContains"
-          id="letter3"
-          type="text"
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-red-600"
-          maxlength="1"
-        />
-
-            <input
-          v-if="thirdLetterContains&&!thirdLetterCorrect"
-          id="letter1"
-          type="text"
-          
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-amber-300"
-          maxlength="1"
-        />
-        
-        <input
-        v-if="fourthLetterCorrect "
-          id="letter4"
-          type="text"
-          class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
-          maxlength="1"
-        />
-
-          <input
-        v-if="!fourthLetterCorrect && !fourthLetterContains"
-          id="letter4"
-          type="text"
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-red-600"
-          maxlength="1"
-        />
-        
-
-          <input
-          v-if="fourthLetterContains&&!fourthLetterCorrect"
-          id="letter1"
-          type="text"
-          
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-amber-300"
-          maxlength="1"
-        />
-        
-        <input
-        v-if="fifthLetterCorrect"
-          id="letter5"
-          type="text"
-          class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
-          maxlength="1"
-        />
-
-         <input
-        v-if="!fifthLetterCorrect && !fifthLetterContains"
-          id="letter5"
-          type="text"
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-red-600"
-          maxlength="1"
-        />
-
-         <input
-          v-if="fifthLetterContains&&!fifthLetterCorrect"
-          id="letter1"
-          type="text"
-          
-          class="w-10 border border-gray-300 rounded-lg p-2  bg-amber-300"
-          maxlength="1"
-        />
+        <div
+          v-if="
+            firstLetterCorrect &&
+            secondLetterCorrect &&
+            thirdLetterCorrect &&
+            fourthLetterCorrect &&
+            fifthLetterCorrect
+          "
+        >
+          Siker!
         </div>
+        <div>
+          <input
+            v-if="firstLetterCorrect"
+            id="letter1"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
+            maxlength="1"
+          />
 
-        
+          <input
+            v-if="!firstLetterCorrect && !firstLetterContains"
+            id="letter1"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-red-600"
+            maxlength="1"
+          />
 
-        
+          <input
+            v-if="firstLetterContains && !firstLetterCorrect"
+            id="letter1"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-amber-300"
+            maxlength="1"
+          />
+
+          <input
+            v-if="secondLetterCorrect"
+            id="letter2"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
+            maxlength="1"
+          />
+
+          <input
+            v-if="!secondLetterCorrect && !secondLetterContains"
+            id="letter2"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-red-600"
+            maxlength="1"
+          />
+
+          <input
+            v-if="secondLetterContains && !secondLetterCorrect"
+            id="letter1"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-amber-300"
+            maxlength="1"
+          />
+
+          <input
+            v-if="thirdLetterCorrect"
+            id="letter3"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
+            maxlength="1"
+          />
+
+          <input
+            v-if="!thirdLetterCorrect && !thirdLetterContains"
+            id="letter3"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-red-600"
+            maxlength="1"
+          />
+
+          <input
+            v-if="thirdLetterContains && !thirdLetterCorrect"
+            id="letter1"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-amber-300"
+            maxlength="1"
+          />
+
+          <input
+            v-if="fourthLetterCorrect"
+            id="letter4"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
+            maxlength="1"
+          />
+
+          <input
+            v-if="!fourthLetterCorrect && !fourthLetterContains"
+            id="letter4"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-red-600"
+            maxlength="1"
+          />
+
+          <input
+            v-if="fourthLetterContains && !fourthLetterCorrect"
+            id="letter1"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-amber-300"
+            maxlength="1"
+          />
+
+          <input
+            v-if="fifthLetterCorrect"
+            id="letter5"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-emerald-400"
+            maxlength="1"
+          />
+
+          <input
+            v-if="!fifthLetterCorrect && !fifthLetterContains"
+            id="letter5"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-red-600"
+            maxlength="1"
+          />
+
+          <input
+            v-if="fifthLetterContains && !fifthLetterCorrect"
+            id="letter1"
+            type="text"
+            class="w-10 border border-gray-300 rounded-lg p-2 bg-amber-300"
+            maxlength="1"
+          />
+        </div>
       </div>
-
-      
 
       <!-- Progress Card -->
       <Card class="shadow-lg rounded-lg">
@@ -503,26 +514,26 @@ function CompareLetters(params, params2) {
   height: 16px;
   border-radius: 50%;
   display: block;
-  margin:15px auto;
+  margin: 15px auto;
   position: relative;
-  background: #FFF;
-  box-shadow: -24px 0 #FFF, 24px 0 #FFF;
+  background: #fff;
+  box-shadow: -24px 0 #fff, 24px 0 #fff;
   box-sizing: border-box;
   animation: shadowPulse 2s linear infinite;
 }
 
 @keyframes shadowPulse {
   33% {
-    background: #FFF;
-    box-shadow: -24px 0 #10b981, 24px 0 #FFF;
+    background: #fff;
+    box-shadow: -24px 0 #10b981, 24px 0 #fff;
   }
   66% {
     background: #10b981;
-    box-shadow: -24px 0 #FFF, 24px 0 #FFF;
+    box-shadow: -24px 0 #fff, 24px 0 #fff;
   }
   100% {
-    background: #FFF;
-    box-shadow: -24px 0 #FFF, 24px 0 #10b981;
+    background: #fff;
+    box-shadow: -24px 0 #fff, 24px 0 #10b981;
   }
 }
 </style>
