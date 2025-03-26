@@ -19,6 +19,7 @@ let audioBlobUrl = ref("");
 const user = ref(null);
 const userLevel = ref(null);
 const levelTitle = ref("Angol ");
+const lifesRemaining = ref([1, 1, 1])
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
@@ -57,6 +58,27 @@ function GetCorrectAudio(taskNumber) {
     console.error("Audio data is empty or invalid.");
   }
 }
+function LifeKill() {
+  let changed = 0
+  for (let i = lifesRemaining.value.length; i >= 0; i--) {
+    if(lifesRemaining.value[i] == 1 && changed == 0){
+      lifesRemaining.value[i] = 0
+      changed = 1
+    }
+  }
+}
+
+function LifeCheck() {
+  let lifeRemaining = 0
+
+  for (let i = 0; i < lifesRemaining.value.length; i++) {
+    if(lifesRemaining.value[i] == 1){  
+      lifeRemaining++
+    }
+    
+  }
+  return lifeRemaining
+}
 
 function SubmitAnswer() {
   let givenAnswer = document.getElementById("answereBox").value;
@@ -64,6 +86,7 @@ function SubmitAnswer() {
   if (givenAnswer == correctAnswer.value) {
     isAnswerCorrect.value = 1;
     progress.value += 20;
+    
     setTimeout(() => {
       currentTaskId.value++;
       givenAnswer = "";
@@ -85,6 +108,12 @@ function SubmitAnswer() {
   } else {
     isAnswerCorrect.value = 2;
     progress.value += 20;
+    LifeKill()
+    if(LifeCheck() == 0){
+      alert("Vége van kicsi")
+
+      router.push("/tanfolyam")
+    } 
     setTimeout(() => {
       currentTaskId.value++;
       givenAnswer = "";
@@ -110,7 +139,9 @@ function SubmitAnswer() {
 </script>
 
 <template>
-  <div class="flex flex-col items-center min-h-screen bg-gray-100 p-6">
+  <div class="flex bg-gray-100"><span v-for="items in lifesRemaining" class="pl-3 pt-2"><img v-if="items == 1" src="../assets/HeartLive.png" alt=""> <img v-if="items == 0" src="../assets/HeartDead.png" alt=""></span> </div>
+  <div class="min-h-screen bg-gray-100 p-6">
+    <div class="flex flex-col items-center">
     <div class="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-6">
       <h1 class="text-3xl font-bold text-gray-800 text-center mb-4">
         {{ levelTitle }}
@@ -146,7 +177,7 @@ function SubmitAnswer() {
           />
         </div>
       </div>
-
+    </div>
       <div
         v-if="currentTaskNumber > maxTaskNumber"
         class="mx-auto text-center align-middle"
@@ -163,21 +194,22 @@ function SubmitAnswer() {
       </div>
     </div>
 
-    <div
+    
+  </div>
+  <div
       v-if="isAnswerCorrect == 1"
-      class="fixed bottom-0 bg-emerald-400 h-40 w-full flex flex-col items-center justify-center"
+      class="w-full fixed bottom-0 bg-emerald-400 h-40 w-full flex flex-col items-center justify-center"
     >
       <h1 class="text-2xl font-bold text-white">Correct Answer</h1>
       <p class="text-white">Ide majd kiírjuk az összes mondatot.</p>
     </div>
-    <div
+      <div
       v-if="isAnswerCorrect == 2"
       class="fixed bottom-0 bg-red-600 h-40 w-full flex flex-col items-center justify-center"
     >
       <h1 class="text-2xl font-bold text-white">Incorrect Answer</h1>
       <p class="text-white">Ide majd kiírjuk az összes mondatot.</p>
     </div>
-  </div>
 </template>
 
 <style scoped></style>
