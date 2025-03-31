@@ -3,7 +3,7 @@ import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
-import { GetCurrentTaskListening, UpdateUserLevel, GetUserProgress, SetProgress, GetUserLevel } from "../config/script";
+import { GetCurrentTaskListening, UpdateUserLevel, GetUserProgress, SetProgress, GetUserLevel, LifeCheck, LifeKill } from "../config/script";
 import { getCookie, parseJwt } from "../lib/common.js";
 import { router } from "../config/routes";
 
@@ -58,27 +58,7 @@ function GetCorrectAudio(taskNumber) {
     console.error("Audio data is empty or invalid.");
   }
 }
-function LifeKill() {
-  let changed = 0
-  for (let i = lifesRemaining.value.length; i >= 0; i--) {
-    if(lifesRemaining.value[i] == 1 && changed == 0){
-      lifesRemaining.value[i] = 0
-      changed = 1
-    }
-  }
-}
 
-function LifeCheck() {
-  let lifeRemaining = 0
-
-  for (let i = 0; i < lifesRemaining.value.length; i++) {
-    if(lifesRemaining.value[i] == 1){  
-      lifeRemaining++
-    }
-    
-  }
-  return lifeRemaining
-}
 
 function SubmitAnswer() {
   let givenAnswer = document.getElementById("answereBox").value;
@@ -108,8 +88,8 @@ function SubmitAnswer() {
   } else {
     isAnswerCorrect.value = 2;
     progress.value += 20;
-    LifeKill()
-    if(LifeCheck() == 0){
+    LifeKill(lifesRemaining.value);
+    if(LifeCheck(lifesRemaining.value) == 0){
       alert("Vége van kicsi")
 
       router.push("/tanfolyam")
@@ -198,7 +178,7 @@ function SubmitAnswer() {
   </div>
   <div
       v-if="isAnswerCorrect == 1"
-      class="w-full fixed bottom-0 bg-emerald-400 h-40 w-full flex flex-col items-center justify-center"
+      class="w-full fixed bottom-0 bg-emerald-400 h-40 flex flex-col items-center justify-center"
     >
       <h1 class="text-2xl font-bold text-white">Correct Answer</h1>
       <p class="text-white">Ide majd kiírjuk az összes mondatot.</p>

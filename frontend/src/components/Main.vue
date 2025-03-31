@@ -26,6 +26,7 @@ const siker = ref(0);
 const beginnerProgress = ref(0);
 const intermediateProgress = ref(0);
 const polyglotProgress = ref(0);
+const curentrow = ref(1);
 
 const timelineItems = ref([
   {
@@ -85,17 +86,6 @@ function SplitDailyWord(wordToSplit) {
   return splitWord;
 }
 
-function CheckLetter() {
-  let letter1 = document.getElementById("letter1").value;
-  let letter2 = document.getElementById("letter2").value;
-  let letter3 = document.getElementById("letter3").value;
-  let letter4 = document.getElementById("letter4").value;
-  let letter5 = document.getElementById("letter5").value;
-  let dailyWordGameGiven = letter1 + letter2 + letter3 + letter4 + letter5;
-  console.log(dailyWordGameGiven.split(""));
-  CompareLetters(dailyWordGame.value.split(""), dailyWordGameGiven.split(""));
-}
-
 function redirectToAdmin() {
   window.location.replace("http://localhost:3300/admintable");
 }
@@ -109,16 +99,14 @@ function CompareLetters(row) {
   }
   for (let i = 0; i < dailyword.length; i++) {
     if (dailyword.includes(givenWord[i]) && dailyword[i] != givenWord[i]) {
-      console.log("letter " + givenWord[i] + " is correct but at the wrong place");
-      document.getElementById("letter" + (i+1) + row).style.backgroundColor = "yellow";
+      document.getElementById("letter" + (i+1) + row).classList.add("partial");
       document.getElementById("letter" + (i+1) + row).disabled = true;
     }else if (dailyword[i] == givenWord[i]) {
       numbersOfCorrectLetters++;
-      document.getElementById("letter" + (i+1) + row).style.backgroundColor = "green";
+      document.getElementById("letter" + (i+1) + row).classList.add("correct");
       document.getElementById("letter" + (i+1) + row).disabled = true;
     } else {
-      console.log("letter " + givenWord[i] + " is not correct");
-      document.getElementById("letter" + (i+1) + row).style.backgroundColor = "red";
+      document.getElementById("letter" + (i+1) + row).classList.add("incorrect");
       document.getElementById("letter" + (i+1) + row).disabled = true;
     }
 
@@ -126,9 +114,26 @@ function CompareLetters(row) {
   if (numbersOfCorrectLetters == 5) {
     console.log("Siker!");
     siker.value = 1;
+  }else{
+    curentrow.value++;
+  }
+
+  if (curentrow.value > 5) {
+    siker.value = 2;
   }
 
 }
+
+const moveToNext = (input, row) => {
+  let inputBox = document.getElementById("letter" + input + row).value; 
+  if (inputBox.length == 1) {
+    document.getElementById("letter" + (input+1) + row).focus();
+  }else if (inputBox.length == 0) {
+    document.getElementById("letter" + (input-1) + row).focus();
+  }else if (input == 5) {
+    document.getElementById("submitBtn").focus();
+  }
+};
 </script>
 
 <template>
@@ -210,26 +215,29 @@ function CompareLetters(row) {
 
     <!-- Word game  -->
     <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 px-4 mt-8">
-      <div class="bg-white shadow-lg rounded-lg p-6">
+      <div class="shadow-lg rounded-lg p-6 dark: bg-darkmode-black dark:text-white flex flex-col items-center">
         <h2 class="text-xl font-bold mb-4">Találd ki a szót!</h2>
-        <div v-for="(row, index) in 5" class="p-2" v-if="siker == 0">
+        <div class="flex flex-col">
+        <div v-for="(row, index) in 5" class="pb-2" v-if="siker == 0">
         <!--first row-->
         <input v-for="(letter, index) in 5"
           :id="'letter' + letter + row"
           type="text"
-          class="w-10 border border-gray-300 rounded-lg p-2"
+          class="dark: bg-white dark:text-black w-10 border border-gray-300 rounded-lg p-2 me-1"
           maxlength="1"
+          @input="moveToNext(letter, row)"
         />
-
-        <button @click="CompareLetters(row)">Send</button>
+        <Button @click="CompareLetters(row)"label="Confirm" severity="success" v-if="curentrow == row" class="ms-2" id="submitBtn"/>
+      </div>
       </div>
         <div
           v-if="siker == 1"
         >
           Siker!
         </div>
-        <div>
-          
+        <div v-if="siker == 2">
+          Sajnos most nem sikerült, próbáld újra később! 
+          <h4 class="flex flex-col items-center">A szó a {{ dailyWordGame }} volt.</h4>
         </div>
       </div>
 
@@ -260,35 +268,8 @@ function CompareLetters(row) {
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white mt-8 py-6">
-      <div class="container mx-auto px-4">
-        <div class="flex flex-wrap justify-between items-center">
-          <div class="flex gap-4">
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener"
-              class="hover:text-gray-400"
-              >Facebook</a
-            >
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener"
-              class="hover:text-gray-400"
-              >Twitter</a
-            >
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener"
-              class="hover:text-gray-400"
-              >Instagram</a
-            >
-          </div>
-          <div class="text-sm text-gray-400">
+      <div class="ms-5">
             &copy; 2025 Your Company. All rights reserved.
-          </div>
-        </div>
       </div>
     </footer>
   </div>
@@ -321,5 +302,20 @@ function CompareLetters(row) {
     background: #fff;
     box-shadow: -24px 0 #fff, 24px 0 #10b981;
   }
+}
+
+.correct {
+  background-color: green !important;
+  color: white;
+}
+
+.partial {
+  background-color: yellow !important;
+  color: black;
+}
+
+.incorrect {
+  background-color: red !important;
+  color: white;
 }
 </style>

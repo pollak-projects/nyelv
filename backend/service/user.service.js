@@ -120,6 +120,37 @@ export async function deleteUser(id) {
   });
 }
 
+export async function UpdateUserData(id, username, email, password, newPassword) {
+  const user = await prisma.user
+    .findUnique({
+      where: {
+        id: id,
+      },
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  const isSucces = await bcrypt.compare(password, user.password);
+
+  if (isSucces) {
+    const hashedPwd = await encrypt(newPassword);
+    await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        username: username,
+        email: email,
+        password: hashedPwd,
+        updated_at: new Date(),
+      },
+    });
+  } else { 
+    return 'Hibás jelszó';
+  }
+
+}
+
 export function encrypt(password) {
   return new Promise((resolve, reject) => {
     bcrypt.genSalt(10, (err, Salt) => {

@@ -3,7 +3,7 @@ import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { GetTaskThree } from "../config/script";
 import draggable from "vuedraggable";
-import { GetUserProgress, SetProgress, GetUserLevel } from "../config/script";
+import { GetUserProgress, SetProgress, GetUserLevel, LifeCheck, LifeKill} from "../config/script";
 import { getCookie, parseJwt } from "../lib/common.js";
 import { router } from "../config/routes";
 
@@ -26,6 +26,7 @@ const re = ref();
 let progress = ref(0);
 const user = ref(null);
 const levelTitle = ref("Angol ");
+const lifesRemaining = ref([1, 1, 1])
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
@@ -80,6 +81,12 @@ function CheckTheMatch(corrcetId, listName1, listName2) {
     }, 0);
     hungaryanTexts.value.push(listName2[1]);
     currentNumber.value += 1;
+    LifeKill(lifesRemaining.value);
+    if(LifeCheck(lifesRemaining.value) == 0){
+      alert("Vége van kicsi")
+
+      router.push("/tanfolyam")
+    }
     alert("Incorrect Answer");
     progress.value += 20;
   }
@@ -91,6 +98,7 @@ function ChangeTest(corrcetId, listName, listName2) {
 </script>
 
 <template>
+    <div class="flex bg-gray-100"><span v-for="items in lifesRemaining" class="pl-3 pt-2"><img v-if="items == 1" src="../assets/HeartLive.png" alt=""> <img v-if="items == 0" src="../assets/HeartDead.png" alt=""></span> </div>
   <div class="min-h-screen bg-gray-100 py-8">
     <div class="max-w-4xl mx-auto px-4">
       <h1 class="text-3xl font-bold text-center mb-4 ">{{ levelTitle }}</h1>

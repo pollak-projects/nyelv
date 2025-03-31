@@ -191,6 +191,24 @@ export async function GetCurrentTaskListening(taskId) {
   });
 }
 
+export async function UpdateUserData(userId, username, email, password, newpassword) {
+  var requestOptions = {
+    method: "PUT",
+  };
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://localhost:3300/user/updateUserData?userId=${userId}&username=${username}&email=${email}&password=${password}&newpassword=${newpassword}`,
+      requestOptions
+    )
+      .then(async (result) => {
+        const res = await result.text();
+        const valasz = JSON.parse(res);
+        resolve(valasz);
+      })
+      .catch((error) => console.log("error", error));
+  });
+}
+
 export async function UpdateUserLevel(userId, level) {
   let newLevel = "";
   if(level=="beginner"){
@@ -222,3 +240,24 @@ export async function UpdateUserLevel(userId, level) {
 
 }
 
+export function LifeKill(lifesRemaining) {
+  let changed = 0
+  for (let i = lifesRemaining.length; i >= 0; i--) {
+    if(lifesRemaining[i] == 1 && changed == 0){
+      lifesRemaining[i] = 0
+      changed = 1
+    }
+  }
+}
+
+export function LifeCheck(lifesRemaining) {
+  let lifeRemaining = 0
+
+  for (let i = 0; i < lifesRemaining.length; i++) {
+    if(lifesRemaining[i] == 1){  
+      lifeRemaining++
+    }
+    
+  }
+  return lifeRemaining
+}

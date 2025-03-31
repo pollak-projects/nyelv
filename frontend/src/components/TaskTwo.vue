@@ -5,7 +5,7 @@ import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { GetCurrentTaskPair, GetUserLevel } from "../config/script";
 import { getCookie, parseJwt } from "../lib/common.js";
-import { GetUserProgress, SetProgress } from "../config/script";
+import { GetUserProgress, SetProgress, LifeCheck, LifeKill } from "../config/script";
 import { router } from "../config/routes";
 
 const isAnswerCorrect = ref(0);
@@ -24,6 +24,7 @@ let mixedHUId = [];
 let mixedHU = [];
 const user = ref(null);
 const levelTitle = ref("Angol ");
+const lifesRemaining = ref([1, 1, 1])
 
 function RandomNumber(max) {
   return Math.floor(Math.random() * max);
@@ -84,7 +85,12 @@ function SelectPairEN(buttonId) {
     }, 1000);
   } else {
     isAnswerWrong.value++;
-    CheckLife();
+    LifeKill(lifesRemaining.value);
+    if(LifeCheck(lifesRemaining.value) == 0){
+      alert("Vége van kicsi")
+
+      router.push("/tanfolyam")
+    } 
     selectPairHU.value = 0;
     isAnswerCorrect.value = 2;
     setTimeout(() => {
@@ -108,6 +114,7 @@ function SubmitTaskTwo() {
 </script>
 
 <template>
+  <div class="flex bg-gray-100"><span v-for="items in lifesRemaining" class="pl-3 pt-2"><img v-if="items == 1" src="../assets/HeartLive.png" alt=""> <img v-if="items == 0" src="../assets/HeartDead.png" alt=""></span> </div>
   <div class="flex flex-col items-center min-h-screen bg-gray-100 p-10">
     <div class="w-full max-w-4xl bg-white shadow-2xl rounded-3xl p-10">
       <h1 class="text-5xl font-bold text-gray-800 text-center mb-12 pb-4">

@@ -68,7 +68,7 @@ onUnmounted(() => {
       </div>
     </template>
   </Toolbar>
-  <div class="flex flex-row justify-center mt-6">
+  <div class="flex flex-row justify-center mt-6 ">
     <div class="w-1/3 p-4">
       <div v-for="(msg, index) in messages" :key="index" class="mb-3">
         <div class="font-bold pl-2 text-gray-700">{{ msg.userId }}</div>
@@ -81,7 +81,7 @@ onUnmounted(() => {
     <div class="w-1/3">
 
 <Dialog v-model:visible="visible" modal header="Chat Rules" :style="{ width: '30rem' }" class="rounded-lg">
-  <div class=" space-y-3 text-gray-700">
+  <div class=" space-y-3 text-gray-700 dark:text-white">
     <p>To ensure a friendly and respectful environment, please follow these rules:</p>
     <ul class="list-disc p-4 space-y-1">
       <li><strong>English Only</strong> - Please communicate only in English.</li>
@@ -111,12 +111,11 @@ onUnmounted(() => {
     </div>
   </div>
 
-  <div class="fixed bottom-0 inset-x-0 p-4 bg-white shadow-lg flex items-center gap-4">
+  <div class="fixed bottom-0 inset-x-0 p-4 dark: bg-darkmode-black shadow-lg flex items-center gap-4">
     <InputText type="text" v-model="newMessage" @keyup.enter="sendMessage" class="w-5/6 p-2 border rounded-lg" placeholder="Írj egy üzenetet..." />
     <Button label="Küldés" class="w-1/6 p-button-primary" @click="sendMessage" />
   </div>
 </template>
 
 <style scoped>
-
 </style>

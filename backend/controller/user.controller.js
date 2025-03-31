@@ -1,5 +1,5 @@
 import express from 'express'
-import { listAllUsers, addUser, deleteUser, updateUser, getUserProgress, setUserProgress, getUserLevel, setUserLevel} from '../service/user.service.js';
+import { listAllUsers, addUser, deleteUser, updateUser, getUserProgress, setUserProgress, getUserLevel, setUserLevel, UpdateUserData} from '../service/user.service.js';
 
 const router = express.Router();
 
@@ -70,6 +70,16 @@ router.get("/getProgress", async (req, res) => {
 router.get("/getUserLevel", async (req, res) => {
     const userId = req.query.userId;
     const data = await getUserLevel(userId);
+    res.status(200).json(data);
+})
+
+router.put("/updateUserData", async (req, res) => {
+    const userId = req.query.userId;
+    const username = req.query.username;
+    const email = req.query.email;
+    const password = req.query.password;
+    const newPassword = req.query.newpassword;
+    const data = await UpdateUserData(userId, username, email, password, newPassword);
     res.status(200).json(data);
 })
 

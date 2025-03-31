@@ -60,11 +60,6 @@ const router = createRouter({
       component: () => import("../components/Chat.vue"),
     },
     {
-      path: "/chatroom",
-      name: "ChatRoom",
-      component: () => import("../components/Chat2.vue"),
-    },
-    {
       path: "/forgotpassword",
       name: "ForgotPassword",
       component: () => import("../components/Forgotpassword.vue"),

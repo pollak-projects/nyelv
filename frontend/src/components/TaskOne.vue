@@ -4,7 +4,7 @@ import { Button } from "primevue";
 import ProgressBar from 'primevue/progressbar';
 import { onMounted, ref } from 'vue';
 import { getCookie, parseJwt } from "../lib/common.js";
-import { GetCurrentTask, SetProgress, GetUserLevel, GetUserProgress } from '../config/script';
+import { GetCurrentTask, SetProgress, GetUserLevel, GetUserProgress, LifeCheck, LifeKill } from '../config/script';
 import { router } from '../config/routes';
 
 const isAnswerCorrect = ref(0);
@@ -18,6 +18,7 @@ let progress = ref(0);
 const user = ref(null);
 const level = ref(null);
 const levelTitle = ref("Angol ");
+const lifesRemaining = ref([1, 1, 1])
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
@@ -62,11 +63,16 @@ function SubmitAnswer() {
     } else {
         isAnswerCorrect.value = 2;
         progress.value += 20;
+        LifeKill(lifesRemaining.value);
+        if(LifeCheck(lifesRemaining.value) == 0){
+          alert("Vége van kicsi")
+
+          router.push("/tanfolyam")
+        } 
         setTimeout(() => {
             givenAnswer = "";
             isAnswerCorrect.value = 0;
             isAnswerWrong.value += 1;
-            CheckLife();
             console.log(currentTaskNumber.value);
             if (currentTaskNumber.value >= 5) {
                 SetProgress(user.value.sub, 25);
@@ -88,6 +94,7 @@ function CheckLife() {
 </script>
 
 <template>
+  <div class="flex bg-gray-100"><span v-for="items in lifesRemaining" class="pl-3 pt-2"><img v-if="items == 1" src="../assets/HeartLive.png" alt=""> <img v-if="items == 0" src="../assets/HeartDead.png" alt=""></span> </div>
   <div class="flex flex-col items-center min-h-screen bg-gray-100 p-6">
     <div class="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-6">
       <h1 class="text-3xl font-bold text-gray-800 text-center mb-4">{{ levelTitle }}</h1>
