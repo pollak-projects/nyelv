@@ -105,19 +105,14 @@ onMounted(() => {
       
       <!-- Achievements -->
       <div class="flex-1 p-4 bg-white shadow-lg rounded-xl">
-        <h1 class="text-2xl font-bold">Achievementek</h1>
-        <!-- Add achievement content here -->
-      </div>
-    </div>
-
-    <!-- Update Information Section -->
-    <div class="p-4 bg-white shadow-lg rounded-xl space-y-4">
-      <h1 class="text-xl font-semibold">Adatok frissítése</h1>
-      <InputText type="text" v-model="value" class=" p-2 border rounded mb-3" placeholder="Felhasználónév" /> <br>
+        <h1 class="text-2xl font-bold">Adatok frissítése</h1>
+        <InputText type="text" v-model="value" class=" p-2 border rounded mb-3" placeholder="Felhasználónév" /> <br>
       <InputText type="text" v-model="value" class=" p-2 border rounded mb-3" placeholder="Email" />
       <Button label="Mentés" severity="success" class="w-full" />
+      </div>
     </div>
   </div>
+    
 </template>
 
 
