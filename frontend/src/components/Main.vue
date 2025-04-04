@@ -214,10 +214,11 @@ const moveToNext = (input, row) => {
     </div>
 
     <!-- Word game  -->
-    <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 px-4 mt-8">
-      <div class="shadow-lg rounded-lg p-6 dark: bg-darkmode-black dark:text-white flex flex-col items-center">
-        <h2 class="text-xl font-bold mb-4">Találd ki a szót!</h2>
-        <div class="flex flex-col">
+    
+      <Card class="shadow-lg rounded-lg mt-4">
+        <template #title>Találd ki a szót!</template>
+        <template #content>
+          <div class="flex flex-col">
         <div v-for="(row, index) in 5" class="pb-2" v-if="siker == 0">
         <!--first row-->
         <input v-for="(letter, index) in 5"
@@ -239,10 +240,10 @@ const moveToNext = (input, row) => {
           Sajnos most nem sikerült, próbáld újra később! 
           <h4 class="flex flex-col items-center">A szó a {{ dailyWordGame }} volt.</h4>
         </div>
-      </div>
-
+        </template>
+      </Card>
       <!-- Progress Card -->
-      <Card class="shadow-lg rounded-lg">
+      <Card class="shadow-lg rounded-lg mt-4">
         <template #title>A jelenlegi haladásod:</template>
         <template #subtitle>Remek munka!</template>
         <template #content>
@@ -272,7 +273,6 @@ const moveToNext = (input, row) => {
             &copy; 2025 Your Company. All rights reserved.
       </div>
     </footer>
-  </div>
 </template>
 
 <style scoped>

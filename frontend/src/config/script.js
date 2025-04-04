@@ -54,6 +54,24 @@ export async function GetUserProgress(userId) {
   });
 }
 
+export async function GetUserData(userId) {
+  var requestOptions = {
+    method: "GET",
+  };
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://localhost:3300/user//getUserData?userId=${userId}`,
+      requestOptions
+    )
+      .then(async (result) => {
+        const res = await result.text();
+        const valasz = JSON.parse(res);
+        resolve(valasz);
+      })
+      .catch((error) => console.log("error", error));
+  });
+}
+
 export async function GetCurrentTaskPair(taskId) {
   var requestOptions = {
     method: "GET",

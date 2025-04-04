@@ -1,13 +1,14 @@
 <script setup>
 import { Toolbar, Button, Avatar, Card, InputText } from "primevue";
 import { RouterLink } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, registerRuntimeCompiler } from "vue";
 import ProgressBar from "primevue/progressbar";
-import { Logout, UpdateUserData } from "../config/script.js";
+import { Logout, UpdateUserData, GetUserData } from "../config/script.js";
 import { getCookie, parseJwt } from "../lib/common.js";
 
 
 const user = ref(null);
+const usernameDisplayed = ref()
 const userLevel = ref(null)
 const beginnerProgress = ref(0);
 const intermediateProgress = ref(0);
@@ -16,8 +17,9 @@ const username = ref("");
 const email = ref("");
 const password = ref("");
 const newPassword = ref("");
+const userData = ref();
 
-onMounted(() => {
+onMounted( async () => {
   const userObj = parseJwt(getCookie("access_token"));
 
   user.value = userObj;
@@ -33,10 +35,16 @@ onMounted(() => {
     intermediateProgress.value = 100;
     polyglotProgress.value = user.value.user_current_progress;
   }
-  username.value =  user.value.username
-  email.value = user.value.email
+  userData.value = await GetUserData(user.value.sub);
+  username.value = userData.value.username
+  usernameDisplayed.value = userData.value.username
+  email.value = userData.value.email
 });
 
+function UpdateData() {
+  UpdateUserData(user.value.sub, username.value, email.value, password.value, newPassword.value)
+  location.reload()
+}
 
 </script>
 <template>
@@ -84,7 +92,7 @@ onMounted(() => {
           </div>
         </template>
         <template #title>
-          <p class="text-center text-xl font-semibold">{{ user?.username || "Loading..." }}</p>
+          <p class="text-center text-xl font-semibold">{{ usernameDisplayed || "Loading..." }}</p>
         </template>
         <template #subtitle>
           <p class="text-center text-gray-500">{{ userLevel || "Loading..." }}</p>
@@ -116,7 +124,7 @@ onMounted(() => {
           <InputText type="password" v-model="newPassword" class="w-full p-2 border rounded mb-4" placeholder="Új jelszó" />
           <InputText type="password" v-model="password" class="w-full p-2 border rounded mb-4" placeholder="Jelszó" />
         </div>
-        <Button @click="UpdateUserData('a42f9192-5cb5-4554-a63f-3d96200a9bad', username, email, password, newPassword)" label="Mentés" severity="success" class="w-full mt-6 absolute inset-x-0 bottom-0 h-16" />
+        <Button @click="UpdateData" label="Mentés" severity="success" class="w-full mt-6 absolute inset-x-0 bottom-0 h-16" />
       </div>
     </div>
   </div>
