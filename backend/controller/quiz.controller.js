@@ -4,7 +4,8 @@ import {
   listAllQuizzesPair,
   imageSaveToDB,
   imageGetFromDB,
-  listAllQuizzesListening
+  listAllQuizzesListening,
+  GetDailyWords
 } from "../service/quiz.service.js";
 import OpenAI from "openai/index.mjs";
 // import { APIKEY } from "../apikey.js";
@@ -46,11 +47,11 @@ router.get("/getImages", async (req, res) => {
   res.status(200).json(data);
 });
 
-/*
 const openai = new OpenAI({
   apiKey:
     "",
 });
+
 let usedWords = "";
 
 async function Compilt() {
@@ -64,13 +65,12 @@ async function Compilt() {
   
   return response.choices[0].message.content;
 }
-*/
+
 router.get("/getDailyWord", async (req, res) => {
   try {
     const data = await Compilt();
     const splited = data.split(":");
     usedWords += splited[0] + ", ";
-    console.log(usedWords);
     res.status(200).json(splited);
   } catch (error) {
     console.error(error);

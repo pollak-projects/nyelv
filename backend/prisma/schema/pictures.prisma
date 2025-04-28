@@ -1,6 +1,1 @@
-model feladatokPairPictures {
-  id    Int    @id @default(autoincrement())
-  text  String @unique
-  image Bytes  @db.LongBlob
-  tipus String
-}
+

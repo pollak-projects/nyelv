@@ -54,6 +54,36 @@ export async function GetUserProgress(userId) {
   });
 }
 
+export async function GetRandomWordGame() {
+  var requestOptions = {
+    method: "GET",
+  };
+  return new Promise((resolve, reject) => {
+    fetch(`http://localhost:3300/wordgame/lastused`, requestOptions)
+      .then(async (result) => {
+        const res = await result.text();
+        const valasz = JSON.parse(res);
+        resolve(valasz);
+      })
+      .catch((error) => console.log("error", error));
+  });
+}
+
+export async function GetRandomWordGameNew() {
+  var requestOptions = {
+    method: "GET",
+  };
+  return new Promise((resolve, reject) => {
+    fetch(`http://localhost:3300/wordgame/randomword`, requestOptions)
+      .then(async (result) => {
+        const res = await result.text();
+        const valasz = JSON.parse(res);
+        resolve(valasz);
+      })
+      .catch((error) => console.log("error", error));
+  });
+}
+
 export async function GetUserData(userId) {
   var requestOptions = {
     method: "GET",

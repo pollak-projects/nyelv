@@ -4,6 +4,7 @@ import { RouterLink } from "vue-router";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { getCookie, parseJwt } from "../lib/common.js";
+import {GetRandomWordGame, GetRandomWordGameNew} from "../config/script.js";
 import {
   Logout,
   GetUserProgress,
@@ -20,7 +21,6 @@ const level = ref(null);
 const dailyWordHU = ref(null);
 const dailyWordENG = ref(null);
 const dailyWordGame = ref(null);
-const dailyWordGameGiven = ref(null);
 const userLevel = ref(null);
 const siker = ref(0);
 const beginnerProgress = ref(0);
@@ -28,28 +28,6 @@ const intermediateProgress = ref(0);
 const polyglotProgress = ref(0);
 const curentrow = ref(1);
 
-const timelineItems = ref([
-  {
-    status: "Started the course level started",
-    date: "2025-02-12",
-    icon: "pi pi-play",
-  },
-  {
-    status: "Completed Beginner Level started",
-    date: "2025-02-10",
-    icon: "pi pi-check",
-  },
-  {
-    status: "Intermediate level started",
-    date: "2025-02-05",
-    icon: "pi pi-play",
-  },
-  {
-    status: "Intermediate",
-    date: "2025-02-05",
-    icon: "pi pi-play",
-  },
-]);
 
 onMounted(async () => {
   const userObj = parseJwt(getCookie("access_token"));
@@ -77,8 +55,14 @@ onMounted(async () => {
   const dailyWord = await GetDailyWord();
   dailyWordHU.value = dailyWord[1];
   dailyWordENG.value = dailyWord[0];
-  dailyWordGame.value = "brisk";
-
+  let lastWord = await GetRandomWordGame();
+  let today = new Date().toISOString().slice(0, 10);
+  let lastUsedDate = lastWord[0].used_date.slice(0, 10);
+  if (lastUsedDate != today) {
+    dailyWordGame.value = await GetRandomWordGameNew()
+  }else if(lastUsedDate == today){
+    dailyWordGame.value = lastWord[0].word;
+  }
 });
 
 function SplitDailyWord(wordToSplit) {
@@ -91,47 +75,52 @@ function redirectToAdmin() {
 }
 
 function CompareLetters(row) {
-  let dailyword = SplitDailyWord(dailyWordGame.value)
-  let givenWord = []
+  let dailyword = SplitDailyWord(dailyWordGame.value);
+  let givenWord = [];
   let numbersOfCorrectLetters = 0;
   for (let i = 0; i < 5; i++) {
-    givenWord[i] = document.getElementById("letter" + (i+1) + row).value;
+    givenWord[i] = document.getElementById("letter" + (i + 1) + row).value;
   }
   for (let i = 0; i < dailyword.length; i++) {
     if (dailyword.includes(givenWord[i]) && dailyword[i] != givenWord[i]) {
-      document.getElementById("letter" + (i+1) + row).classList.add("partial");
-      document.getElementById("letter" + (i+1) + row).disabled = true;
-    }else if (dailyword[i] == givenWord[i]) {
+      document
+        .getElementById("letter" + (i + 1) + row)
+        .classList.add("partial");
+      document.getElementById("letter" + (i + 1) + row).disabled = true;
+    } else if (dailyword[i] == givenWord[i]) {
       numbersOfCorrectLetters++;
-      document.getElementById("letter" + (i+1) + row).classList.add("correct");
-      document.getElementById("letter" + (i+1) + row).disabled = true;
+      document
+        .getElementById("letter" + (i + 1) + row)
+        .classList.add("correct");
+      document.getElementById("letter" + (i + 1) + row).disabled = true;
     } else {
-      document.getElementById("letter" + (i+1) + row).classList.add("incorrect");
-      document.getElementById("letter" + (i+1) + row).disabled = true;
+      document
+        .getElementById("letter" + (i + 1) + row)
+        .classList.add("incorrect");
+      document.getElementById("letter" + (i + 1) + row).disabled = true;
     }
-
   }
   if (numbersOfCorrectLetters == 5) {
     console.log("Siker!");
     siker.value = 1;
-  }else{
+  } else {
     curentrow.value++;
   }
 
   if (curentrow.value > 5) {
     siker.value = 2;
   }
-
 }
 
 const moveToNext = (input, row) => {
-  let inputBox = document.getElementById("letter" + input + row).value; 
-  if (inputBox.length == 1) {
-    document.getElementById("letter" + (input+1) + row).focus();
-  }else if (inputBox.length == 0) {
-    document.getElementById("letter" + (input-1) + row).focus();
-  }else if (input == 5) {
-    document.getElementById("submitBtn").focus();
+  let inputBox = document.getElementById("letter" + input + row).value;
+  if (inputBox.length == 1 && input < 5) {
+    document.getElementById("letter" + (input + 1) + row).focus();
+  } else if (inputBox.length == 0) {
+    document.getElementById("letter" + (input - 1) + row).focus();
+  } else if (input == 5) {
+    CompareLetters(row);
+    document.getElementById("letter1" + (row+1)).focus();
   }
 };
 </script>
@@ -177,7 +166,7 @@ const moveToNext = (input, row) => {
     </Toolbar>
 
     <!-- Welcome Message -->
-    <h1 class="text-3xl font-bold ps-4 pt-4">Üdv {{ user?.username }}!</h1>
+    <h1 class="text-3xl font-bold ps-4 pt-4">Üdv {{ user?.username }}! {{ dailyWordGame }}</h1>
 
     <!-- Course Cards -->
     <div class="flex gap-6 px-4 mt-8 justify-evenly flex-wrap">
@@ -214,65 +203,63 @@ const moveToNext = (input, row) => {
     </div>
 
     <!-- Word game  -->
-    
-      <Card class="shadow-lg rounded-lg mt-4">
-        <template #title>Találd ki a szót!</template>
-        <template #content>
-          <div class="flex flex-col">
-        <div v-for="(row, index) in 5" class="pb-2" v-if="siker == 0">
-        <!--first row-->
-        <input v-for="(letter, index) in 5"
-          :id="'letter' + letter + row"
-          type="text"
-          class="dark: bg-white dark:text-black w-10 border border-gray-300 rounded-lg p-2 me-1"
-          maxlength="1"
-          @input="moveToNext(letter, row)"
-        />
-        <Button @click="CompareLetters(row)"label="Confirm" severity="success" v-if="curentrow == row" class="ms-2" id="submitBtn"/>
-      </div>
-      </div>
-        <div
-          v-if="siker == 1"
-        >
-          Siker!
-        </div>
-        <div v-if="siker == 2">
-          Sajnos most nem sikerült, próbáld újra később! 
-          <h4 class="flex flex-col items-center">A szó a {{ dailyWordGame }} volt.</h4>
-        </div>
-        </template>
-      </Card>
-      <!-- Progress Card -->
-      <Card class="shadow-lg rounded-lg mt-4">
-        <template #title>A jelenlegi haladásod:</template>
-        <template #subtitle>Remek munka!</template>
-        <template #content>
-          <div class="space-y-4">
-            <div>
-              <h4 class="font-semibold">Beginner</h4>
-              <ProgressBar :value="beginnerProgress" class="mt-2" />
-            </div>
-            <hr />
-            <div>
-              <h4 class="font-semibold">Intermediate</h4>
-              <ProgressBar :value="intermediateProgress" class="mt-2" />
-            </div>
-            <hr />
-            <div>
-              <h4 class="font-semibold">Polyglot master</h4>
-              <ProgressBar :value="polyglotProgress" class="mt-2" />
-            </div>
-          </div>
-        </template>
-      </Card>
-    </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white mt-8 py-6">
-      <div class="ms-5">
-            &copy; 2025 Your Company. All rights reserved.
-      </div>
-    </footer>
+    <Card class="shadow-lg rounded-lg mt-4">
+      <template #title>Találd ki a szót!</template>
+      <template #content>
+        <div class="flex justify-center">
+        <div class="flex flex-col">
+          <div v-for="(row, index) in 5" class="pb-2" v-if="siker == 0">
+            <!--first row-->
+            <input
+              v-for="(letter, index) in 5"
+              :id="'letter' + letter + row"
+              type="text"
+              class="dark: bg-white dark:text-black w-10 border border-gray-300 rounded-lg p-2 me-1"
+              maxlength="1"
+              @input="moveToNext(letter, row)"
+            />
+          </div>
+        </div>
+        </div>
+        <div v-if="siker == 1">Siker!</div>
+        <div v-if="siker == 2">
+          Sajnos most nem sikerült, próbáld újra később!
+          <h4 class="flex flex-col items-center">
+            A szó a {{ dailyWordGame }} volt.
+          </h4>
+        </div>
+      </template>
+    </Card>
+    <!-- Progress Card -->
+    <Card class="shadow-lg rounded-lg mt-4">
+      <template #title>A jelenlegi haladásod:</template>
+      <template #subtitle>Remek munka!</template>
+      <template #content>
+        <div class="space-y-4">
+          <div>
+            <h4 class="font-semibold">Beginner</h4>
+            <ProgressBar :value="beginnerProgress" class="mt-2" />
+          </div>
+          <hr />
+          <div>
+            <h4 class="font-semibold">Intermediate</h4>
+            <ProgressBar :value="intermediateProgress" class="mt-2" />
+          </div>
+          <hr />
+          <div>
+            <h4 class="font-semibold">Polyglot master</h4>
+            <ProgressBar :value="polyglotProgress" class="mt-2" />
+          </div>
+        </div>
+      </template>
+    </Card>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white mt-8 py-6">
+    <div class="ms-5">&copy; 2025 Your Company. All rights reserved.</div>
+  </footer>
 </template>
 
 <style scoped>

@@ -6,6 +6,7 @@ import { router as quizRouter } from "./controller/quiz.controller.js";
 import { router as emailsenderRouter } from "./controller/emailsender.controller.js";
 import { router as chatRouter } from "./controller/chatmessages.controller.js";
 import { router as selfRouter } from "./controller/self.controller.js";
+import { router as wordRouter } from "./controller/wordgame.controller.js";
 import cors from "cors";
 import swaggerSpec from "./swagger.js";
 import swaggerUi from "swagger-ui-express";
@@ -62,6 +63,7 @@ app.use("/quiz", quizRouter);
 app.use("/self", selfRouter);
 app.use("/emailsender", emailsenderRouter);
 app.use("/chat", chatRouter);
+app.use("/wordgame", wordRouter)
 
 app.get("/admintable", disableMethodsForNonAdmin, async (req, res) => {
   const data = await listAllUsers();
@@ -79,6 +81,7 @@ app.get("/", async (req, res) => {
 app.get("/chat", async (req, res) => {
   res.render("chat");
 });
+ 
 
 async function SendToDB(msg, flag, id) {
   await prisma.chatMessages.create({

@@ -71,3 +71,13 @@ export async function listAllQuizPairImg(kapottTipus) {
   });
   return data;
 }
+
+export async function GetDailyWords() {
+  const data = await prisma.dailywords.findMany()
+
+  return data
+}
+
+export async function AddType(params) {
+  
+}

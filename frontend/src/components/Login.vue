@@ -83,6 +83,7 @@ function Login() {
           </div>
           <div class="d-flex justify-content-center">
             <button
+            id="login-button"
               class="btn btn-primary w-100"
               @click="Login"
               :disabled="isLoading"
