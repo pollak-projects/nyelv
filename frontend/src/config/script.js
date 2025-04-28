@@ -239,6 +239,43 @@ export async function GetCurrentTaskListening(taskId) {
   });
 }
 
+export async function GetDailyWordDid(userId) {
+  var requestOptions = {
+    method: "GET",
+  };
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://localhost:3300/user/getuserdailyword?userId=${userId}`,
+      requestOptions
+    )
+      .then(async (result) => {
+        const res = await result.text();
+        const valasz = JSON.parse(res);
+        resolve(valasz);
+      })
+      .catch((error) => console.log("error", error));
+  });
+}
+
+export async function SetDailyWordDid(userId) {
+  var requestOptions = {
+    method: "PUT",
+  };
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://localhost:3300/user/setuserdailyword?userId=${userId}`,
+      requestOptions
+    )
+      .then(async (result) => {
+        const res = await result.text();
+        const valasz = JSON.parse(res);
+        resolve(valasz);
+      })
+      .catch((error) => console.log("error", error));
+  });
+}
+
+
 export async function UpdateUserData(userId, username, email, password, newpassword) {
   var requestOptions = {
     method: "PUT",

@@ -1,5 +1,5 @@
 import express from 'express'
-import { listAllUsers, addUser, deleteUser, updateUser, getUserProgress, setUserProgress, getUserLevel, setUserLevel, UpdateUserData, getUSerData} from '../service/user.service.js';
+import { listAllUsers, addUser, deleteUser, updateUser, getUserProgress, setUserProgress, getUserLevel, setUserLevel, UpdateUserData, getUSerData, getUserDailyWord, setUserDailyWord} from '../service/user.service.js';
 
 const router = express.Router();
 
@@ -98,6 +98,21 @@ router.put("/setProgress", async (req, res) => {
     })
 
 })
+
+router.get("/getuserdailyword", async (req, res) => {
+  const userId = req.query.userId;
+  const data = await getUserDailyWord(userId);
+  console.log(data);
+  res.status(200).json(data);
+});
+
+router.put("/setuserdailyword", async (req, res) => {
+  const userId = req.query.userId;
+  await setUserDailyWord(userId);
+  res.status(200).json({
+    message: "Data successfully updated",
+  });
+});
 
 router.put("/setUserLevel", async (req, res) => {
   const userId = req.query.userId;

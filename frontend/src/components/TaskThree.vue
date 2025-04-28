@@ -6,11 +6,13 @@ import draggable from "vuedraggable";
 import { GetUserProgress, SetProgress, GetUserLevel, LifeCheck, LifeKill} from "../config/script";
 import { getCookie, parseJwt } from "../lib/common.js";
 import { router } from "../config/routes";
-
+import { Button } from "primevue";
 const hungaryanTexts = ref([]);
 const currentTaskId = ref("beginner");
 const currentNumber = ref(1);
 const currentTaskLevel = ref();
+const isAnswerCorrect = ref(0);
+const isAnswerWrong = ref(0);
 const question1 = ref([]);
 const question2 = ref([]);
 const question3 = ref([]);
@@ -63,9 +65,12 @@ const correctAnswers = ref([]);
 
 function CheckTheMatch(corrcetId, listName1, listName2) {
   if (listName1[0] == listName2[1] && listName2.length == 2) {
-    alert("Correct Answer");
     correctAnswers.value.push(corrcetId);
     currentNumber.value += 1;
+    isAnswerCorrect.value = 1;
+    setTimeout(() => {
+      isAnswerCorrect.value = 0;
+    }, 2000);
     if (currentNumber.value > 5) {
       console.log("Task Completed");
       SetProgress(user.value.sub, 25);
@@ -83,11 +88,13 @@ function CheckTheMatch(corrcetId, listName1, listName2) {
     currentNumber.value += 1;
     LifeKill(lifesRemaining.value);
     if(LifeCheck(lifesRemaining.value) == 0){
-      alert("Vége van kicsi")
 
       router.push("/tanfolyam")
     }
-    alert("Incorrect Answer");
+    isAnswerCorrect.value = 2;
+    setTimeout(() => {
+      isAnswerCorrect.value = 0;
+    }, 2000);
     progress.value += 20;
   }
 }
@@ -104,7 +111,15 @@ function ChangeTest(corrcetId, listName, listName2) {
       <h1 class="text-3xl font-bold text-center mb-4 ">{{ levelTitle }}</h1>
       <ProgressBar :value="progress" class="mb-8"></ProgressBar>
       <p class="text-lg text-center mb-6">3. fejezet</p>
-
+      <div v-if="progress == 100" class="mx-auto text-center align-middle">
+  <h1 class="text-2xl font-bold text-green-600">Siker!</h1>
+  <RouterLink to="/taskfour">
+    <Button label="Jöhet a következő fejezet!" severity="success" variant="text" class="mt-2" />
+  </RouterLink>
+  <RouterLink to="/main">
+    <Button label="Vissza a főoldalra" severity="info" variant="text" class="mt-2" />
+  </RouterLink>
+</div>
       <!-- Draggable Images -->
       <div class="col-span-2">
         <div class="space-y-4">
@@ -245,15 +260,21 @@ function ChangeTest(corrcetId, listName, listName2) {
       </div>
     </div>
   </div>
-
-  <!-- Success Message -->
-  <div v-if="progress == 100" class="mt-8 text-center">
-    <h1 class="text-4xl font-bold text-green-600 mb-4">Siker!</h1>
-    <p class="text-xl text-gray-700">
-      Gratulálunk, minden feladatot sikeresen teljesítettél!
-    </p>
-  </div>
+ 
   <!--  </div> -->
+
+  <div
+      v-if="isAnswerCorrect == 1"
+      class="w-full fixed bottom-0 bg-emerald-400 h-40 flex flex-col items-center justify-center"
+    >
+      <h1 class="text-2xl font-bold text-white">Correct Answer</h1>
+    </div>
+      <div
+      v-if="isAnswerCorrect == 2"
+      class="fixed bottom-0 bg-red-600 h-40 w-full flex flex-col items-center justify-center"
+    >
+      <h1 class="text-2xl font-bold text-white">Incorrect Answer</h1>
+    </div>
 </template>
 
 <style scoped>

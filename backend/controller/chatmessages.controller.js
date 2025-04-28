@@ -9,8 +9,9 @@ router.get("/getAllMessages", async (_req, res) => {
   res.status(200).json(data);
 });
 
-router.put("/updateChat", async (req, res) => {
-    const id = Number(req.query.id);
+router.put("/updateChat", async (req, res) => {;
+    const id = req.query.id;
+    console.log(id)
     const { flag } = req.body;
     const data = await updateChat(id, flag);
     res.status(200).json(data);

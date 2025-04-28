@@ -13,7 +13,7 @@ export async function listAllQuizzes(kapottTipus) {
 }
 
 export async function listAllQuizzesPair(kapottTipus) {
-  const data = await prisma.feladatokPair.findMany({
+  const data = await prisma.feladatokpair.findMany({
     where: {
       tipus: kapottTipus,
     },
@@ -23,7 +23,7 @@ export async function listAllQuizzesPair(kapottTipus) {
 }
 
 export async function listAllQuizzesListening(kapottTipus) {
-  const data = await prisma.feladatokListeningAudio.findMany({
+  const data = await prisma.feladatoklisteningaudio.findMany({
     where: {
       tipus: kapottTipus,
     },
@@ -36,7 +36,7 @@ export async function imageSaveToDB(image) {
   const imageBlob = Buffer.from(image, "base64");
 
   try {
-    const result = await prisma.feladatokPairPictures.create({
+    const result = await prisma.feladatokpairpictures.create({
       data: {
         image: imageBlob,
         text: "PLACEHOLDER",
@@ -49,7 +49,7 @@ export async function imageSaveToDB(image) {
 }
 
 export async function imageGetFromDB(kapottTipus) {
-  const data = await prisma.feladatokPairPictures.findMany({
+  const data = await prisma.feladatokpairpictures.findMany({
     where: {
       tipus: kapottTipus,
     },
@@ -64,7 +64,7 @@ export async function imageGetFromDB(kapottTipus) {
 }
 
 export async function listAllQuizPairImg(kapottTipus) {
-  const data = await prisma.feladatokPairPictures.findMany({
+  const data = await prisma.feladatokpairpictures.findMany({
     where: {
       tipus: kapottTipus,
     },
@@ -78,6 +78,22 @@ export async function GetDailyWords() {
   return data
 }
 
-export async function AddType(params) {
-  
+
+export async function AddWordToDB(word) {
+  const data = await prisma.dailywords.create({
+    data: {
+      word: word,
+      date: new Date(),
+    },
+  });
+  return data
+}
+
+export async function GetLastDailyWord() {
+  const data = await prisma.dailywords.findFirst({
+    orderBy: {
+      date: 'desc'
+    }
+  })
+  return data
 }

@@ -1,5 +1,10 @@
-model gamewords {
-  id        Int       @id @default(autoincrement())
-  word      String    @db.VarChar(5)
-  used_date DateTime? @db.Date
+model chatmessages {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  message   String
+  flag      Int      @default(0)
+  timestamp DateTime @default(now())
+  user      user     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "chatmessages_userId_fkey")
 }

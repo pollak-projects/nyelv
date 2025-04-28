@@ -14,18 +14,20 @@ const messages = ref([]);
 const Mymessages = ref([]);
 const newMessage = ref("");
 const visible = ref(true);
-const userId = "41596d56-5630-4223-b2c2-1d8d126fbd46";
+const userId = ref();
 
 const sendMessage = () => {
   if (newMessage.value.trim()) {
-    socket.emit("chat message", {text: newMessage.value, userId});
+    socket.emit("chat message", {text: newMessage.value, userId: userId.value});
     newMessage.value = "";
   }
 };
 
 onMounted(() => {
+  const userObj = parseJwt(getCookie("access_token"));
+  userId.value = userObj.sub.toString();
   socket.on("chat message", (msg) => {
-    if (msg.userId === "Zete") {
+    if (msg.userId === userObj.username) {
       msg.userId = "Me";
       Mymessages.value.push(msg);
     }else{
@@ -72,7 +74,7 @@ onUnmounted(() => {
     <div class="w-1/3 p-4">
       <div v-for="(msg, index) in messages" :key="index" class="mb-3">
         <div class="font-bold pl-2 text-gray-700">{{ msg.userId }}</div>
-        <div class="bg-purple-100 rounded-xl p-3 shadow-md">
+        <div class="bg-purple-100 rounded-xl p-3 shadow-md flex justify-between">
           {{ msg.text }}
         </div>
       </div>

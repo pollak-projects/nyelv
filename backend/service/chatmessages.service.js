@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function listAllMessages() {
-  const data = await prisma.chatMessages.findMany({
+  const data = await prisma.chatmessages.findMany({
     include: {
       user: true
     }
@@ -13,7 +13,7 @@ export async function listAllMessages() {
 }
 
 export async function updateChat(id, flag) {
-  await prisma.chatMessages.update({
+  await prisma.chatmessages.update({
     where: {
       id: id,
     },
@@ -22,4 +22,3 @@ export async function updateChat(id, flag) {
     },
   });
 }
-

@@ -1,9 +1,8 @@
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model feladatok {
-  id     Int
+  id     Int    @id @default(autoincrement())
   kerdes String
   valasz String
   tipus  String
 
-  @@ignore
 }

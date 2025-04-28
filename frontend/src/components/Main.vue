@@ -4,7 +4,7 @@ import { RouterLink } from "vue-router";
 import ProgressBar from "primevue/progressbar";
 import { onMounted, ref } from "vue";
 import { getCookie, parseJwt } from "../lib/common.js";
-import {GetRandomWordGame, GetRandomWordGameNew} from "../config/script.js";
+import {GetRandomWordGame, GetRandomWordGameNew, GetDailyWordDid, SetDailyWordDid} from "../config/script.js";
 import {
   Logout,
   GetUserProgress,
@@ -27,6 +27,7 @@ const beginnerProgress = ref(0);
 const intermediateProgress = ref(0);
 const polyglotProgress = ref(0);
 const curentrow = ref(1);
+const userDidDailyWord = ref();
 
 
 onMounted(async () => {
@@ -35,6 +36,10 @@ onMounted(async () => {
   if (userObj && userObj.username) {
     const progress = await GetUserProgress(user.value.sub);
     const level = await GetUserLevel(user.value.sub);
+    userDidDailyWord.value = await GetDailyWordDid(user.value.sub);
+    if (userDidDailyWord.value.slice(0, 10) == new Date().toISOString().slice(0, 10)) {
+      siker.value = 3;
+    }
     user.value.user_current_progress = progress;
     user.value.level = level;
   }
@@ -65,6 +70,7 @@ onMounted(async () => {
   }
 });
 
+
 function SplitDailyWord(wordToSplit) {
   const splitWord = wordToSplit.split("");
   return splitWord;
@@ -74,7 +80,7 @@ function redirectToAdmin() {
   window.location.replace("http://localhost:3300/admintable");
 }
 
-function CompareLetters(row) {
+async function CompareLetters(row) {
   let dailyword = SplitDailyWord(dailyWordGame.value);
   let givenWord = [];
   let numbersOfCorrectLetters = 0;
@@ -101,14 +107,16 @@ function CompareLetters(row) {
     }
   }
   if (numbersOfCorrectLetters == 5) {
-    console.log("Siker!");
     siker.value = 1;
+    console.log("Sikerült!");
+    await SetDailyWordDid(user.value.sub);
   } else {
     curentrow.value++;
   }
 
   if (curentrow.value > 5) {
     siker.value = 2;
+    await SetDailyWordDid(user.value.sub);
   }
 }
 
@@ -166,7 +174,7 @@ const moveToNext = (input, row) => {
     </Toolbar>
 
     <!-- Welcome Message -->
-    <h1 class="text-3xl font-bold ps-4 pt-4">Üdv {{ user?.username }}! {{ dailyWordGame }}</h1>
+    <h1 class="text-3xl font-bold ps-4 pt-4">Üdv {{ user?.username }}!</h1>
 
     <!-- Course Cards -->
     <div class="flex gap-6 px-4 mt-8 justify-evenly flex-wrap">
@@ -227,6 +235,11 @@ const moveToNext = (input, row) => {
           Sajnos most nem sikerült, próbáld újra később!
           <h4 class="flex flex-col items-center">
             A szó a {{ dailyWordGame }} volt.
+          </h4>
+        </div>
+        <div v-if="siker == 3">
+          <h4 class="flex flex-col items-center">
+            Ma már kitaláltad a szót.
           </h4>
         </div>
       </template>

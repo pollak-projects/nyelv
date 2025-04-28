@@ -1,7 +1,7 @@
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model user {
-  id                    String   @default(uuid())
-  username              String
+  id                    String         @id @default(uuid())
+  username              String         @unique
   first_name            String
   last_name             String
   birth_date            DateTime
@@ -9,9 +9,9 @@ model user {
   password              String
   created_at            DateTime
   updated_at            DateTime
-  user_level            String   @default("beginner")
-  user_current_progress Int      @default(0)
-  user_role             String   @default("user") @db.VarChar(10)
-
-  @@ignore
+  user_level            String         @default("beginner")
+  user_current_progress Int            @default(0)
+  user_role             String         @default("user") @db.VarChar(10)
+  diddailyword          DateTime?      @db.Date
+  chatmessages          chatmessages[]
 }

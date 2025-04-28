@@ -65,7 +65,6 @@ function SubmitAnswer() {
         progress.value += 20;
         LifeKill(lifesRemaining.value);
         if(LifeCheck(lifesRemaining.value) == 0){
-          alert("Vége van kicsi")
 
           router.push("/tanfolyam")
         } 
@@ -122,11 +121,9 @@ function CheckLife() {
     
     <div v-if="isAnswerCorrect == 1" class="fixed bottom-0 bg-emerald-400 h-40 w-full flex flex-col items-center justify-center">
       <h1 class="text-2xl font-bold text-white">Correct Answer</h1>
-      <p class="text-white">Ide majd kiírjuk az összes mondatot.</p>
     </div>
     <div v-if="isAnswerCorrect == 2" class="fixed bottom-0 bg-red-600 h-40 w-full flex flex-col items-center justify-center">
       <h1 class="text-2xl font-bold text-white">Incorrect Answer</h1>
-      <p class="text-white">Ide majd kiírjuk az összes mondatot.</p>
     </div>
   </div>
 </template>

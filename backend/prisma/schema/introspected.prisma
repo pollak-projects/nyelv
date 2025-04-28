@@ -1,5 +1,5 @@
-model dailywords {
-  id   Int      @id @default(autoincrement())
-  word String   @db.VarChar(100)
-  date DateTime @unique(map: "date") @db.Date
+model gamewords {
+  id        Int       @id @default(autoincrement())
+  word      String    @db.VarChar(5)
+  used_date DateTime? @db.Date
 }

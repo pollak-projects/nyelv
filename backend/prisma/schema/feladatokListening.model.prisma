@@ -1,1 +1,6 @@
-
+model feladatoklisteningaudio {
+  id     Int    @id @default(autoincrement())
+  valasz String
+  audio  Bytes
+  tipus  String
+}

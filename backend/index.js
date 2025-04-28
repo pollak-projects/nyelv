@@ -84,7 +84,7 @@ app.get("/chat", async (req, res) => {
  
 
 async function SendToDB(msg, flag, id) {
-  await prisma.chatMessages.create({
+  await prisma.chatmessages.create({
     data: {
       message: msg,
       flag: flag,
@@ -102,7 +102,7 @@ async function GetUsername(id) {
 
 async function Moderation(msg) {
   const openai = new OpenAI({
-    apiKey: "your-openai-api-key",
+    apiKey: "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",
   });
   let flagged = 0;
 

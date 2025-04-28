@@ -87,7 +87,6 @@ function SelectPairEN(buttonId) {
     isAnswerWrong.value++;
     LifeKill(lifesRemaining.value);
     if(LifeCheck(lifesRemaining.value) == 0){
-      alert("Vége van kicsi")
 
       router.push("/tanfolyam")
     } 
@@ -101,7 +100,6 @@ function SelectPairEN(buttonId) {
 
 function CheckLife() {
     if (isAnswerWrong.value == 3) {
-        alert("Vesztettél!");
         router.push("/tanfolyam");
     }
 }

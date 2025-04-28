@@ -130,6 +130,28 @@ export async function deleteUser(id) {
   });
 }
 
+export async function getUserDailyWord(userId) {
+  const data = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  return data.diddailyword;
+}
+
+export async function setUserDailyWord(userId, word) {
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      diddailyword: new Date(),
+    },
+  });
+}
+
+
 export async function UpdateUserData(id, username, email, password, newPassword) {
   const user = await prisma.user
     .findUnique({
