@@ -102,7 +102,8 @@ async function GetUsername(id) {
 
 async function Moderation(msg) {
   const openai = new OpenAI({
-    apiKey: "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",
+    apiKey:
+      "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",
   });
   let flagged = 0;
 
